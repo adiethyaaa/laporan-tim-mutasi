@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Dalam Pemeliharaan</title>
+    <style>
+        /* CSS Khusus Halaman Maintenance (Independen) */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .maintenance-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 30px;
+            text-align: center;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            border: 1px solid #e2e8f0;
+            max-width: 500px;
+            width: 90%;
+        }
+        .maintenance-icon-wrapper {
+            position: relative;
+            font-size: 65px;
+            margin-bottom: 20px;
+            animation: floatBounce 2.5s infinite ease-in-out;
+        }
+        .gear-badge {
+            position: absolute;
+            bottom: -5px;
+            right: -10px;
+            font-size: 32px;
+            animation: spinGear 5s linear infinite;
+        }
+        .maintenance-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 12px 0;
+            letter-spacing: -0.3px;
+        }
+        .maintenance-subtext {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0 0 25px 0;
+        }
+        .badge-coming-soon {
+            display: inline-block;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #ffffff;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+            animation: softPulse 2s infinite;
+        }
+        @keyframes floatBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes spinGear {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes softPulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.04); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="maintenance-container">
+        <div class="maintenance-icon-wrapper">
+            🎓
+            <span class="gear-badge">⚙️</span>
+        </div>
+        <div class="badge-coming-soon">UNDER MAINTENANCE / COMING SOON</div>
+        <h2 class="maintenance-title">Layanan Sedang Ditingkatkan</h2>
+        <p class="maintenance-subtext">
+            Fitur modul layanan ini sedang dalam tahap pemeliharaan dan pengoptimalan sistem. Halaman ini akan segera kembali aktif melayani Anda.
+        </p>
+    </div>
+
+</body>
+</html>

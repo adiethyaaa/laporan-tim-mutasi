@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Laporan Hasil Pelayanan</title>
+    <!-- FONTAWESOME CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Library HTML2PDF untuk Generate Preview & Download PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Library PDF Native Engine (pdfmake) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+</head>
+<body>
+
+    <!-- OVERLAY BACKDROP MOBILE -->
+    <div id="sidebarMobileBackdrop" class="sidebar-mobile-backdrop"></div>
+
+    <!-- HAMBURGER BUTTON MOBILE -->
+    <button id="btnMobileHamburger" class="mobile-hamburger-btn" title="Buka Menu">☰ Menu</button>
+
+    <!-- SIDEBAR UTAMA -->
+    <div id="sidebarContainer" class="sidebar" style="display: none;">
+        <div class="sidebar-header">
+            <h2 class="sidebar-title">Layanan Tim KP</h2>
+            <button id="btnToggleSidebar" class="toggle-sidebar-btn" title="Ciutkan Sidebar">➕</button>
+        </div>
+
+        <!-- WIDGET PROFIL USER (BISA DIKLIK MEMBUKA HALAMAN PROFIL) -->
+        <div class="user-profile-widget" id="sidebarUserProfile" onclick="showSection('profile-page')" style="cursor: pointer;" title="Klik untuk membuka Halaman Profil">
+            <div class="user-profile-avatar-initial" id="sidebarUserAvatar">--</div>
+            <div class="user-profile-info">
+                <span class="user-profile-email" id="sidebarUserEmail">Loading...</span>
+                <span class="user-profile-role" id="sidebarUserRole">User</span>
+            </div>
+        </div>
+
+        <!-- MENU NAVIGASI MULTI-MODUL -->
+        <nav class="sidebar-menu">
+            <a id="nav-dashboard" onclick="showSection('dashboard')" class="active">
+                <span class="sidebar-icon">📊</span>
+                <span class="sidebar-text">Dashboard Laporan</span>
+            </a>
+            
+            <a id="nav-aplikasi-kp" onclick="showSection('aplikasi-1-KP', 'KP')" style="display: none;">
+                <span class="sidebar-icon">🏅</span>
+                <span class="sidebar-text">Usulan KP</span>
+            </a>
+
+            <a id="nav-aplikasi-pga" onclick="showSection('aplikasi-2-PGA')" style="display: none;">
+                <span class="sidebar-icon">🎓</span>
+                <span class="sidebar-text">Usulan PGA</span>
+            </a>
+
+            <a id="nav-aplikasi-pi" onclick="showSection('aplikasi-3-PI', 'PI')" style="display: none;">
+                <span class="sidebar-icon">✈️</span>
+                <span class="sidebar-text">Usulan PI</span>
+            </a>
+            
+            <a id="nav-admin" onclick="showSection('admin-page')" style="display: none;">
+                <span class="sidebar-icon">⚙️</span>
+                <span class="sidebar-text">Admin Panel</span>
+            </a>
+
+            <a id="btnTriggerLogout" class="btn-logout" style="margin-top: 20px; cursor: pointer;">
+                <span class="sidebar-icon" style="color:#a1ba00;">➜]</span>
+                <span class="sidebar-text" style="color:#ffffff;">Keluar</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <div id="mainContent" class="main-content" style="display: none;">
+        <!-- 0. HALAMAN PROFIL USER & WELCOME BANNER -->
+        <div id="profile-page" class="section active">
+            <div class="welcome-hero-container">
+                
+                <!-- WIDGET JAM DIGITAL WIT MINIMALIS -->
+                <div class="digital-clock-hero">
+                    <div class="clock-date-hero" id="clockDate">Senin, 18 Agustus 2026</div>
+                    <div class="clock-time-hero">
+                        <span id="clockHours">00</span><span class="clock-colon">:</span><span id="clockMinutes" class="flip-unit">00</span><span class="clock-colon">:</span><span id="clockSeconds" class="flip-unit">00</span>
+                        <span class="clock-tz-hero">WIT</span>
+                    </div>
+                </div>
+
+                <!-- FOKUS UTAMA: ANIMASI TIM DISKUSI BESAR DI TENGAH LAYAR -->
+                <div class="team-chat-hero-wrapper" title="Tim Pelayanan Sedang Berdiskusi">
+                    <div class="person-hero p1">
+                        <span class="chat-bubble-hero">Validasi KP sudah? 📑</span>
+                        <div class="avatar-hero">🧔</div>
+                    </div>
+                    <div class="person-hero p2">
+                        <span class="chat-bubble-hero">Sudah SLA! 👍</span>
+                        <div class="avatar-hero">👩‍💼</div>
+                    </div>
+                    <div class="person-hero p3">
+                        <span class="chat-bubble-hero">Laporan NIP OK! 🔄</span>
+                        <div class="avatar-hero">👨‍💻</div>
+                    </div>
+                    <div class="person-hero p4">
+                        <span class="chat-bubble-hero">Cuci Mata IVa-IVb! ✨</span>
+                        <div class="avatar-hero">👩‍💻</div>
+                    </div>
+                    <div class="person-hero p5">
+                        <span class="chat-bubble-hero">Hitung PAK Madya🔍</span>
+                        <div class="avatar-hero">👨‍💼</div>
+                    </div>
+                    <div class="person-hero p6">
+                        <span class="chat-bubble-hero">Siap MS 🎉</span>
+                        <div class="avatar-hero">👩‍🦰</div>
+                    </div>
+                </div>
+
+                <!-- UCAPAN SELAMAT DATANG (POSISI CENTER) -->
+                <div class="welcome-text-center">
+                    <h1 id="welcomeTitle" class="welcome-heading">Selamat Datang, <br>Pengabdi Negeri! 👋</h1>
+                    <div class="quotes-hero-box">
+                        <p id="welcomeQuote" class="welcome-quote-text">"Semangat memberikan pelayanan terbaik hari ini. Setiap berkas yang diproses adalah bentuk pengabdian!"</p>
+                    </div>
+                </div>
+                <!-- FOOTER DIGITAL STYLE MINIMALIS -->
+                 <div class="profile-digital-footer">made 🫰 by aditya</div>
+            </div>
+        </div>
+
+        <!-- 1. SEKSI HALAMAN APLIKASI KP -->
+        <div id="aplikasi-1-KP" class="section">
+            <div class="module-header-banner header-kp">
+                <div class="module-header-title">
+                    <h2>📈 Laporan Pelayanan Kenaikan Pangkat (KP)</h2>
+                    <p>Pencatatan, pemantauan, dan manajemen berkas usulan Kenaikan Pangkat pegawai.</p>
+                </div>
+
+                <div class="header-widgets-compact">
+                    <div class="team-chat-mini" title="Tim Pelayanan Berdiskusi">
+                        <span class="person-mini p1">👨‍💼<span class="chat-bubble-mini">MS BTS!?</span></span>
+                        <span class="person-mini p2">👩‍💼<span class="chat-bubble-mini">Siap!</span></span>
+                        <span class="person-mini p3">👨‍💻<span class="chat-bubble-mini">Acc!</span></span>
+                        <span class="person-mini p4">👩‍💻<span class="chat-bubble-mini">Pertek OK</span></span>
+                        <span class="person-mini p5">🧔<span class="chat-bubble-mini">Validasi</span></span>
+                        <span class="person-mini p6">👩‍🦰<span class="chat-bubble-mini">Selesai!</span></span>
+                    </div>
+                    <div class="digital-clock-mini clock-transparent">
+                        <div class="clock-date-mini" id="clockDateKP">18 Agt 2026</div>
+                        <div class="clock-time-mini">
+                            <span id="clockHoursKP">00</span><span class="clock-colon">:</span><span id="clockMinutesKP">00</span><span class="clock-colon">:</span><span id="clockSecondsKP">00</span>
+                            <span class="clock-tz-mini">WIT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="module-header-title">
+                <button id="btnToggleUploadForm" class="btn-toggle-chart" style="background: rgba(255,255,255,0.18); color: rgb(38, 15, 15); border: 1px solid rgba(255,255,255,0.3);">
+                    <span id="toggleIcon"><i class="fas fa-eye-slash"></i></span>
+                    <span id="toggleText">Sembunyikan Form KP</span>
+                </button>
+            </div>
+
+            <!-- FORM UPLOAD EXCEL KP -->
+            <div id="uploadFormWrapper">
+                <div class="form-group">
+                    <div id="dropZone" class="drop-zone drop-zone-kp">
+                        <div class="drop-zone-icon">📤</div>
+                        <div class="drop-zone-text" style="color: #065f46; font-weight: bold;">Tarik & Lepaskan File Excel KP Di Sini</div>
+                        <div class="drop-zone-subtext">Atau klik untuk memilih berkas (.xlsx, .xls)</div>
+                        <input type="file" id="uploadKP" accept=".xlsx, .xls" multiple style="display: none;">
+                    </div>
+                    
+                    <div id="fileQueueCard" class="file-queue-card" style="display: none;">
+                        <div class="file-queue-header">📁 Berkas KP Terpilih (<span id="fileCountText">0</span> Berkas):</div>
+                        <div id="fileListContainer" class="file-list-container"></div>
+                        <div style="margin-top: 15px; display: flex; align-items: center; gap: 15px;">
+                            <button id="btnUploadDB" class="btn-upload-db" style="background: #047857;">Upload Data KP ke Database</button>
+                            <button id="btnUndo" class="btn-undo" style="display: none;">↩ Undo Perubahan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABEL DATA KP -->
+            <div id="tableContainer" style="display: block; margin-top: 25px;">
+                <div class="filter-kp-box-custom">
+                    <div class="filter-box-header">
+                        <div class="filter-box-title">
+                            <span class="filter-icon">🔍</span>
+                            <span>Filter Data Usulan KP</span>
+                        </div>
+                    </div>
+
+                    <div class="filter-grid-container">
+                        <!-- Filter Instansi Induk -->
+                        <div class="filter-group">
+                            <label for="filterInstansi">Instansi Induk</label>
+                            <div class="select-wrapper">
+                                <select id="filterInstansi" class="filter-select">
+                                    <option value="">-- Semua Instansi --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Filter Periode KP -->
+                        <div class="filter-group">
+                            <label for="filterPeriodeKP">Periode KP</label>
+                            <div class="select-wrapper">
+                                <select id="filterPeriodeKP" class="filter-select">
+                                    <option value="">-- Semua Periode --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Filter Kategori Status -->
+                        <div class="filter-group">
+                            <label for="filterKategori">Kategori Status</label>
+                            <div class="select-wrapper">
+                                <select id="filterKategori" class="filter-select">
+                                    <option value="">-- Semua Kategori Status --</option>
+                                    <option value="MS">MS</option>
+                                    <option value="BTS">BTS</option>
+                                    <option value="TMS">TMS</option>
+                                    <option value="Inbox">Inbox</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Filter Jenis KP -->
+                        <div class="filter-group">
+                            <label for="filterJenisKP">Jenis KP</label>
+                            <div class="select-wrapper">
+                                <select id="filterJenisKP" class="filter-select">
+                                    <option value="">-- Semua Jenis KP --</option>
+                                    <option value="KP Reguler">KP Reguler</option>
+                                    <option value="KP Penyesuaian Ijazah">KP Penyesuaian Ijazah</option>
+                                    <option value="KP JF">KP JF</option>
+                                    <option value="KP Struktural">KP Struktural</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; align-items: center; width: 100%; margin-top: 10px; margin-bottom: 5px;">
+                    <button type="button" class="btn-rekap-animated" 
+                            style="background: #004590 !important; width: auto !important; max-width: fit-content !important; min-width: unset !important; padding: 10px 14px !important; font-family: 'Segoe UI'; font-size: 14px !important; margin-top: 0 !important;" 
+                            onclick="window.resetMainFilters(event)">
+                        Reset Filter
+                    </button>
+                </div>
+                </div>
+                
+                <div class="data-count-container">
+                    <div class="data-count-bubble">
+                        📊 Menampilkan <span id="displayedCount">0</span> dari <span id="totalDbCount">0</span> Data
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <button id="btnDeleteSelected" class="btn-delete-selected" style="display: none;">
+                        🗑️ Hapus Terpilih (<span id="selectedCount">0</span>)
+                    </button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table id="dataTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 30px; text-align: center;">
+                                    <input type="checkbox" id="selectAll">
+                                </th>
+                                <th style="width: 60px; text-align: center;" class="sortable" onclick="sortTable('uploader_initial')">
+                                    ID User <span id="sort_uploader_initial" class="sort-arrow">↕</span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('instansi_induk')">
+                                    Instansi <span id="sort_instansi_induk" class="sort-arrow">↕</span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('tgl_pengiriman_kelayanan')">
+                                    Tgl Pengiriman <span id="sort_tgl_pengiriman_kelayanan" class="sort-arrow">↕</span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('periode_kp')">
+                                    Periode KP <span id="sort_periode_kp" class="sort-arrow">↕</span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('status_usulan')">
+                                    Status Usulan <span id="sort_status_usulan" class="sort-arrow">↕</span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('kategori_status')">
+                                    Kategori Status <span id="sort_kategori_status" class="sort-arrow">↕</span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('tgl_pertek')">
+                                    Tgl Pertek <span id="sort_tgl_pertek" class="sort-arrow">↕</span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('no_pertek')">
+                                    No Pertek <span id="sort_no_pertek" class="sort-arrow">↕</span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('nama')">
+                                    Nama Pegawai <span id="sort_nama" class="sort-arrow">↕</span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('nip')">
+                                    NIP <span id="sort_nip" class="sort-arrow">↕</span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('golongan_lama')">
+                                    Gol/TMT Lama <span id="sort_golongan_lama" class="sort-arrow">↕</span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('golongan_baru')">
+                                    Gol/TMT Baru <span id="sort_golongan_baru" class="sort-arrow">↕</span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('prosedur')">
+                                    Jenis Prosedur <span id="sort_prosedur" class="sort-arrow">↕</span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('jenis_kp')">
+                                    Jenis KP <span id="sort_jenis_kp" class="sort-arrow">↕</span>
+                                </th>
+                                <th style="text-align: center; width: 80px;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. SEKSI HALAMAN USULAN PGA -->
+        <div id="aplikasi-2-PGA" class="section">
+            <iframe src="maintenance.html" style="width: 100%; height: 500px; border: none; border-radius: 12px;"></iframe>
+        </div>
+
+        <!-- 3. SEKSI HALAMAN APLIKASI KHUSUS PINDAH INSTANSI (PI) -->
+        <div id="aplikasi-3-PI" class="section">
+            <div class="module-header-banner header-pi">
+                <div class="module-header-title">
+                    <h2>🏣 Laporan Pelayanan Pindah Instansi (PI)</h2>
+                    <p>Pencatatan, pemantauan, dan manajemen usulan Pindah Instansi antar wilayah/instansi.</p>
+                </div>
+
+                <div class="header-widgets-compact">
+                    <div class="team-chat-mini" title="Tim Pelayanan Berdiskusi">
+                        <span class="person-mini p1">👨‍💼<span class="chat-bubble-mini">MS BTS!?</span></span>
+                        <span class="person-mini p2">👩‍💼<span class="chat-bubble-mini">Siap!</span></span>
+                        <span class="person-mini p3">👨‍💻<span class="chat-bubble-mini">Acc!</span></span>
+                        <span class="person-mini p4">👩‍💻<span class="chat-bubble-mini">Pertek OK</span></span>
+                        <span class="person-mini p5">🧔<span class="chat-bubble-mini">Validasi</span></span>
+                        <span class="person-mini p6">👩‍🦰<span class="chat-bubble-mini">Selesai!</span></span>
+                    </div>
+                    <div class="digital-clock-mini clock-transparent">
+                        <div class="clock-date-mini" id="clockDatePI">18 Agt 2026</div>
+                        <div class="clock-time-mini">
+                            <span id="clockHoursPI">00</span><span class="clock-colon">:</span><span id="clockMinutesPI">00</span><span class="clock-colon">:</span><span id="clockSecondsPI">00</span>
+                            <span class="clock-tz-mini">WIT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-header-title">
+                <button id="btnToggleUploadFormPI" class="btn-toggle-chart" style="background: rgba(255,255,255,0.2); color: rgb(0, 102, 51); border: 1px solid rgba(255,255,255,0.3);">
+                    <span id="toggleIconPI"><i class="fas fa-eye"></i></span>
+                    <span id="toggleTextPI" style="margin-left: 5px;">Tampilkan Form PI</span>
+                </button>
+            </div>
+
+            <!-- FORM UPLOAD KHUSUS PI -->
+            <div id="uploadFormWrapperPI" style="display: none;">
+                <div class="form-group">
+                    <div id="dropZonePI" class="drop-zone drop-zone-pi">
+                        <div class="drop-zone-icon">📤</div>
+                        <div class="drop-zone-text" style="color: #1e1b4b; font-weight: bold;">Tarik & Lepaskan File Excel PI Di Sini</div>
+                        <div class="drop-zone-subtext">Hanya menerima format tabel PI baku (.xlsx, .xls)</div>
+                        <input type="file" id="uploadPI" accept=".xlsx, .xls" multiple style="display: none;">
+                    </div>
+                    
+                    <div id="fileQueueCardPI" class="file-queue-card" style="display: none;">
+                        <div class="file-queue-header">📁 Berkas PI Terpilih (<span id="fileCountTextPI">0</span> Berkas):</div>
+                        <div id="fileListContainerPI" class="file-list-container"></div>
+                        <div style="margin-top: 15px;">
+                            <button id="btnUploadDBPI" class="btn-upload-db" style="background: #4338ca;">Upload Data PI ke Database</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABEL DATA PI -->
+            <div id="tableContainerPI" style="display: block; margin-top: 25px;">
+                <div class="filter-box-header">
+                    <div class="filter-box-title">
+                        <i class="fas fa-filter filter-icon" style="color: #0284c7;"></i>
+                        <span>Filter Data Pindah Instansi (PI)</span>
+                    </div>
+                    <!-- TOMBOL RESET FILTER -->
+                    <button type="button" class="btn-reset-filter-mini" onclick="window.resetFilterPI()">
+                        <i class="fas fa-rotate-left"></i> Reset Filter
+                    </button>
+                </div>
+                <div class="filter-container">
+                    <div class="filter-group">
+                        <label>Instansi Asal:</label>
+                        <select id="filterInstansiAsalPI" class="filter-select" onchange="window.filterTablePI()"><option value="">-- Semua Instansi Asal --</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Instansi Tujuan:</label>
+                        <select id="filterInstansiTujuanPI" class="filter-select" onchange="window.filterTablePI()"><option value="">-- Semua Instansi Tujuan --</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Wilayah (Prov/Vertikal):</label>
+                        <select id="filterWilkerPI" class="filter-select" onchange="window.filterTablePI()">
+                            <option value="">-- Semua Wilayah --</option>
+                            <option value="Papua Barat">Papua Barat</option>
+                            <option value="Papua Barat Daya">Papua Barat Daya</option>
+                            <option value="Instansi Vertikal">Instansi Vertikal</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Status Usulan:</label>
+                        <select id="filterStatusPI" class="filter-select" onchange="window.filterTablePI()">
+                            <option value="">-- Semua Status --</option>
+                            <option value="MS">MS</option>
+                            <option value="TMS">TMS</option>
+                            <option value="BTS">BTS</option>
+                        </select>
+                    </div>
+                </div>
+                
+
+                <div style="margin-bottom: 10px;">
+                    
+                    <button id="btnDeleteSelectedPI" class="btn-delete-selected" style="display: none;">
+                        Hapus Terpilih PI (<span id="selectedCountPI">0</span>)
+                    </button>
+                    <button id="btnUndoEditPI" class="btn-delete-selected" onclick="undoLastPIChange()" disabled style= "display:flexbox ; opacity: 0.5; cursor: not-allowed;" title="Undo Perubahan">
+                        <i class="fas fa-rotate-left"></i> Undo Changes
+                    </button>
+                    <button id="btnOpenAddFormPI" 
+                        class="btn-delete-selected" 
+                        onclick="openAddFormPI()" 
+                        onmouseover="this.style.backgroundColor='#059669'" 
+                        onmouseout="this.style.backgroundColor='#047857'"
+                        style="display: flexbox; background-color: #047857; color: white; border: none; cursor: pointer; transition: background-color 0.2s ease;">
+                    <i class="fas fa-plus"></i>
+                    <span>Tambah Data PI</span>
+                    </button>
+                </div>
+
+                <!-- KONTANER TABEL PINDAH INSTANSI (PI) -->
+                <!-- AREA KONTEN UTAMA PINDAH INSTANSI (SPLIT LAYOUT) -->
+                <div class="split-layout-pi" style="display: flex; gap: 20px; align-items: flex-start; width: 100%;">
+
+                    <!-- KOLOM KIRI: TABEL DATA PI -->
+                    <div id="tableColPI" class="table-pi-scrollbox" style="flex: 1; transition: all 0.3s ease; width: 100%; overflow-x: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 30px;"><input type="checkbox" id="selectAllPI"></th>
+                                    <th style="width: 45px;">No</th>
+                                    <th style="width: 50px;">ID</th>
+                                    <th onclick="sortTablePI('tgl_validasi')" style="cursor:pointer;">Tgl Validasi <span id="sort_pi_tgl_validasi">↕</span></th>
+                                    <th onclick="sortTablePI('nama')" style="cursor:pointer;">Nama Pegawai <span id="sort_pi_nama">↕</span></th>
+                                    <!-- KOLOM BARU: NIP -->
+                                    <th onclick="sortTablePI('nip')" style="cursor:pointer;">NIP <span id="sort_pi_nip">↕</span></th>
+                                    <th onclick="sortTablePI('instansi_asal')" style="cursor:pointer;">Instansi Asal <span id="sort_pi_instansi_asal">↕</span></th>
+                                    <th onclick="sortTablePI('instansi_tujuan')" style="cursor:pointer;">Instansi Tujuan <span id="sort_pi_instansi_tujuan">↕</span></th>
+                                    <th onclick="sortTablePI('wilker_prov')" style="cursor:pointer;">WIlayah <span id="sort_pi_wilker_prov">↕</span></th>
+                                    <th onclick="sortTablePI('status')" style="cursor:pointer;">Status <span id="sort_pi_status">↕</span></th>
+                                    <th>Keterangan / Validator</th>
+                                    <th style="width: 70px; text-align: center;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBodyPI">
+                                <!-- Data dirender otomatis oleh renderTablePI() -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- KOLOM KANAN: FORM PI (SIDE PANEL DUAL-MODE: TAMBAH / EDIT) -->
+                    <div id="sideEditFormPI" style="display: none; width: 380px; min-width: 340px; background: #ffffff; border: 1.5px solid #0284c7; border-radius: 10px; padding: 18px; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.12); position: sticky; top: 20px; animation: slideInRight 0.3s ease;">
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px;">
+                            <h4 id="sideFormTitlePI" style="margin: 0; color: #0f172a; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-pen-to-square" style="color: #0284c7;"></i> <span id="sideFormTitleTextPI">Edit Data PI</span>
+                            </h4>
+                            <button type="button" onclick="closeEditFormPI()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #64748b; line-height: 1;" title="Tutup Form">&times;</button>
+                        </div>
+
+                        <!-- DATALIST UNTUK SUGGESTION INSTANSI -->
+                        <datalist id="listInstansiSuggest"></datalist>
+
+                        <form id="formEditPI" style="display: flex; flex-direction: column; gap: 12px;">
+                            <input type="hidden" id="editKeyPI">
+                            <div>
+                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase;">Nama Pegawai</label>
+                                <input type="text" id="editNamaPI" style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;" required>
+                            </div>
+                            <div>
+                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase;">NIP</label>
+                                <input type="text" id="editNipPI" placeholder="Masukkan 18 digit NIP..." style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;" required>
+                            </div>
+                            <div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase;">Instansi Asal</label>
+                                    <button type="button" onclick="openModalMasterInstansi()" style="background: none; border: none; color: #0284c7; font-size: 11px; cursor: pointer; font-weight: bold;">+ Kelola Master Instansi</button>
+                                </div>
+                                <input type="text" id="editInstansiAsalPI" list="listInstansiSuggest" placeholder="Ketik nama instansi asal..." style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;" required>
+                            </div>
+
+                            <div>
+                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase;">Instansi Tujuan</label>
+                                <input type="text" id="editInstansiTujuanPI" list="listInstansiSuggest" placeholder="Ketik nama instansi tujuan..." style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;" required>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div>
+                                    <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase;">Tgl Validasi</label>
+                                    <input type="date" id="editTglValidasiPI" style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 12px;">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase;">Status Usulan</label>
+                                <select id="editStatusPI" style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;">
+                                    <option value="ACC">ACC / SETUJU</option>
+                                    <option value="INBOX">INBOX / APPROVAL</option>
+                                    <option value="BTS">BTS</option>
+                                    <option value="TMS">TMS</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase;">Keterangan</label>
+                                <textarea id="editKeteranganPI" rows="3" style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;"></textarea>
+                            </div>
+
+                            <!-- BARIS TOMBOL AKSI -->
+                            <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 10px; gap: 8px;">
+                                <button type="button" onclick="closeEditFormPI()" style="padding: 8px 12px; background: #64748b; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                    <i class="fas fa-times"></i> Batal
+                                </button>
+                                <button type="submit" id="btnSubmitFormPI" style="padding: 8px 14px; background: #0284c7; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                    <i class="fas fa-floppy-disk"></i> Simpan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 4. SEKSI DASHBOARD -->
+        <div id="dashboard" class="section">
+            <div class="module-header-banner header-dshb">
+                <div class="module-header-title">
+                    <h2>📍🗺️ Dashboard Pelayanan Tim Pengangkatan dan Mutasi</h2>
+                    <p>Laporan, rekapitulasi, dan pendokumentasian proses usul Kenaikan Pangkat pegawai.</p>
+                </div>
+                <div class="header-widgets-compact">
+                    <div class="team-chat-mini" title="Tim Pelayanan Berdiskusi">
+                        <span class="person-mini p1">👨‍💼<span class="chat-bubble-mini">MS BTS!?</span></span>
+                        <span class="person-mini p2">👩‍💼<span class="chat-bubble-mini">Siap!</span></span>
+                        <span class="person-mini p3">👨‍💻<span class="chat-bubble-mini">Acc!</span></span>
+                        <span class="person-mini p4">👩‍💻<span class="chat-bubble-mini">Pertek OK</span></span>
+                        <span class="person-mini p5">🧔<span class="chat-bubble-mini">Validasi</span></span>
+                        <span class="person-mini p6">👩‍🦰<span class="chat-bubble-mini">Selesai!</span></span>
+                    </div>
+                    <div class="digital-clock-mini clock-transparent">
+                        <div class="clock-date-mini" id="clockDateDSHB">18 Agt 2026</div>
+                        <div class="clock-time-mini">
+                            <span id="clockHoursDSHB">00</span><span class="clock-colon">:</span><span id="clockMinutesDSHB">00</span><span class="clock-colon">:</span><span id="clockSecondsDSHB">00</span>
+                            <span class="clock-tz-mini">WIT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+   
+            <!-- SPLIT LAYOUT DASHBOARD -->
+             
+            <div class="dashboard-split-layout">
+                <div class="chart-box-wrapper">
+                    <canvas id="mainTotalChart"></canvas>
+                </div>
+                <div class="dashboard-cards-column">
+                    <!-- BARIS HEADER SUMMARY (Judul Ringkasan & Badge Total Usulan di Kanan) -->
+                    <div style="display: flex; justify-content:left ; align-items: center; margin-bottom: 12px; gap: 10px;">
+                        <h3 class="btn-rekap-animated" style="background: #ffffff; color: #065f46; margin: 0; text-align: left ; pointer-events: none;">
+                            📊 Ringkasan Status Usulan
+                        </h3>
+                        
+                        <!-- POSISI BARU: BOX TOTAL USULAN DI KANAN ATAS CARDS -->
+                        <div id="totalSummaryBadge" id="btnResetDashFilter" class="btn-rekap-animated" style="background: #4d4d4d;  margin: 0; text-align: right ; pointer-events: none">
+                            Total Usulan: <strong>0 Data</strong>
+                        </div>
+                    </div>
+                    <div class="dashboard-cards">
+                        <div class="card card-ms">
+                            <h4>MEMENUHI SYARAT (MS)</h4>
+                            <div class="card-value" id="cardMsValue">0</div>
+                            <button class="btn-card-copy" onclick="openSummaryTableModal('kategori', 'MS')">🔍 Lihat Detail</button>
+                        </div>
+                        <div class="card card-bts">
+                            <h4>BERKAS TIDAK SESUAI (BTS)</h4>
+                            <div class="card-value" id="cardBtsValue">0</div>
+                            <button class="btn-card-copy" onclick="openSummaryTableModal('kategori', 'BTS')">🔍 Lihat Detail</button>
+                        </div>
+                        <div class="card card-tms">
+                            <h4>TIDAK MEMENUHI SYARAT (TMS)</h4>
+                            <div class="card-value" id="cardTmsValue">0</div>
+                            <button class="btn-card-copy" onclick="openSummaryTableModal('kategori', 'TMS')">🔍 Lihat Detail</button>
+                        </div>
+                        <div class="card card-inbox">
+                            <h4>INBOX USULAN</h4>
+                            <div class="card-value" id="cardInboxValue">0</div>
+                            <button class="btn-card-copy" onclick="openSummaryTableModal('kategori', 'Inbox')">🔍 Lihat Detail</button>
+                        </div>
+                    </div>
+
+                    <div class="mini-cards-container">
+                        <div class="mini-card">
+                            <h5>KP Reguler</h5>
+                            <div class="mini-value" id="miniKpReguler">0</div>
+                            <button class="btn-card-copy" onclick="openSummaryTableModal('jenis', 'KP Reguler')">🔍 Lihat</button>
+                        </div>
+                        <div class="mini-card">
+                            <h5>Penyesuaian Ijazah</h5>
+                            <div class="mini-value" id="miniKpIjazah">0</div>
+                            <button class="btn-card-copy" onclick="openSummaryTableModal('jenis', 'KP Penyesuaian Ijazah')">🔍 Lihat</button>
+                        </div>
+                        <div class="mini-card">
+                            <h5>KP JF</h5>
+                            <div class="mini-value" id="miniKpJf">0</div>
+                            <button class="btn-card-copy" onclick="openSummaryTableModal('jenis', 'KP JF')">🔍 Lihat</button>
+                        </div>
+                        <div class="mini-card">
+                            <h5>KP Struktural</h5>
+                            <div class="mini-value" id="miniKpStruktural">0</div>
+                            <button class="btn-card-copy" onclick="openSummaryTableModal('jenis', 'KP Struktural')">🔍 Lihat</button>
+                        </div>
+                    </div>
+
+                    <button class="btn-rekap-animated" onclick="openRekapAngkaModal()">📋 Rekapitulasi Angka Dashboard</button>
+                </div>
+            </div>
+
+            <!-- FILTER DASHBOARD -->
+            <div class="js-team-modal-section" style="margin-top: 30px; width: 100%; box-sizing: border-box;background-color: #c8c8c8;">
+                <header class="js-team-modal-head">
+                    <div class="filter-container">
+                        <div class="filter-group">
+                            <label style="font-size: 16px; color: #000000; font-weight: 600;">Filter Instansi:</label>
+                            <select id="dashFilterInstansi" class="filter-select" onchange="window.updateDashboardMetrics()">
+                                <option value="">-- Semua Instansi --</option>
+                            </select>
+                        </div>
+                        <!-- FILTER PERIODE KP -->
+                        <div class="filter-group">
+                            <label style="font-size: 16px; color: #000000; font-weight: 600;" for="dashFilterPeriodeKP">Filter Periode KP:</label>
+                            <select id="dashFilterPeriodeKP" class="filter-select" onchange="window.updateDashboardMetrics()">
+                                <option value="">-- Semua Periode KP --</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label style="font-size: 16px; color: #000000; font-weight: 600;">Dari Tanggal:</label>
+                            <input type="date" id="dashDateFrom" class="filter-input-date" onchange="window.updateDashboardMetrics()">
+                        </div>
+                        <div class="filter-group">
+                            <label style="font-size: 16px; color: #000000; font-weight: 600;">Sampai Tanggal:</label>
+                            <input type="date" id="dashDateTo" class="filter-input-date" onchange="window.updateDashboardMetrics()">
+                        </div>
+                        <div class="filter-group-right" style="display: flex; align-items: center;">
+                            <div class="toggle-switch-item" style="background: #e2e2e2; border: 1px solid #ffffff; border-radius: 8px; padding: 6px 12px; display: flex; align-items: center; gap: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                                <span class="toggle-switch-label" style="font-size: 13px; font-weight: 600; color: #1a1a1a;">Include Usul KPO</span>
+                                <label class="switch" style="margin: 0;">
+                                    <input type="checkbox" id="toggleIncludeKPO" checked onchange="window.handleKPOFilterChange()">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-end;">
+                            <button type="button" id="btnResetDashFilter" class="btn-rekap-animated" style="background: #aa2500; height: 38px;" onclick="window.resetDashboardFilters()">
+                                Reset Filter
+                            </button>
+                        </div>
+                        
+                    </div>
+                </header>
+            </div>
+            
+            <!-- <div id="totalSummaryBadge" class="total-summary-badge">Total Usulan Terpilih: 0 Data</div> -->
+
+            <!-- INTEGRASI SECTION REKAP DASHBOARD 3 CARDS -->
+            <div class="js-team-modal-section" style="margin-top: 30px; width: 100%; box-sizing: border-box;">
+                <header class="js-team-modal-head">
+                    <div>
+                        <h3 style="font-size: 24px;">Ekspor Laporan <span>Per Instansi</span></h3>
+                        <p>Pilih wilayah/kelompok instansi di bawah ini untuk melihat rekapitulasi data usulan KP secara detail dan mengekspornya.</p>
+                    </div>
+                </header>
+
+                <div class="js-team-modal-grid">
+                    <button class="js-team-modal-card" onclick="window.toggleRekapRegionSection('export-section-papua-barat')">
+                        <div class="js-team-modal-photo"><div class="js-team-modal-avatar">🦃</div></div>
+                        <div class="js-team-modal-card-body">
+                            <span>Wilayah 1</span>
+                            <strong>Export KP Papua Barat</strong>
+                        </div>
+                    </button>
+
+                    <button class="js-team-modal-card" onclick="window.toggleRekapRegionSection('export-section-papua-barat-daya')">
+                        <div class="js-team-modal-photo"><div class="js-team-modal-avatar">🐦‍🔥</div></div>
+                        <div class="js-team-modal-card-body">
+                            <span>Wilayah 2</span>
+                            <strong>Export KP Papua Barat Daya</strong>
+                        </div>
+                    </button>
+
+                    <button class="js-team-modal-card" onclick="window.toggleRekapRegionSection('export-section-instansi-vertikal')">
+                        <div class="js-team-modal-photo"><div class="js-team-modal-avatar">🏢</div></div>
+                        <div class="js-team-modal-card-body">
+                            <span>Kementerian / Lembaga</span>
+                            <strong>Export KP Instansi Vertikal</strong>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- CONTAINER TABEL INLINE EXPANDABLE -->
+            <div id="rekapRegionExpandableContainer" style="margin-top: 20px;">
+
+                <!-- 1. TABEL REGIONAL PAPUA BARAT -->
+                <div id="export-section-papua-barat" class="rekap-region-expandable">
+                    <div class="rekap-region-card">
+                        <div class="rekap-region-header">
+                            <h3>📊 Export KP - Provinsi Papua Barat</h3>
+                            <div id="exportDateTextPB" class="rekap-header-subtitle-date" style="font-size: 13px; font-weight: 600; color: #38bdf8; margin-top: 4px;">
+                                📅 Rentang Data: --
+                            </div>
+                            <button type="button" class="btn-close-inline" onclick="window.toggleRekapRegionSection('export-section-papua-barat')">✖ Tutup</button>
+                        </div>
+                        <div class="rekap-region-body">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                                <span style="font-size: 12px; color: #64748b; font-weight: 600;">Tabel rekapitulasi real-time usulan KP wilayah Provinsi Papua Barat.</span>
+                                <button onclick="window.copyAnyTable('table-rekap-pb')" class="copy-table-btn">📋 Copy Tabel ke Excel</button>
+                            </div>
+                            <div class="table-wrapper-full">
+                                <table class="rekap-regional-table" id="table-rekap-pb">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Instansi</th>
+                                            <th>Berkas Masuk</th>
+                                            <th>Approval (Inbox)</th>
+                                            <th>Total Validasi</th>
+                                            <th>MS</th>
+                                            <th>BTS</th>
+                                            <th>TMS</th>
+                                            <th>Menunggu TTD</th>
+                                            <th>Sudah TTD</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-papua-barat"></tbody>
+                                    <tfoot id="tfoot-papua-barat"></tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button onclick="window.previewLaporanPDF()" class="btn-pdf-shine">
+                            <i class="fas fa-file-pdf"></i> Cetak Laporan PDF Keseluruhan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. TABEL REGIONAL PAPUA BARAT DAYA -->
+                <div id="export-section-papua-barat-daya" class="rekap-region-expandable">
+                    <div class="rekap-region-card">
+                        <div class="rekap-region-header">
+                            <h3>📈 Export KP - Provinsi Papua Barat Daya</h3>
+                            <div id="exportDateTextPBD" class="rekap-header-subtitle-date" style="font-size: 13px; font-weight: 600; color: #38bdf8; margin-top: 4px;">
+                                📅 Rentang Data: --
+                            </div>
+                            <button type="button" class="btn-close-inline" onclick="window.toggleRekapRegionSection('export-section-papua-barat-daya')">✖ Tutup</button>
+                        </div>
+                        <div class="rekap-region-body">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                                <span style="font-size: 12px; color: #64748b; font-weight: 600;">Tabel rekapitulasi real-time usulan KP wilayah Provinsi Papua Barat Daya.</span>
+                                <button onclick="window.copyAnyTable('table-rekap-pbd')" class="copy-table-btn">📋 Copy Tabel ke Excel</button>
+                            </div>
+                            <div class="table-wrapper-full">
+                                <table class="rekap-regional-table" id="table-rekap-pbd">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Instansi</th>
+                                            <th>Berkas Masuk</th>
+                                            <th>Approval (Inbox)</th>
+                                            <th>Total Validasi</th>
+                                            <th>MS</th>
+                                            <th>BTS</th>
+                                            <th>TMS</th>
+                                            <th>Menunggu TTD</th>
+                                            <th>Sudah TTD</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-papua-barat-daya"></tbody>
+                                    <tfoot id="tfoot-papua-barat-daya"></tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button onclick="window.previewLaporanPDF()" class="btn-pdf-shine">
+                            <i class="fas fa-file-pdf"></i> Cetak Laporan PDF Keseluruhan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. TABEL INSTANSI VERTIKAL -->
+                <div id="export-section-instansi-vertikal" class="rekap-region-expandable">
+                    <div class="rekap-region-card">
+                        <div class="rekap-region-header">
+                            <h3>🏢 Export KP - Instansi Vertikal</h3>
+                            <div id="exportDateTextVert" class="rekap-header-subtitle-date" style="font-size: 13px; font-weight: 600; color: #38bdf8; margin-top: 4px;">
+                                📅 Rentang Data: --
+                            </div>
+                            <button type="button" class="btn-close-inline" onclick="window.toggleRekapRegionSection('export-section-instansi-vertikal')">✖ Tutup</button>
+                        </div>
+                        <div class="rekap-region-body">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                                <span style="font-size: 12px; color: #64748b; font-weight: 600;">Tabel rekapitulasi real-time usulan KP kementerian & lembaga vertikal.</span>
+                                <button onclick="window.copyAnyTable('table-rekap-vertikal')" class="copy-table-btn">📋 Copy Tabel ke Excel</button>
+                            </div>
+                            <div class="table-wrapper-full">
+                                <table class="rekap-regional-table" id="table-rekap-vertikal">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Instansi</th>
+                                            <th>Berkas Masuk</th>
+                                            <th>Approval (Inbox)</th>
+                                            <th>Total Validasi</th>
+                                            <th>MS</th>
+                                            <th>BTS</th>
+                                            <th>TMS</th>
+                                            <th>Menunggu TTD</th>
+                                            <th>Sudah TTD</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-instansi-vertikal"></tbody>
+                                    <tfoot id="tfoot-instansi-vertikal"></tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button onclick="window.previewLaporanPDF()" class="btn-pdf-shine">
+                            <i class="fas fa-file-pdf"></i> Cetak Laporan PDF Keseluruhan
+                        </button>
+                    </div>
+                </div>
+            </div>    
+
+            <!-- ========================================== -->
+            <!-- TREN GRAFIK USULAN HARIAN (BARU)           -->
+            <!-- ========================================== -->
+            <div class="dashboard-section" style="margin-top: 24px; margin-bottom: 24px;">
+                <div class="rekap-region-card" style="background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 1px solid #e2e8f0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">
+                        <div>
+                            <h3 style="margin: 0; color: #0f172a; font-size: 16px;">📈 Jumlah Usulan per Hari</h3>
+                            <div id="trendChartDateText" style="font-size: 12px; font-weight: 600; color: #0284c7; margin-top: 4px;">📅 Semua Data Usulan KP</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Canvas untuk Chart.js -->
+                    <div style="position: relative; height: 320px; width: 100%;">
+                        <canvas id="dailyTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="btn-rekap-animated" >
+                <button id="btnToggleKabChart" class="btn-toggle-chart">
+                    <span>🍩</span> Tampilkan Grafik Donat Detail per Instansi
+                </button>
+            </div>
+
+            <!-- GRAFIK DONUT DETAIL -->
+            <div id="kabChartWrapper" style="display: none; margin-top: 25px;">
+                <h3 style="font-size: 15px; color: #1e293b; margin-bottom: 10px;">Sebaran Rekapitulasi per Instansi Induk</h3>
+                <div id="donutCardsGrid" class="donut-grid-container"></div>
+            </div>
+        </div>
+
+        <!-- 5. SEKSI ADMIN PANEL -->
+        <!-- HALAMAN ADMIN PANEL / PROFIL -->
+<div id="admin-page" class="section" style="display: none;">
+    
+    <!-- HEADER ADMIN -->
+    <div class="content-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+        <div>
+            <h2><i class="fas fa-user-shield"></i> Pengaturan Akun & Pengguna</h2>
+            <p>Kelola kata sandi akun Anda dan manajemen pengguna sistem.</p>
+        </div>
+        <button onclick="openChangePasswordModal()" class="btn-action" style="background: #e67e22; padding: 8px 16px; font-size: 14px;">
+            🔑 Ubah Password Saya
+        </button>
+    </div>
+
+    <!-- AREA KELOLA PENGGUNA SISTEM (HANYA UNTUK ROLE ADMIN) -->
+    <div id="adminUserManagementArea" style="display: none; margin-top: 25px;">
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-bottom: 25px;">
+        
+        <!-- TOMBOL TAMBAH USER -->
+        <div style="margin-bottom: 20px; display: flex; justify-content: flex-end;">
+            <button onclick="openAddUserForm()" class="btn-action">
+                <i class="fas fa-user-plus"></i> Tambah User Baru
+            </button>
+        </div>
+
+        <!-- GRID TABEL & FORM REGISTER -->
+        <div class="admin-grid-container">
+            <!-- TABEL USER -->
+            <div class="admin-card-box admin-col-left">
+                <h4 style="margin-top: 0; color: #2c3e50;">👥 Informasi User Pengguna</h4>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 50px; text-align: center;">ID Inisial</th>
+                                <th>Email User</th>
+                                <th>Nama Lengkap</th>
+                                <th>Role</th>
+                                <th style="text-align: center; width: 140px;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userManagementTableBody">
+                            <tr><td colspan="5" style="text-align: center; padding: 15px; color: #7f8c8d;">Memuat data user...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <br>
+                <br>
+                    <button type="button" class="btn-logout" onclick="window.clearAllDataKP()" style="background-color: #ef4444; color: white; padding: 6px 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">
+                        <i class="fas fa-trash-can"></i> Hapus Semua Data KP
+                    </button>
+            </div>
+            
+            <!-- FORM REGISTER/EDIT USER -->
+            <div class="admin-card-box admin-col-right" id="adminFormBox" style="display: none; border-top: 4px solid #2ecc71;">
+                <h4 id="adminFormTitle" style="margin-top: 0; color: #2c3e50;">➕ Tambah User Pengguna Baru & Atur Hak Akses</h4>
+                <form id="adminRegisterForm">
+                    <input type="hidden" id="editUserUidTarget" value="">
+                    <div class="form-group-stacked">
+                        <label style="font-size: 12px; font-weight: bold;">Nama Lengkap / Identitas</label>
+                        <input type="text" id="newUserName" required placeholder="Nama User" class="admin-input-field">
+                    </div>
+                    <div class="form-group-stacked">
+                        <label style="font-size: 12px; font-weight: bold;">Email User</label>
+                        <input type="email" id="newUserEmail" required placeholder="user@instansi.go.id" class="admin-input-field">
+                    </div>
+                    <div class="form-grid-2" style="margin-top: 10px;">
+                        <div>
+                            <label style="font-size: 12px; font-weight: bold;">ID Inisial (Max 3 Huruf)</label>
+                            <input type="text" id="newUserIdInisial" required maxlength="3" placeholder="ADI" class="admin-input-field" style="text-transform: uppercase;">
+                        </div>
+                        <div>
+                            <label style="font-size: 12px; font-weight: bold;">Password</label>
+                            <input type="password" id="newUserPassword" placeholder="Password" class="admin-input-field">
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <label style="font-size: 12px; font-weight: bold;">Role Akses Jabatan</label>
+                        <select id="newUserRole" onchange="window.handleNewRoleChange()" class="admin-input-field">
+                            <option value="Operator">Operator Pelayanan</option>
+                            <option value="Admin">Administrator Sistem</option>
+                        </select>
+                    </div>
+                    <div style="margin-top: 15px; margin-bottom: 20px;">
+                        <label style="font-size: 12px; font-weight: bold; color: #2c3e50;">Pengaturan Sakelar ON/OFF Hak Akses Menu & Fitur:</label>
+                        <div class="toggle-switch-group">
+                            <div class="toggle-switch-item"><span class="toggle-switch-label">📈 Halaman KP</span><label class="switch"><input type="checkbox" id="chkNewMenuKP" checked><span class="slider"></span></label></div>
+                            <div class="toggle-switch-item"><span class="toggle-switch-label">🔄 Halaman PI</span><label class="switch"><input type="checkbox" id="chkNewMenuPI" checked><span class="slider"></span></label></div>
+                            <div class="toggle-switch-item"><span class="toggle-switch-label">🎓 Halaman PGA</span><label class="switch"><input type="checkbox" id="chkNewMenuPGA" checked><span class="slider"></span></label></div>
+                            <div class="toggle-switch-item"><span class="toggle-switch-label">📊 Halaman Dashboard</span><label class="switch"><input type="checkbox" id="chkNewDashboard" checked><span class="slider"></span></label></div>
+                            <div class="toggle-switch-item"><span class="toggle-switch-label">⚙️ Halaman Admin</span><label class="switch"><input type="checkbox" id="chkNewAdmin" checked><span class="slider"></span></label></div>
+                            <div class="toggle-switch-item" style="background: #f1f5f9; border-left: 3px solid #e11d48; margin-top: 8px;">
+                                <span class="toggle-switch-label" style="color: #9f1239; font-weight: bold;">🗑️ Izin Tombol Hapus Terpilih</span>
+                                <label class="switch"><input type="checkbox" id="chkAllowDeleteSelected"><span class="slider"></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" id="btnAdminSubmit" class="btn-action" style="background: #2ecc71; flex: 1;">Daftarkan User</button>
+                        <button type="button" id="btnAdminCancelEdit" class="btn-undo-cancel" onclick="window.confirmCancelEditAdmin()">Tutup</button>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+
+    <!-- ========================================== -->
+    <!-- MODAL POP-UP UBAH PASSWORD -->
+    <!-- ========================================== -->
+    <!-- MODAL POP-UP UBAH PASSWORD -->
+    <div id="modalChangePassword" class="modal-backdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+        <div style="background: #fff; padding: 25px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;">
+            <h3 style="margin-top: 0; font-size: 18px; color: #1e293b;">🔑 Ganti Kata Sandi</h3>
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Masukkan password saat ini dan password baru Anda.</p>
+            
+            <form id="formChangePassword" onsubmit="event.preventDefault();">
+                <!-- INPUT PASSWORD LAMA -->
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px;">Password Saat Ini (Lama)</label>
+                    <input type="password" id="inputOldPassword" placeholder="Masukkan password saat ini" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+                </div>
+
+                <!-- INPUT PASSWORD BARU -->
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px;">Password Baru</label>
+                    <input type="password" id="inputNewPassword" placeholder="Minimal 6 karakter" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+                </div>
+                
+                <!-- INPUT KONFIRMASI PASSWORD BARU -->
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px;">Konfirmasi Password Baru</label>
+                    <input type="password" id="inputConfirmPassword" placeholder="Ketik ulang password baru" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+                </div>
+
+                <!-- PESAN STATUS / SPINNER -->
+                <div id="changePasswordStatus" style="display: none; margin-bottom: 15px; text-align: center; font-size: 14px; font-weight: 600;"></div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" id="btnCancelChangePassword" onclick="closeChangePasswordModal()" style="padding: 8px 16px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; cursor: pointer;">Batal</button>
+                    <!-- UBAH TYPE MENJADI BUTTON DAN PANGGIL FUNGSI SECARA DIRECT -->
+                    <button type="button" id="btnSubmitChangePassword" onclick="window.handleProcessChangePassword()" style="padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer;">Simpan Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SEMUA MODAL BAWAAN -->
+   <!-- MODAL REKAPITULASI ANGKA DASHBOARD -->
+    <div id="rekapAngkaModal" class="modal-wrapper" style="display: none;">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>📊 Rekapitulasi Angka Dashboard</h3>
+                <span class="modal-close" onclick="document.getElementById('rekapAngkaModal').style.display='none'">&times;</span>
+            </div>
+            <div class="modal-body">
+                
+                <!-- A. REKAP STATUS USULAN -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
+                    <h4 style="margin: 0; color: #1e293b; font-size: 15px;">A. Rekap Kenaikan Pangkat</h4>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="window.openRekapInstansiModal()" class="btn-rekap-instansi">🏢 Lihat Rekap Per Instansi</button>
+                        <button onclick="window.copyAnyTable('tabelRekapStatus')" class="copy-table-btn">📋 Copy Tabel Rekap</button>
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto; width: 100%;">
+                    <table id="tabelRekapStatus" class="table-rekap-angka">
+                        <thead>
+                            <!-- BARIS PERIODE KP DITEMPATKAN DI ATAS HEADER KOLOM -->
+                            <tr>
+                                <th id="modalRekapDateTextA" colspan="6" style="background-color: #ffffff !important; color: #5a2a00 !important; text-align: left !important; padding: 8px 12px !important; font-size: 12px !important; border-bottom: 2px solid #e8e8e8 !important;"></th>
+                            </tr>
+                            <tr>
+                                <!-- <th class="col-region">Regional / Wilayah</th> -->
+                                <th class="col-region">Wilayah / Instansi</th>
+                                <th class="col-num" style="color: #86efac;">MS</th>
+                                <th class="col-num" style="color: #fde047;">BTS</th>
+                                <th class="col-num" style="color: #fca5a5;">TMS</th>
+                                <th class="col-num" style="color: #93c5fd;">Inbox</th>
+                                <th class="col-num th-total-col">TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyRekapStatusRegional"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="col-region" style="font-weight: 800; color: #0f172a;">JUMLAH TOTAL</td>
+                                <td id="rekMs" class="col-num" style="color: #16a34a;">0</td>
+                                <td id="rekBts" class="col-num" style="color: #d97706;">0</td>
+                                <td id="rekTms" class="col-num" style="color: #dc2626;">0</td>
+                                <td id="rekInbox" class="col-num" style="color: #2563eb;">0</td>
+                                <td id="rekTotalStatus" class="col-num td-total-col">0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- B. REKAP JENIS KP -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; margin-top: 18px; flex-wrap: wrap; gap: 8px;">
+                    <h4 style="margin: 0; color: #1e293b; font-size: 15px;">B. Rekap Berdasarkan Jenis KP</h4>
+                    <button onclick="window.copyAnyTable('tabelRekapJenis')" class="copy-table-btn">📋 Copy Tabel Jenis KP</button>
+                </div>
+
+                <div style="overflow-x: auto; width: 100%;">
+                    <table id="tabelRekapJenis" class="table-rekap-angka">
+                        <thead>
+                            <!-- BARIS PERIODE KP DITEMPATKAN DI ATAS HEADER KOLOM -->
+                            <tr>
+                                <th id="modalRekapDateTextB" colspan="6" style="background-color: #ffffff !important; color: #5a2a00 !important; text-align: left !important; padding: 8px 12px !important; font-size: 12px !important; border-bottom: 2px solid #e8e8e8 !important;"></th>
+                            </tr>
+                            <tr>
+                                <!-- <th class="col-region">Regional / Wilayah</th> -->
+                                <th class="col-region">Wilayah / Instansi</th>
+                                <th class="col-num">KP Reguler</th>
+                                <th class="col-num">PI / Ijazah</th>
+                                <th class="col-num">KP JF</th>
+                                <th class="col-num">KP Struktural</th>
+                                <th class="col-num th-total-col">TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyRekapJenisRegional"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="col-region" style="font-weight: 800; color: #0f172a;">JUMLAH TOTAL</td>
+                                <td id="rekReg" class="col-num">0</td>
+                                <td id="rekIj" class="col-num">0</td>
+                                <td id="rekJf" class="col-num">0</td>
+                                <td id="rekStruk" class="col-num">0</td>
+                                <td id="rekTotalJenis" class="col-num td-total-col">0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+
+    <div id="rekapInstansiModal" class="modal-wrapper" style="display: none;">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>🏢 Rekapitulasi Usulan Per Instansi</h3>
+                <span class="modal-close" onclick="document.getElementById('rekapInstansiModal').style.display='none'">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                    <span style="font-size: 12px; color: #64748b;">Klik header kolom untuk mengurutkan data:</span>
+                    <button type="button" onclick="window.copyInstansiTableClean()" class="copy-table-btn">📋 Copy Tabel ke Excel</button>
+                </div>
+                <div class="table-wrapper" style="max-height: 420px; overflow-y: auto;">
+                    <table id="tabelRekapInstansi" class="detail-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px; text-align: center;">No</th>
+                                <th class="sortable" onclick="window.sortRekapInstansiTable('name')">Nama Instansi <span id="sort_inst_name" class="sort-arrow">↕</span></th>
+                                <th class="sortable" style="text-align: center; width: 80px;" onclick="window.sortRekapInstansiTable('MS')">MS <span id="sort_inst_MS" class="sort-arrow">↕</span></th>
+                                <th class="sortable" style="text-align: center; width: 80px;" onclick="window.sortRekapInstansiTable('BTS')">BTS <span id="sort_inst_BTS" class="sort-arrow">↕</span></th>
+                                <th class="sortable" style="text-align: center; width: 80px;" onclick="window.sortRekapInstansiTable('TMS')">TMS <span id="sort_inst_TMS" class="sort-arrow">↕</span></th>
+                                <th class="sortable" style="text-align: center; width: 80px;" onclick="window.sortRekapInstansiTable('Inbox')">Inbox <span id="sort_inst_Inbox" class="sort-arrow">↕</span></th>
+                                <th class="sortable th-total-col" style="width: 110px;" onclick="window.sortRekapInstansiTable('Total')">TOTAL JUMLAH <span id="sort_inst_Total" class="sort-arrow">↕</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelRekapInstansiBody"></tbody>
+                        <tfoot id="tabelRekapInstansiFoot"></tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <div id="summaryTableModal" class="modal-wrapper" style="display: none;">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3 id="summaryModalTitle">Daftar Usulan KP</h3>
+                <span class="modal-close" onclick="document.getElementById('summaryTableModal').style.display='none'">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                    <span style="font-size: 12px; color: #64748b;">Klik header kolom untuk mengurutkan data detail:</span>
+                    <button onclick="window.copyDetailSummaryTableClean()" class="copy-table-btn">📋 Copy Tabel ke Excel</button>
+                </div>
+                <div class="table-wrapper" style="max-height: 420px; overflow-y: auto;">
+                    <table id="summaryExportTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px; text-align: center;">No</th>
+                                <th class="sortable" onclick="window.sortDetailSummaryTable('uploader_initial')">ID User <span id="sort_det_uploader_initial" class="sort-arrow">↕</span></th>
+                                <th class="sortable" onclick="window.sortDetailSummaryTable('instansi_induk')">Instansi <span id="sort_det_instansi_induk" class="sort-arrow">↕</span></th>
+                                <th class="sortable" onclick="window.sortDetailSummaryTable('tgl_pengiriman_kelayanan')">Tgl Usul Masuk <span id="sort_det_tgl_pengiriman_kelayanan" class="sort-arrow">▼</span></th>
+                                <th class="sortable" onclick="window.sortDetailSummaryTable('nama')">Nama <span id="sort_det_nama" class="sort-arrow">↕</span></th>
+                                <th class="sortable" onclick="window.sortDetailSummaryTable('nip')">NIP <span id="sort_det_nip" class="sort-arrow">↕</span></th>
+                                <th class="sortable" onclick="window.sortDetailSummaryTable('jenis_kp')">Jenis KP <span id="sort_det_jenis_kp" class="sort-arrow">↕</span></th>
+                                <th class="sortable" onclick="window.sortDetailSummaryTable('kategori_status')">Kategori Status <span id="sort_det_kategori_status" class="sort-arrow">↕</span></th>
+                                <th class="sortable" onclick="window.sortDetailSummaryTable('status_usulan')">Status Usulan <span id="sort_det_status_usulan" class="sort-arrow">↕</span></th>
+                                <th class="sortable" onclick="window.sortDetailSummaryTable('no_pertek')">No Pertek <span id="sort_det_no_pertek" class="sort-arrow">↕</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="summaryExportTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="previewModal" class="modal-wrapper" style="display: none;">
+        <div class="modal-content">
+            <!-- Tombol Silang (X) Penutup -->
+            <button class="modal-close-btn" onclick="closePreviewModal()" style="position: absolute; top: 15px; right: 18px; background: none; border: none; font-size: 22px; cursor: pointer; color: #64748b;">&times;</button>
+            <h3>Detail Usulan Pegawai</h3>
+                
+            <div style="display: flex; flex-direction: column; gap: 12px; font-size: 14px; margin-top: 15px;">
+                <div><strong>Nama / NIP:</strong> <span id="mNamaNip">--</span></div>
+                <div><strong>Jabatan Lama:</strong> <span id="mJabatanLama">--</span></div>
+                <div><strong>Jabatan Baru:</strong> <span id="mJabatanBaru">--</span></div>
+                <div><strong>Pendidikan:</strong> <span id="mPendidikan">--</span></div>
+                <div><strong>Verifikator:</strong> <span id="mVerifikator">--</span></div>
+                <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 10px; border-radius: 4px; color: #991b1b;">
+                    <strong>Alasan Tolak / Catatan:</strong> <span id="mAlasanTolak">--</span>
+                </div>
+            </div>
+
+            <div style="text-align: right; margin-top: 20px;">
+                <button class="btn-secondary" onclick="closePreviewModal()" style="padding: 8px 18px; border-radius: 6px; cursor: pointer;">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-wrapper" id="logoutModal" style="display: none;">
+        <div class="modal-content" style="max-width: 420px; text-align: center; padding: 0;">
+            <div class="modal-header" style="background: #e11d48 !important;">
+                <h3 style="color: #ffffff !important; font-size: 16px !important;">🚪 Konfirmasi Keluar</h3>
+                <span class="modal-close" id="btnCancelLogoutModal" style="color: #ffffff;">&times;</span>
+            </div>
+            <div class="modal-body" style="padding: 25px 20px;">
+                <div style="font-size: 48px; margin-bottom: 12px;">⚠️</div>
+                <h4 style="margin: 0 0 8px 0; color: #0f172a; font-size: 16px;">Apakah Anda yakin ingin keluar?</h4>
+                <p style="margin: 0 0 20px 0; color: #64748b; font-size: 13px; line-height: 1.5;">
+                    Sesi login Anda akan diakhiri dan Anda perlu memasukkan akun kembali untuk mengakses aplikasi.
+                </p>
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button type="button" id="btnCancelLogoutAction" class="btn-undo-cancel" style="padding: 9px 18px; border-radius: 6px;">Batal</button>
+                    <button type="button" id="btnConfirmLogoutModal" class="btn-undo-cancel" style="padding: 9px 18px; border-radius: 6px; cursor: pointer; background: #930000;">Ya, Keluar Saja</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PROGRESS UPLOAD DATA -->
+    <div id="uploadProgressModal" class="progress-modal" style="display: none;">
+        <div class="progress-card">
+            <div class="cloud-icon">☁️</div>
+            <h3 style="margin: 10px 0 5px 0; color: #0f172a; font-size: 16px; font-weight: 700;">Mengunggah Data ke Database...</h3>
+            
+            <!-- Progress Bar -->
+            <div class="progress-bar-container">
+                <div id="progressBarFill" class="progress-bar-fill"></div>
+            </div>
+            
+            <!-- Teks Persentase & Rincian Baris dengan Style Baru -->
+            <div id="progressPercent" class="progress-text">0%</div>
+            <div id="progressSubDetail" class="progress-subtext">0 dari 0 baris terkirim</div>
+        </div>
+    </div>
+
+    <!-- MODAL POPUP: KELOLA MASTER INSTANSI & WILKER -->
+    <div id="modalMasterInstansi" class="modal-wrapper" style="display: none;">
+        <!-- Ditambahkan style="display: none;" bawaan yang nanti diubah JS menjadi flex -->
+        <div class="modal-content" style="max-width: 550px; display: none; flex-direction: column;">
+            <div class="modal-header">
+                <h3>🏢 Kelola Master Instansi & Wilker</h3>
+                <span class="modal-close" onclick="closeModalMasterInstansi()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <!-- FORM TAMBAH MASTER INSTANSI -->
+                <form id="formAddMasterInstansi" style="display: flex; gap: 8px; margin-bottom: 15px; align-items: flex-end;">
+                    <div style="flex: 2;">
+                        <label style="font-size: 11px; font-weight: bold;">Nama Instansi</label>
+                        <input type="text" id="newMasterInstansiName" placeholder="Contoh: Badan Kepegawaian Negara" style="width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px;" required>
+                    </div>
+                    <div style="flex: 1.2;">
+                        <label style="font-size: 11px; font-weight: bold;">Kategori Wilayah</label>
+                        <select id="newMasterInstansiWilker" style="width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px;" required>
+                            <option value="Instansi Vertikal">Instansi Vertikal</option>
+                            <option value="Papua Barat">Papua Barat</option>
+                            <option value="Papua Barat Daya">Papua Barat Daya</option>
+                        </select>
+                    </div>
+                    <button type="submit" style="padding: 7px 12px; background: #047857; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer;">+ Tambah</button>
+                </form>
+
+                <!-- TABEL DAFTAR INSTANSI -->
+                <div style="max-height: 280px; overflow-y: auto; border: 1px solid #cbd5e1; border-radius: 6px;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                        <thead>
+                            <tr style="background: #f1f5f9; position: sticky; top: 0;">
+                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Nama Instansi</th>
+                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Wilayah / Kategori</th>
+                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1; width: 50px; text-align: center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyMasterInstansi"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
