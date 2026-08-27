@@ -26,11 +26,11 @@ jobs:
 
       # Menginjeksikan Secret FIREBASE_CONFIG_FILE menjadi file firebase-config.js
       - name: Create firebase-config.js from Secret
+        env:
+          FIREBASE_SECRET_DATA: ${{ secrets.FIREBASE_CONFIG_FILE }}
         run: |
           mkdir -p js
-          cat << 'EOF' > firebase-config.js
-          ${{ secrets.FIREBASE_CONFIG_FILE }}
-          EOF
+          echo "$FIREBASE_SECRET_DATA" > firebase-config.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
