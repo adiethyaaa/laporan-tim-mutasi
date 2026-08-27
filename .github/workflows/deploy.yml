@@ -27,7 +27,10 @@ jobs:
       # Menginjeksikan Secret FIREBASE_CONFIG_FILE menjadi file firebase-config.js
       - name: Create firebase-config.js from Secret
         run: |
-          echo "${{ secrets.FIREBASE_CONFIG_FILE }}" > firebase-config.js
+          mkdir -p js
+          cat << 'EOF' > firebase-config.js
+          ${{ secrets.FIREBASE_CONFIG_FILE }}
+          EOF
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
