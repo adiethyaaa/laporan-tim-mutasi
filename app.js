@@ -17,6 +17,7 @@ function injectDynamicFavicon() {
 }
 document.addEventListener("DOMContentLoaded", injectDynamicFavicon);
 
+
 // ==========================================
 // 1. VARIABEL GLOBAL & KONSTANTA
 // ==========================================

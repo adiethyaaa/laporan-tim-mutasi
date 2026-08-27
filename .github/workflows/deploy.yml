@@ -1,9 +1,9 @@
-name: Deploy to GitHub Pages
+name: Deploy Application
 
 on:
   push:
     branches:
-      - main # Ubah ke 'master' jika nama branch utama Anda adalah master
+      - main
 
 permissions:
   contents: read
@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: true
 
 jobs:
@@ -24,9 +24,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Inject Firebase Config from Secret
+      # Menginjeksikan Secret FIREBASE_CONFIG_FILE menjadi file firebase-config.js
+      - name: Create firebase-config.js from Secret
         run: |
-          echo "${{ secrets.FIREBASE_CONFIG_FILE }}" > firebase-config.js
+          echo "${{ secrets.FIREBASE_CONFIG_FILE }}" > js/firebase-config.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -34,7 +35,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.' # Mengunggah seluruh root direktori project
+          path: '.'
 
       - name: Deploy to GitHub Pages
         id: deployment
