@@ -716,16 +716,20 @@ function standardizeInstansiName(name) {
     let norm = normalizeValue(name);
     if (norm === '--') return '--';
 
+    // Hapus awalan "Pemerintah " agar seragam
     norm = norm.replace(/^Pemerintah\s+/i, '').trim();
 
     const rawLower = norm.toLowerCase();
     
+    // 1. Standarisasi Pemda Wilayah Papua Barat Daya
     if (rawLower.includes('maybrat')) return 'Kab. Maybrat';
     if (rawLower.includes('raja ampat')) return 'Kab. Raja Ampat';
     if (rawLower.includes('tambrauw')) return 'Kab. Tambrauw';
     if (rawLower.includes('sorong selatan') || rawLower.includes('sorsel')) return 'Kab. Sorong Selatan';
     if (rawLower.includes('kota sorong')) return 'Kota Sorong';
     if (rawLower === 'kab. sorong' || rawLower === 'kabupaten sorong' || rawLower === 'sorong') return 'Kab. Sorong';
+    
+    // 2. Standarisasi Pemda Wilayah Papua Barat
     if (rawLower.includes('fak-fak') || rawLower.includes('fakfak')) return 'Kab. Fak-Fak';
     if (rawLower.includes('kaimana')) return 'Kab. Kaimana';
     if (rawLower.includes('teluk wondama') || rawLower.includes('wondama')) return 'Kab. Teluk Wondama';
@@ -734,13 +738,12 @@ function standardizeInstansiName(name) {
     if (rawLower.includes('pegunungan arfak') || rawLower.includes('pegaf')) return 'Kab. Pegunungan Arfak';
     if (rawLower === 'kab. manokwari' || rawLower === 'kabupaten manokwari' || rawLower === 'manokwari') return 'Kab. Manokwari';
     
+    // 3. Standarisasi Provinsi
     if (rawLower.includes('papua barat daya') || rawLower.includes('daya')) return 'Prov. Papua Barat Daya';
-    if (rawLower.includes('papua barat')|| rawLower.includes('pabar')) return 'Prov. Papua Barat';
+    if (rawLower.includes('papua barat') || rawLower.includes('pabar')) return 'Prov. Papua Barat';
 
-    return norm.toLowerCase().split(' ').map(word => {
-        if (!word) return '';
-        return word.charAt(0).toUpperCase() + word.slice(1);
-    }).join(' ');
+    // 4. KEMBALIKAN TEKS MURNI (mencegah INSTANSI dipaksa jadi Instansi)
+    return norm;
 }
 
 // ==========================================
@@ -2603,6 +2606,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // RENDER TABEL DI DALAM MODAL MASTER INSTANSI
+// RENDER TABEL DI DALAM MODAL MASTER INSTANSI (KHUSUS INSTANSI VERTIKAL DIBUAT ASCENDING A-Z)
 window.renderMasterInstansiTable = function() {
     const tbody = document.getElementById('tbodyMasterInstansi');
     if (!tbody) return;
@@ -2612,17 +2616,33 @@ window.renderMasterInstansiTable = function() {
         return;
     }
 
-    tbody.innerHTML = masterInstansiData.map((item, index) => `
-        <tr>
-            <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0; font-weight: 600; color: #1e293b;">${item.name}</td>
-            <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0;">
-                <span style="font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; background: #e0f2fe; color: #0369a1;">${item.wilker}</span>
-            </td>
-            <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0; text-align: center;">
-                <button type="button" onclick="deleteMasterInstansi(${index})" style="background: #fee2e2; border: 1px solid #fca5a5; color: #dc2626; border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: bold; cursor: pointer;" title="Hapus Instansi">Hapus</button>
-            </td>
-        </tr>
-    `).join('');
+    // 1. Pisahkan antara Instansi Vertikal dan Non-Vertikal
+    const vertikalList = masterInstansiData.filter(item => item.wilker === 'Instansi Vertikal');
+    const nonVertikalList = masterInstansiData.filter(item => item.wilker !== 'Instansi Vertikal');
+
+    // 2. Urutkan khusus Instansi Vertikal secara Ascending (A-Z)
+    vertikalList.sort((a, b) => a.name.localeCompare(b.name, 'id', { sensitivity: 'base' }));
+
+    // 3. Gabungkan kembali (Non-Vertikal tetap pada urutan aslinya, diikuti Instansi Vertikal A-Z)
+    const sortedData = [...nonVertikalList, ...vertikalList];
+
+    // 4. Render ke tabel
+    tbody.innerHTML = sortedData.map((item) => {
+        // Cari indeks asli di masterInstansiData untuk keperluan hapus data yang tepat
+        const originalIndex = masterInstansiData.findIndex(orig => orig.name === item.name && orig.wilker === item.wilker);
+
+        return `
+            <tr>
+                <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0; font-weight: 600; color: #1e293b;">${item.name}</td>
+                <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0;">
+                    <span style="font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; background: #e0f2fe; color: #0369a1;">${item.wilker}</span>
+                </td>
+                <td style="padding: 7px 10px; border-bottom: 1px solid #e2e8f0; text-align: center;">
+                    <button type="button" onclick="deleteMasterInstansi(${originalIndex})" style="background: #fee2e2; border: 1px solid #fca5a5; color: #dc2626; border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: bold; cursor: pointer;" title="Hapus Instansi">Hapus</button>
+                </td>
+            </tr>
+        `;
+    }).join('');
 };
 
 // FUNGSI BUKA MODAL MASTER INSTANSI
@@ -2709,7 +2729,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!inputName || !selectWilker) return;
 
             // UBAH DARI .toUpperCase() MENJADI toTitleCase()
-            const nameValue = toTitleCase(inputName.value.trim());
+            // const nameValue = toTitleCase(inputName.value.trim()); --> Supaya Capital Each word
+            
+            const nameValue = inputName.value.trim();
             const wilkerValue = selectWilker.value;
 
             // Cek Duplikasi (Bandingkan secara Case-Insensitive)
@@ -3330,3 +3352,183 @@ function startDigitalClockWIT() {
     });
 });
 
+// =======================================================
+// GENERATE LAPORAN PDF PI (3 TABEL WILAYAH & RENTANG TANGGAL)
+// =======================================================
+window.exportLaporanPIPDF = function() {
+    // 1. Ambil data PI saat ini
+    const dataList = (typeof combinedDataList !== 'undefined' && currentModule === 'PI')
+        ? combinedDataList
+        : Object.keys(dbFetchedMap || {}).map(k => ({ dbKey: k, ...dbFetchedMap[k] }));
+
+    if (!dataList || dataList.length === 0) {
+        alert("⚠️ Tidak ada data Pindah Instansi (PI) di database untuk di-export.");
+        return;
+    }
+
+    // 2. Cari Rentang Tanggal Data (Paling Awal & Paling Akhir)
+    const validDates = dataList
+        .map(i => i.tgl_validasi || (i.uploaded_at ? String(i.uploaded_at).substring(0, 10) : ''))
+        .filter(d => d && d !== '--')
+        .sort();
+
+    const formatDateIndo = (strDate) => {
+        if (!strDate) return '--';
+        const parts = strDate.split('-');
+        if (parts.length !== 3) return strDate;
+        const [y, m, d] = parts;
+        return `${parseInt(d, 10)} ${NAMA_BULAN[parseInt(m, 10) - 1]} ${y}`;
+    };
+
+    const dateRangeText = validDates.length > 0
+        ? `${formatDateIndo(validDates[0])} s/d ${formatDateIndo(validDates[validDates.length - 1])}`
+        : 'Semua Data';
+
+    // 3. Inisialisasi Penampung 3 Wilayah Utama, hide un hide instansi vertikal
+    // HIDE UNHIDE INSTANSI VERTIKAL
+    // const REGIONS = ['Papua Barat', 'Papua Barat Daya', 'Instansi Vertikal'];
+    const REGIONS = ['Papua Barat', 'Papua Barat Daya'];
+    const groupedData = {
+        'Papua Barat': {},
+        'Papua Barat Daya': {},
+        'Instansi Vertikal': {}
+    };
+
+    // 4. Agregasi Data Berdasarkan Instansi Tujuan di Masing-masing Wilayah
+    dataList.forEach(item => {
+        const instAsal = (typeof standardizeInstansiName === 'function') ? standardizeInstansiName(item.instansi_asal) : (item.instansi_asal || '');
+        const instTujuan = (typeof standardizeInstansiName === 'function') ? standardizeInstansiName(item.instansi_tujuan) : (item.instansi_tujuan || '-');
+        
+        let wilker = (typeof window.getAutomaticWilker === 'function')
+            ? window.getAutomaticWilker(instAsal, instTujuan)
+            : (item.wilker_prov || 'Instansi Vertikal');
+
+        // Normalisasi Wilayah
+        if (!REGIONS.includes(wilker)) wilker = 'Instansi Vertikal';
+
+        if (!groupedData[wilker][instTujuan]) {
+            groupedData[wilker][instTujuan] = { MS: 0, BTS: 0, TMS: 0 };
+        }
+
+        const st = String(item.status || '').toUpperCase().trim();
+        if (st === 'MS' || st === 'ACC') {
+            groupedData[wilker][instTujuan].MS++;
+        } else if (st === 'BTS') {
+            groupedData[wilker][instTujuan].BTS++;
+        } else if (st === 'TMS') {
+            groupedData[wilker][instTujuan].TMS++;
+        }
+    });
+
+    // 5. Build HTML untuk 3 Tabel Besar
+    let tablesHtml = '';
+
+    REGIONS.forEach((regionName, regIdx) => {
+        const instansiMap = groupedData[regionName];
+        const sortedInstansi = Object.keys(instansiMap).sort((a, b) => a.localeCompare(b));
+
+        let rowsHtml = '';
+        let sumMS = 0, sumBTS = 0, sumTMS = 0;
+
+        if (sortedInstansi.length === 0) {
+            rowsHtml = `<tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 10px;">Tidak ada data usulan untuk wilayah ini.</td></tr>`;
+        } else {
+            sortedInstansi.forEach((instName, idx) => {
+                const counts = instansiMap[instName];
+                const totalBaris = counts.MS + counts.BTS + counts.TMS;
+                sumMS += counts.MS;
+                sumBTS += counts.BTS;
+                sumTMS += counts.TMS;
+
+                rowsHtml += `
+                    <tr>
+                        <td style="text-align: center; width: 6%;">${idx + 1}</td>
+                        <td style="text-align: left; padding-left: 8px;"><strong>${instName}</strong></td>
+                        <td style="text-align: center; color: #16a34a; font-weight: bold; width: 14%;">${counts.MS}</td>
+                        <td style="text-align: center; color: #d97706; font-weight: bold; width: 14%;">${counts.BTS}</td>
+                        <td style="text-align: center; color: #dc2626; font-weight: bold; width: 14%;">${counts.TMS}</td>
+                        <td style="text-align: center; font-weight: bold; width: 14%; background-color: #f8fafc;">${totalBaris}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        const totalWilayah = sumMS + sumBTS + sumTMS;
+
+        tablesHtml += `
+            <div class="table-section" style="${regIdx > 0 ? 'margin-top: 25px;' : ''}">
+                <div style="font-size: 10pt; font-weight: bold; background: #0f172a; color: #ffffff; padding: 6px 10px; border-radius: 4px 4px 0 0; display: flex; justify-content: space-between;">
+                    <span>TABEL ${regIdx + 1}: WILAYAH ${regionName.toUpperCase()}</span>
+                    <span>TOTAL: ${totalWilayah} USULAN</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>NO</th>
+                            <th style="text-align: left; padding-left: 8px;">INSTANSI TUJUAN</th>
+                            <th style="color: #86efac;">MS</th>
+                            <th style="color: #fde047;">BTS</th>
+                            <th style="color: #fca5a5;">TMS</th>
+                            <th>TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rowsHtml}</tbody>
+                    <tfoot>
+                        <tr style="background: #e2e8f0; font-weight: bold;">
+                            <td colspan="2" style="text-align: right; padding-right: 10px;">TOTAL WILAYAH ${regionName.toUpperCase()}:</td>
+                            <td style="text-align: center; color: #16a34a;">${sumMS}</td>
+                            <td style="text-align: center; color: #d97706;">${sumBTS}</td>
+                            <td style="text-align: center; color: #dc2626;">${sumTMS}</td>
+                            <td style="text-align: center; font-size: 9pt;">${totalWilayah}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        `;
+    });
+
+    // 6. Tampilkan Print Preview Window
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+        alert("⚠️ Pop-up diblokir oleh browser. Izinkan pop-up untuk mencetak PDF.");
+        return;
+    }
+
+    const now = new Date();
+    const printDateStr = `${now.getDate()} ${NAMA_BULAN[now.getMonth()]} ${now.getFullYear()}`;
+
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Laporan Rekapitulasi PI - 3 Wilayah</title>
+            <style>
+                @page { size: A4 portrait; margin: 10mm; }
+                body { font-family: Arial, sans-serif; font-size: 8.5pt; color: #000; margin: 0; padding: 0; }
+                .header-container { text-align: center; margin-bottom: 15px; border-bottom: 2px solid #0f172a; padding-bottom: 8px; }
+                .header-title { font-size: 11pt; font-weight: bold; text-transform: uppercase; }
+                .header-subtitle { font-size: 9pt; font-weight: bold; color: #0284c7; margin-top: 4px; }
+                .header-date-range { font-size: 8pt; font-weight: bold; color: #334155; margin-top: 4px; background: #f1f5f9; display: inline-block; padding: 3px 10px; border-radius: 4px; border: 1px solid #cbd5e1; }
+                .table-section { page-break-inside: avoid; }
+                table { width: 100%; border-collapse: collapse; margin-top: 0; }
+                th, td { border: 1px solid #cbd5e1; padding: 5px; text-align: center; }
+                th { background-color: #1e293b; color: #ffffff; font-weight: bold; font-size: 8pt; }
+            </style>
+        </head>
+        <body>
+            <div class="header-container">
+                <div class="header-title">LAPORAN REKAPITULASI PINDAH INSTANSI (PI)</div>
+                <div class="header-subtitle">KANTOR REGIONAL XIV BKN MANOKWARI</div>
+                <div class="header-date-range">🗓️ RENTANG TANGGAL DATA: ${dateRangeText.toUpperCase()}</div>
+            </div>
+            ${tablesHtml}
+        </body>
+        </html>
+    `);
+
+    printWindow.document.close();
+    setTimeout(() => {
+        printWindow.focus();
+        printWindow.print();
+    }, 500);
+};
