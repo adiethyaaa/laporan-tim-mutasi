@@ -1009,25 +1009,26 @@ window.closeEditFormPI = function() {
 };
 
 // =======================================================
-// EVENT LISTENER SUBMIT FORM (TAMBAH / UPDATE FIREBASE)
+// EVENT LISTENER SUBMIT FORM (TAMBAH / UPDATE FIREBASE PI)
 // =======================================================
 document.getElementById('formEditPI')?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    
     const dbKey = document.getElementById('editKeyPI')?.value.trim() || '';
-
     const rawAsal = document.getElementById('editInstansiAsalPI')?.value || '';
     const rawTujuan = document.getElementById('editInstansiTujuanPI')?.value || '';
 
     const instansiAsalClean = (typeof standardizeInstansiName === 'function') ? standardizeInstansiName(rawAsal) : rawAsal;
     const instansiTujuanClean = (typeof standardizeInstansiName === 'function') ? standardizeInstansiName(rawTujuan) : rawTujuan;
 
+    // Wilker dihitung otomatis dari Instansi Tujuan
     const calculatedWilker = (typeof window.getAutomaticWilker === 'function') 
         ? window.getAutomaticWilker(instansiAsalClean, instansiTujuanClean) 
         : 'Instansi Vertikal';
 
     const recordPayload = {
         nama: document.getElementById('editNamaPI')?.value.trim() || '',
-        nip: document.getElementById('editNipPI')?.value.trim() || '', // Ambil nilai NIP
+        nip: document.getElementById('editNipPI')?.value.trim() || '',
         instansi_asal: instansiAsalClean,
         instansi_tujuan: instansiTujuanClean,
         wilker_prov: calculatedWilker,
@@ -1086,52 +1087,6 @@ window.getAutomaticWilker = function(instansiAsal, instansiTujuan) {
     // Default jika tidak cocok dengan instansi daerah di atas
     return "Instansi Vertikal";
 };
-
-// =======================================================
-// 2. PENYESUAIAN PADA EVENT LISTENER SUBMIT FORM PI
-// =======================================================
-document.getElementById('formEditPI')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const dbKey = document.getElementById('editKeyPI').value.trim();
-
-    const rawAsal = document.getElementById('editInstansiAsalPI').value;
-    const rawTujuan = document.getElementById('editInstansiTujuanPI').value;
-
-    const instansiAsalClean = (typeof standardizeInstansiName === 'function') ? standardizeInstansiName(rawAsal) : rawAsal;
-    const instansiTujuanClean = (typeof standardizeInstansiName === 'function') ? standardizeInstansiName(rawTujuan) : rawTujuan;
-
-    // Wilker dihitung MURNI mengacu pada Instansi Tujuan
-    const calculatedWilker = window.getAutomaticWilker(instansiAsalClean, instansiTujuanClean);
-
-    const recordPayload = {
-        nama: document.getElementById('editNamaPI').value.trim(),
-        instansi_asal: instansiAsalClean,
-        instansi_tujuan: instansiTujuanClean,
-        wilker_prov: calculatedWilker, // Otomatis terisi dari Instansi Tujuan
-        tgl_validasi: document.getElementById('editTglValidasiPI').value.trim(),
-        status: document.getElementById('editStatusPI').value.trim().toUpperCase(),
-        keterangan: document.getElementById('editKeteranganPI').value.trim(),
-        uploader_initial: (typeof currentUserInitial !== 'undefined' && currentUserInitial !== '--') ? currentUserInitial : 'OP',
-        uploaded_at: new Date().toISOString()
-    };
-
-    try {
-        if (dbKey) {
-            const oldRecord = dbFetchedMap[dbKey];
-            if (oldRecord && typeof pushPiActionState === 'function') {
-                pushPiActionState('EDIT', [{ dbKey: dbKey, data: { ...oldRecord } }]);
-            }
-            await update(ref(db, `${MODULE_CONFIG['PI'].node}/${dbKey}`), recordPayload);
-            alert("✅ Data Pindah Instansi berhasil diperbarui!");
-        } else {
-            await push(ref(db, MODULE_CONFIG['PI'].node), recordPayload);
-            alert("✅ Data Pindah Instansi baru berhasil ditambahkan!");
-        }
-        window.closeEditFormPI();
-    } catch (err) {
-        alert("❌ Gagal menyimpan data: " + err.message);
-    }
-});
 
 // SORT PI
 let currentSortColumnPI = 'tgl_validasi', isAscendingPI = false; 
