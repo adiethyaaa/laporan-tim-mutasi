@@ -1367,24 +1367,45 @@ document.getElementById('btnUploadDB')?.addEventListener('click', async () => {
     }
     
     try {
-        let count = 0;
-        for (let rec of parsedRecords) {
-            const ext = existingNipMap[rec.nip];
-            if (ext && new Date(rec.tgl_pengiriman_kelayanan !== '--' ? rec.tgl_pengiriman_kelayanan : 0) >= new Date(ext.record.tgl_pengiriman_kelayanan !== '--' ? ext.record.tgl_pengiriman_kelayanan : 0)) {
-                await update(ref(db, `${activeNode}/${ext.key}`), rec); 
-            } else {
-                await push(ref(db, activeNode), rec);
-            }
-            count++; 
-            fill.style.width = `${Math.round((count / parsedRecords.length) * 100)}%`; 
-            percentTxt.innerText = `${Math.round((count / parsedRecords.length) * 100)}%`; 
-            subTxt.innerText = `${count} dari ${parsedRecords.length} data terkirim`;
+        // BATAS PENGIRIMAN: 150 baris sekaligus per request
+        const CHUNK_SIZE = 150; 
+        let countProcessed = 0;
+
+        for (let i = 0; i < parsedRecords.length; i += CHUNK_SIZE) {
+            const chunk = parsedRecords.slice(i, i + CHUNK_SIZE);
+            const updates = {}; // Keranjang data rombongan
+
+            chunk.forEach(rec => {
+                const ext = existingNipMap[rec.nip];
+                // Cek apakah data sudah ada dan tanggal lebih baru
+                if (ext && new Date(rec.tgl_pengiriman_kelayanan !== '--' ? rec.tgl_pengiriman_kelayanan : 0) >= new Date(ext.record.tgl_pengiriman_kelayanan !== '--' ? ext.record.tgl_pengiriman_kelayanan : 0)) {
+                    // Update data lama
+                    updates[`${activeNode}/${ext.key}`] = rec;
+                } else if (!ext) {
+                    // Generate ID unik baru (secara lokal tanpa nunggu internet)
+                    const newKey = push(ref(db, activeNode)).key; 
+                    updates[`${activeNode}/${newKey}`] = rec;
+                }
+            });
+
+            // Eksekusi pengiriman 150 data dalam 1x kedipan mata
+            await update(ref(db), updates); 
+
+            // Update UI Progress Bar per rombongan (lebih ringan untuk browser)
+            countProcessed += chunk.length;
+            const progress = Math.round((countProcessed / parsedRecords.length) * 100);
+            fill.style.width = `${progress}%`;
+            percentTxt.innerText = `${progress}%`;
+            subTxt.innerText = `${countProcessed} dari ${parsedRecords.length} data terkirim`;
         }
+
         setTimeout(() => { 
             modal.style.display = 'none'; 
             selectedFilesQueue = []; 
             renderFileQueueUI(); 
+            alert('✅ Berhasil mengunggah data KP ke Database!');
         }, 500);
+
     } catch (e) { 
         modal.style.display = 'none'; 
         alert(`Gagal Upload: ${e.message}`); 
@@ -1465,21 +1486,38 @@ document.getElementById('btnUploadDBPI')?.addEventListener('click', async () => 
     }
     
     try {
-        let count = 0;
-        for (let rec of parsedRecords) {
-            await push(ref(db, activeNode), rec); 
-            count++; 
-            const progress = Math.round((count / parsedRecords.length) * 100);
+        // BATAS PENGIRIMAN: 150 baris sekaligus per request
+        const CHUNK_SIZE = 150; 
+        let countProcessed = 0;
+
+        for (let i = 0; i < parsedRecords.length; i += CHUNK_SIZE) {
+            const chunk = parsedRecords.slice(i, i + CHUNK_SIZE);
+            const updates = {}; 
+
+            chunk.forEach(rec => {
+                // Generate ID unik secara offline/lokal
+                const newKey = push(ref(db, activeNode)).key; 
+                updates[`${activeNode}/${newKey}`] = rec;
+            });
+
+            // Kirim rombongan data ke Firebase
+            await update(ref(db), updates);
+
+            // Update layar per rombongan
+            countProcessed += chunk.length;
+            const progress = Math.round((countProcessed / parsedRecords.length) * 100);
             if (fill) fill.style.width = `${progress}%`; 
             if (percentTxt) percentTxt.innerText = `${progress}%`; 
-            if (subTxt) subTxt.innerText = `${count} dari ${parsedRecords.length} baris terkirim`;
+            if (subTxt) subTxt.innerText = `${countProcessed} dari ${parsedRecords.length} baris terkirim`;
         }
+
         setTimeout(() => { 
             if (modal) modal.style.display = 'none'; 
             alert('✅ Berhasil mengunggah data Pindah Instansi ke Database!'); 
             selectedFilesQueuePI = []; 
             renderFileQueueUIPI(); 
         }, 500);
+
     } catch (e) { 
         if (modal) modal.style.display = 'none'; 
         alert(`Gagal Upload PI: ${e.message}`); 
