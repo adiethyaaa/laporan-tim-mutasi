@@ -1,2 +1,13 @@
-# Abaikan file konfigurasi yang berisi API Key asli
+# Dependencies
+node_modules/
+
+# Production build
+dist/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Sensitive credentials
 firebase-config.js

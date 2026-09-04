@@ -322,7 +322,213 @@
 
         <!-- 2. SEKSI HALAMAN USULAN PGA -->
         <div id="aplikasi-2-PGA" class="section">
-            <iframe src="maintenance.html" style="width: 100%; height: 500px; border: none; border-radius: 12px;"></iframe>
+            <div class="module-header-banner header-pga" style="background: linear-gradient(135deg, #1e1b4b, #312e81);">
+                <div class="module-header-title">
+                    <h2>🎓 Laporan Pelayanan Usulan PGA & PMK</h2>
+                    <p>Pencatatan, pemantauan, dan manajemen usulan Pencantuman Gelar Akademik (PGA) dan Peninjauan Masa Kerja (PMK).</p>
+                </div>
+
+                <div class="header-widgets-compact">
+                    <div class="team-chat-mini" title="Tim Pelayanan Berdiskusi">
+                        <span class="person-mini p1">👨‍💼<span class="chat-bubble-mini">Cek Ijazah</span></span>
+                        <span class="person-mini p2">👩‍💼<span class="chat-bubble-mini">Siap!</span></span>
+                        <span class="person-mini p3">👨‍💻<span class="chat-bubble-mini">Acc!</span></span>
+                        <span class="person-mini p4">👩‍💻<span class="chat-bubble-mini">Valid</span></span>
+                    </div>
+                    <div class="digital-clock-mini clock-transparent">
+                        <div class="clock-date-mini" id="clockDatePGA">18 Agt 2026</div>
+                        <div class="clock-time-mini">
+                            <span id="clockHoursPGA">00</span><span class="clock-colon">:</span><span id="clockMinutesPGA">00</span><span class="clock-colon">:</span><span id="clockSecondsPGA">00</span>
+                            <span class="clock-tz-mini">WIT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-header-title">
+                <button id="btnToggleUploadFormPGA" class="btn-toggle-chart" style="background: rgba(255,255,255,0.2); color: #4338ca; border: 1px solid rgba(255,255,255,0.3);">
+                    <span id="toggleIconPGA"><i class="fas fa-eye"></i></span>
+                    <span id="toggleTextPGA" style="margin-left: 5px;">Tampilkan Form Upload PGA</span>
+                </button>
+            </div>
+
+            <!-- FORM UPLOAD KHUSUS PGA -->
+            <div id="uploadFormWrapperPGA" style="display: none;">
+                <div class="form-group">
+                    <div id="dropZonePGA" class="drop-zone drop-zone-pga" style="border-color: #4338ca; background-color: #eef2ff;">
+                        <div class="drop-zone-icon">📤</div>
+                        <div class="drop-zone-text" style="color: #1e1b4b; font-weight: bold;">Tarik & Lepaskan File Excel PGA Di Sini</div>
+                        <div class="drop-zone-subtext">Sesuai format: Validator, Nama, NIP, Instansi, Tgl Usul, Status, Keterangan</div>
+                        <input type="file" id="uploadPGA" accept=".xlsx, .xls" multiple style="display: none;">
+                    </div>
+                    
+                    <div id="fileQueueCardPGA" class="file-queue-card" style="display: none;">
+                        <div class="file-queue-header">📁 Berkas PGA Terpilih (<span id="fileCountTextPGA">0</span> Berkas):</div>
+                        <div id="fileListContainerPGA" class="file-list-container"></div>
+                        <div style="margin-top: 15px;">
+                            <button id="btnUploadDBPGA" class="btn-upload-db" style="background: #4338ca;">Upload Data PGA ke Database</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KONTANER TABEL DATA PGA -->
+            <div id="tableContainerPGA" style="display: block; margin-top: 25px;">
+                <div class="filter-box-header">
+                    <div class="filter-box-title">
+                        <i class="fas fa-filter filter-icon" style="color: #4338ca;"></i>
+                        <span>Filter Data PGA & PMK</span>
+                    </div>
+                    <button type="button" class="btn-reset-filter-mini" onclick="window.resetFilterPGA()">
+                        <i class="fas fa-rotate-left"></i> Reset Filter
+                    </button>
+                </div>
+                <div class="filter-container">
+                    <div class="filter-group">
+                        <label>Instansi (Pemda):</label>
+                        <select id="filterInstansiPGA" class="filter-select" onchange="window.filterTablePGA()">
+                            <option value="">-- Semua Instansi --</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Status Usulan:</label>
+                        <select id="filterStatusPGA" class="filter-select" onchange="window.filterTablePGA()">
+                            <option value="">-- Semua Status --</option>
+                            <option value="MS">MS (Memenuhi Syarat)</option>
+                            <option value="TMS">TMS (Tidak Memenuhi Syarat)</option>
+                            <option value="BTS">BTS (Bahan Tidak Sesuai)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- KELOMPOK TOMBOL AKSI -->
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button id="btnDeleteSelectedPGA" class="btn-delete-selected" style="display: none;">
+                            Hapus Terpilih PGA (<span id="selectedCountPGA">0</span>)
+                        </button>
+
+                        <button id="btnUndoEditPGA" class="btn-delete-selected" onclick="undoLastPGAChange()" disabled style="display: inline-flex; align-items: center; gap: 6px; opacity: 0.5; cursor: not-allowed;" title="Undo Perubahan">
+                            <i class="fas fa-rotate-left"></i> Undo
+                        </button>
+
+                        <!-- Tombol ini memicu fungsi untuk membuka Modal Pop-up -->
+                        <button id="btnOpenAddFormPGA" class="btn-delete-selected" onclick="openModalFormPGA()" style="display: inline-flex; align-items: center; gap: 6px; background-color: #4338ca; color: white; border: none; cursor: pointer;">
+                            <i class="fas fa-plus"></i>
+                            <span>Tambah Data PGA</span>
+                        </button>
+                    </div>
+
+                    <button type="button" class="btn-success" onclick="window.exportLaporanPGAPDF()" style="background-color: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 6px;">
+                        <i class="fas fa-file-pdf"></i> Export PDF
+                    </button>
+                </div>
+                
+                <!-- AREA TABEL FULL WIDTH -->
+                <div class="table-pga-scrollbox" style="width: 100%; overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;"><input type="checkbox" id="selectAllPGA"></th>
+                                <th style="width: 45px;">No</th>
+                                <th onclick="sortTablePGA('validator')" style="cursor:pointer;">Validator <span id="sort_pga_validator">↕</span></th>
+                                <th onclick="sortTablePGA('nama')" style="cursor:pointer;">Nama Pegawai <span id="sort_pga_nama">↕</span></th>
+                                <th onclick="sortTablePGA('nip')" style="cursor:pointer;">NIP <span id="sort_pga_nip">↕</span></th>
+                                <th onclick="sortTablePGA('instansi')" style="cursor:pointer;">Instansi <span id="sort_pga_instansi">↕</span></th>
+                                <th onclick="sortTablePGA('tgl_usul')" style="cursor:pointer;">Tgl Usul <span id="sort_pga_tgl_usul">↕</span></th>
+                                <th onclick="sortTablePGA('status')" style="cursor:pointer;">Status <span id="sort_pga_status">↕</span></th>
+                                <th>Keterangan</th>
+                                <th style="width: 70px; text-align: center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBodyPGA">
+                            <!-- Data dirender otomatis oleh renderTablePGA() -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MODAL POP UP TAMBAH/EDIT DATA PGA -->
+        <!-- ========================================== -->
+        <div id="modalFormPGA" class="modal-overlay" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
+            
+            <div class="modal-box" style="background: #ffffff; border-radius: 12px; width: 100%; max-width: 480px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); overflow: hidden; animation: slideDown 0.3s ease;">
+                
+                <!-- Header Modal -->
+                <div style="background: #4338ca; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 id="modalTitleTextPGA" style="margin: 0; color: white; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-file-signature"></i> <span>Tambah Data PGA</span>
+                    </h3>
+                    <button type="button" onclick="closeModalFormPGA()" style="background: none; border: none; color: white; font-size: 22px; cursor: pointer; line-height: 1;">&times;</button>
+                </div>
+
+                <!-- Datalist Master Instansi (Tanpa Vertikal) -->
+                <datalist id="listInstansiSuggestPGA"></datalist>
+
+                <!-- Body Form -->
+                <div style="padding: 20px;">
+                    <form id="formEditPGA" style="display: flex; flex-direction: column; gap: 14px;">
+                        <input type="hidden" id="editKeyPGA">
+                        
+                        <div>
+                            <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">Nama Pegawai</label>
+                            <input type="text" id="editNamaPGA" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;" required>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 12px;">
+                            <div>
+                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">NIP</label>
+                                <input type="text" id="editNipPGA" placeholder="18 Digit..." style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;" required>
+                            </div>
+                            <div>
+                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">ID Validator</label>
+                                <input type="text" id="editValidatorPGA" placeholder="Contoh: CM" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;">
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase;">Instansi</label>
+                                <button type="button" onclick="openModalMasterInstansi()" style="background: none; border: none; color: #4338ca; font-size: 11px; cursor: pointer; font-weight: bold;">+ Master</button>
+                            </div>
+                            <input type="text" id="editInstansiPGA" list="listInstansiSuggestPGA" placeholder="Ketik instansi daerah..." style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;" required>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div>
+                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">Tgl Usul</label>
+                                <input type="date" id="editTglUsulPGA" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">Status Usulan</label>
+                                <select id="editStatusPGA" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;">
+                                    <option value="MS">MS</option>
+                                    <option value="TMS">TMS</option>
+                                    <option value="BTS">BTS</option>
+                                    <option value="INBOX">INBOX</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">Keterangan</label>
+                            <textarea id="editKeteranganPGA" rows="3" placeholder="Catatan opsional..." style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;"></textarea>
+                        </div>
+
+                        <!-- Footer Modal (Tombol) -->
+                        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 6px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+                            <button type="button" onclick="closeModalFormPGA()" style="padding: 10px 16px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: 600;">
+                                Batal
+                            </button>
+                            <button type="submit" id="btnSubmitFormPGA" style="padding: 10px 20px; background: #4338ca; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-floppy-disk"></i> Simpan Data
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <!-- 3. SEKSI HALAMAN APLIKASI KHUSUS PINDAH INSTANSI (PI) -->

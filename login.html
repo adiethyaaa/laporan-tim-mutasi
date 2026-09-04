@@ -445,9 +445,9 @@ const yBrowL     = document.getElementById('yBrowL');
 // Posisi Garis Alis Kiri & Kanan (Normal vs Panik)
 // POSISI SETELAH DINAIKKAN KE ATAS
 const YL_N = { x1: 13, y1: 28, x2: 29, y2: 32 }; // Normal Alis Kiri (naik ~4px)
-const YL_W = { x1: 13, y1: 28, x2: 29, y2: 32 }; // Panik Alis Kiri (naik ~4px)
+const YL_W = { x1: 13, y1: 30, x2: 25, y2: 30 }; // Alis Kiri Lurus di Y=30
 const YR_N = { x1: 33, y1: 32, x2: 49, y2: 28 }; // Normal Antenna Kanan (naik ~4px)
-const YR_W = { x1: 36, y1: 32, x2: 49, y2: 28 }; // Panik Antenna Kanan (naik ~4px)
+const YR_W = { x1: 33, y1: 30, x2: 45, y2: 30 }; // Antenna/Alis Kanan Lurus di Y=30
 
 
 // ==========================================
@@ -627,7 +627,13 @@ function setState(s) {
             } catch (error) {
                 console.error("Login gagal:", error);
                 if (errorEl) {
-                    errorEl.innerText = "Email atau password yang Anda masukkan salah.";
+                    let detailMsg = "Email atau password yang Anda masukkan salah.";
+                    if (error.code) {
+                        detailMsg += ` [${error.code}]`;
+                    } else if (error.message) {
+                        detailMsg += ` (${error.message})`;
+                    }
+                    errorEl.innerText = detailMsg;
                     errorEl.style.display = 'block';
                 }
                 if (btnText) btnText.innerText = "MASUK KE SISTEM";
