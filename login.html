@@ -627,7 +627,13 @@ function setState(s) {
             } catch (error) {
                 console.error("Login gagal:", error);
                 if (errorEl) {
-                    errorEl.innerText = "Email atau password yang Anda masukkan salah.";
+                    let detailMsg = "Email atau password yang Anda masukkan salah.";
+                    if (error.code) {
+                        detailMsg += ` [${error.code}]`;
+                    } else if (error.message) {
+                        detailMsg += ` (${error.message})`;
+                    }
+                    errorEl.innerText = detailMsg;
                     errorEl.style.display = 'block';
                 }
                 if (btnText) btnText.innerText = "MASUK KE SISTEM";
