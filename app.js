@@ -2791,6 +2791,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+function openModalFormPGA(isEdit = false) {
+    const modal = document.getElementById('modalFormPGA');
+    const title = document.getElementById('modalTitleTextPGA');
+    
+    if (!isEdit) {
+        document.getElementById('formEditPGA').reset();
+        document.getElementById('editKeyPGA').value = '';
+        title.innerHTML = '<i class="fas fa-plus"></i> Tambah Data PGA';
+    } else {
+        title.innerHTML = '<i class="fas fa-pen-to-square"></i> Edit Data PGA';
+    }
+    
+    // Tampilkan modal dan ubah styling ke flex agar posisinya di tengah
+    modal.style.display = 'flex';
+}
+
+function closeModalFormPGA() {
+    document.getElementById('modalFormPGA').style.display = 'none';
+    document.getElementById('formEditPGA').reset();
+}
 
 // ==========================================
 // 11. EXPORT TO EXCEL / CLIPBOARD COPY
