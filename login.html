@@ -4,311 +4,635 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sistem Pelayanan</title>
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Laporan Hasil Pelayanan</title>
 
-    <!-- FAVICON SVG KR14 OTOMATIS (LATAR BIRU GELAP, TULISAN PUTIH) -->
+    <!-- FAVICON SVG KR14 -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIwIiBmaWxsPSIjMGYxNzJhIi8+PHRleHQgeD0iNTAlIiB5PSI1NSUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSIyOCIgZmlsbD0iIzM4YmRmOCI+S1IxNDwvdGV4dD48L3N2Zz4=">
 
-    <!-- IMPOR FONT SPACEY & MODERN (ORBITRON & INTER) -->
+    <!-- FONT SPACEY & MODERN (ORBITRON & INTER) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
     
     <style>
-    * { 
-        box-sizing: border-box; 
-        margin: 0; 
-        padding: 0; 
-        font-family: 'Inter', system-ui, -apple-system, sans-serif; 
-    }
-    
-    /* BACKGROUND SOFT & TERANG (GRADIENT MILD SKY) */
-    body {
-        width: 100vw; 
-        min-height: 100vh; 
-        overflow-x: hidden;
-        background: linear-gradient(135deg, #eef2f7 0%, #e0e7ff 50%, #dbeafe 100%);
-        display: flex; 
-        justify-content: center; 
-        align-items: center; 
-        position: relative;
-        padding: 20px;
-    }
+        :root {
+            --purple: #6C5CE7; --black: #1c1c1e; --orange: #FF8A3D; --yellow: #FFD23F;
+            --ink: #1a1a1e; --panel-bg: #e9e8ec;
+        }
 
-    /* ORNAMEN BACKGROUND SOFT GLOW */
-    .nebula-purple {
-        position: absolute; width: 450px; height: 450px;
-        background: radial-gradient(circle, rgba(199, 210, 254, 0.5) 0%, rgba(255,255,255,0) 70%);
-        top: -100px; left: -100px; border-radius: 50%; filter: blur(40px);
-        pointer-events: none;
-    }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+        }
 
-    .nebula-blue {
-        position: absolute; width: 500px; height: 500px;
-        background: radial-gradient(circle, rgba(186, 230, 253, 0.6) 0%, rgba(255,255,255,0) 70%);
-        bottom: -100px; right: -100px; border-radius: 50%; filter: blur(50px);
-        pointer-events: none;
-    }
+        /* BACKGROUND SOFT & TERANG (DARI KODE ANDA) */
+        body {
+            width: 100vw; 
+            min-height: 100vh; 
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #eef2f7 0%, #e0e7ff 50%, #dbeafe 100%);
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            position: relative;
+            padding: 24px;
+        }
 
-    /* KOTAK LOGIN LIGHT GLASSMORPHISM MODERN */
-    .space-login-card {
-        position: relative; 
-        z-index: 10; 
-        width: 100%; 
-        max-width: 400px; 
-        padding: 40px 30px;
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(16px); 
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        border-radius: 12px; 
-        box-shadow: 0 10px 30px rgba(148, 163, 184, 0.25), 0 1px 3px rgba(0, 0, 0, 0.05);
-        text-align: center; 
-        color: #1e293b;
-    }
+        /* ORNAMEN BACKGROUND GLOW */
+        .nebula-purple {
+            position: absolute; width: 450px; height: 450px;
+            background: radial-gradient(circle, rgba(199, 210, 254, 0.5) 0%, rgba(255,255,255,0) 70%);
+            top: -100px; left: -100px; border-radius: 50%; filter: blur(40px);
+            pointer-events: none;
+        }
+        .nebula-blue {
+            position: absolute; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(186, 230, 253, 0.6) 0%, rgba(255,255,255,0) 70%);
+            bottom: -100px; right: -100px; border-radius: 50%; filter: blur(50px);
+            pointer-events: none;
+        }
 
-    /* TYPOGRAPHY MODERN */
-    .space-icon {
-        font-size: 36px;
-        margin-bottom: 12px;
-        display: inline-block;
-        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-    }
+        /* CARD UTAMA (GABUNGAN) */
+        .card {
+            display: flex;
+            width: 920px;
+            max-width: 100%;
+            height: 560px;
+            border-radius: 22px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 30px 60px -20px rgba(0,0,0,0.35), 0 10px 30px rgba(148, 163, 184, 0.25);
+            position: relative;
+            z-index: 10;
+        }
 
-    .space-title { 
-        font-family: 'Orbitron', sans-serif;
-        font-size: 20px; 
-        font-weight: 700; 
-        color: #0f172a; 
-        letter-spacing: 2px; 
-        margin-bottom: 6px; 
-        text-transform: uppercase;
-    }
+        /* LEFT CANVAS (ANIMASI ANIMASI) */
+        .canvas { position: relative; width: 50%; background: var(--panel-bg); overflow: hidden; display: none; }
+        @media(min-width: 720px){ .canvas { display: block; } }
 
-    .space-subtitle { 
-        font-size: 12px; 
-        color: #64748b; 
-        margin-bottom: 30px; 
-        letter-spacing: 0.5px;
-    }
+        .stage { position: absolute; bottom: 52px; left: 0; width: 100%; height: 280px; overflow: hidden; }
+        .creature { position: absolute; bottom: 0; will-change: transform; }
+        .creature svg { display: block; }
+        .rig { transform-origin: bottom center; }
 
-    .space-input-group { 
-        text-align: left; 
-        margin-bottom: 20px; 
-    }
+        /* Posisi dasar animasi - Diubah persentasenya agar pas di tengah */
+        #orange { left: 18%; z-index: 3; }
+        #purple { left: 36%; z-index: 1; }
+        #black  { left: 53%; z-index: 2; }
+        #yellow { left: 66%; z-index: 4; }
 
-    .space-input-group label { 
-        display: block; 
-        font-family: 'Orbitron', sans-serif;
-        font-size: 10px; 
-        font-weight: 600; 
-        color: #0284c7; 
-        margin-bottom: 8px; 
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-    }
-    
-    /* INPUT KOTAK MINIMALIS SOFT LIGHT */
-    .space-input {
-        width: 100%; 
-        padding: 12px 14px; 
-        background: #f8fafc;
-        border: 1px solid #cbd5e1; 
-        border-radius: 4px; 
-        color: #0f172a; 
-        font-size: 14px;
-        outline: none; 
-        transition: all 0.25s ease;
-    }
+        #black.enter  { animation: enter-black 0.7s cubic-bezier(.22,1,.36,1) 0.0s both; }
+        #purple.enter { animation: enter-purple 0.75s cubic-bezier(.22,1,.36,1) 0.18s both; }
+        #yellow.enter { animation: enter-yellow 0.65s cubic-bezier(.34,1.56,.64,1) 0.32s both; }
+        #orange.enter { animation: enter-orange 0.6s cubic-bezier(.34,1.56,.64,1) 0.46s both; }
 
-    .space-input:focus {
-        border-color: #0284c7; 
-        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15); 
-        background: #ffffff;
-    }
+        @keyframes enter-black {
+            from { transform: translateY(-280px) translateX(60px) rotate(25deg) scale(0.9); opacity: 0; }
+            to { transform: translateY(0) translateX(0) rotate(0deg) scale(1); opacity: 1; }
+        }
+        @keyframes enter-purple {
+            0% { transform: translateY(40px) translateX(-80px) rotate(-45deg) scale(0.5,0.22); opacity: 0; }
+            55% { transform: translateY(10px) translateX(-20px) rotate(-20deg) scale(0.75,0.55); opacity: 1; }
+            100% { transform: translateY(0) translateX(0) rotate(0deg) scale(1,1); opacity: 1; }
+        }
+        @keyframes enter-yellow {
+            from { transform: translateY(180px) scale(0.7); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        @keyframes enter-orange {
+            0% { transform: translateY(60px) translateX(-50px) scale(0.32,0.55) rotate(-8deg); opacity: 0; }
+            60% { transform: translateY(10px) translateX(-10px) scale(0.7,0.8) rotate(-2deg); opacity: 1; }
+            100% { transform: translateY(0) translateX(0) scale(1,1) rotate(0deg); opacity: 1; }
+        }
 
-    /* OVERRIDE AUTOFILL CACHE TERANG */
-    .space-input:-webkit-autofill,
-    .space-input:-webkit-autofill:hover, 
-    .space-input:-webkit-autofill:focus {
-        -webkit-text-fill-color: #0f172a !important;
-        -webkit-box-shadow: 0 0 0px 1000px #f8fafc inset !important;
-        transition: background-color 5000s ease-in-out 0s;
-        border: 1px solid #0284c7 !important;
-    }
+        .brand { position: absolute; top: 28px; left: 0; width: 100%; text-align: center; font-weight: 700; letter-spacing: .02em; color: #2a2a30; font-size: 15px; }
+        .caption { position: absolute; bottom: 16px; left: 0; width: 100%; text-align: center; font-size: 13px; color: #6b6a70; transition: opacity .15s ease; }
 
-    /* TOMBOL LOGIN TERANG MODERN */
-    .btn-space-login {
-        width: 100%; 
-        padding: 12px; 
-        margin-top: 10px;
-        background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
-        border: none; 
-        border-radius: 4px; 
-        color: white; 
-        font-family: 'Orbitron', sans-serif;
-        font-size: 12px; 
-        font-weight: 700;
-        cursor: pointer; 
-        transition: all 0.25s ease; 
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        display: flex; 
-        justify-content: center; 
-        align-items: center; 
-        gap: 8px;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-    }
+        /* RIGHT FORM (GAYA ANDA DIMASUKKAN KE STRUKTUR BARU) */
+        .form-side { flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 40px; }
+        .form-inner { width: 100%; max-width: 320px; text-align: center; }
+        
+        .space-icon { font-size: 28px; margin-bottom: 8px; display: inline-block; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+        
+        h1.space-title { 
+            font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 700; 
+            color: #0f172a; letter-spacing: 1.5px; margin-bottom: 4px; text-transform: uppercase;
+        }
+        .space-subtitle { font-size: 12px; color: #64748b; margin-bottom: 28px; letter-spacing: 0.5px; }
 
-    .btn-space-login:hover {
-        background: linear-gradient(135deg, #0369a1 0%, #1d4ed8 100%);
-        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
-    }
+        .field { margin-bottom: 16px; text-align: left; }
+        .field label { 
+            display: block; font-family: 'Orbitron', sans-serif; font-size: 10px; 
+            font-weight: 600; color: #0284c7; margin-bottom: 8px; letter-spacing: 1.5px; text-transform: uppercase;
+        }
+        
+        .field-wrap { position: relative; }
+        
+        .space-input {
+            width: 100%; padding: 12px 14px; background: #f8fafc; border: 1px solid #cbd5e1; 
+            border-radius: 6px; color: #0f172a; font-size: 14px; outline: none; transition: all 0.25s ease;
+        }
+        .space-input:focus { border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15); background: #ffffff; }
+        .space-input.pw { padding-right: 38px; }
 
-    .btn-space-login:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
+        .space-input:-webkit-autofill, .space-input:-webkit-autofill:hover, .space-input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #0f172a !important;
+            -webkit-box-shadow: 0 0 0px 1000px #f8fafc inset !important;
+            transition: background-color 5000s ease-in-out 0s;
+            border: 1px solid #0284c7 !important;
+        }
 
-    /* SPINNER LOADING TERANG */
-    .space-spinner {
-        width: 16px; 
-        height: 16px; 
-        border: 2px solid rgba(255,255,255,0.4);
-        border-top-color: #ffffff; 
-        border-radius: 50%; 
-        animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+        .eye-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; padding: 4px; color: #9a99a0; display: flex; }
+        .eye-toggle:hover { color: #5a5960; }
 
-    .error-message { 
-        color: #dc2626; 
-        font-size: 12px; 
-        margin-top: 14px; 
-        display: none; 
-        padding: 10px;
-        background: #fef2f2;
-        border: 1px solid #fecaca;
-        border-radius: 4px;
-    }
+        /* TOMBOL LOGIN ANDA */
+        .btn-space-login {
+            width: 100%; padding: 12px; margin-top: 10px; background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+            border: none; border-radius: 6px; color: white; font-family: 'Orbitron', sans-serif;
+            font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.25s ease; 
+            letter-spacing: 1.5px; text-transform: uppercase; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+        .btn-space-login:hover { background: linear-gradient(135deg, #0369a1 0%, #1d4ed8 100%); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35); transform: translateY(-1px); }
+        .btn-space-login:active { transform: scale(0.98); }
+        .btn-space-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-    /* MEDIA QUERIES MOBILE */
-    @media screen and (max-width: 480px) {
-        body { padding: 15px; }
-        .space-login-card { padding: 30px 20px; border-radius: 8px; }
-        .space-title { font-size: 17px; letter-spacing: 1.5px; }
-        .space-subtitle { font-size: 11px; margin-bottom: 24px; }
-        .space-input { padding: 10px 12px; font-size: 13px; }
-        .btn-space-login { padding: 11px; font-size: 11px; }
-    }
-</style>
-    
+        .error-message { 
+            color: #dc2626; font-size: 12px; margin-top: 14px; display: none; 
+            padding: 10px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px;
+        }
 
+        @media screen and (max-width: 720px) {
+            .card { height: auto; max-width: 400px; }
+            .form-side { padding: 30px 24px; }
+        }
+    </style>
 </head>
 <body>
-    <div class="stars"></div>
     <div class="nebula-purple"></div>
     <div class="nebula-blue"></div>
 
-    <div class="space-login-card">
-        <div class="space-icon"> ✦. ݁˖𐦂𖨆𐀪𖠋𐀪𐀪˖ ݁.✦ </div>
-        <h1 class="space-title">APLIKASI LAPORAN PELAYANAN</h1>
-        <p class="space-subtitle">Tim Kerja Pengangkatan dan Mutasi</p>
-
-        <!-- PENGGUNAAN TAG FORM DAN ATTRIBUTE AUTOCOMPLETE TERHUBUNG BROWSER CACHE -->
-        <form id="spaceLoginForm" method="POST" action="javascript:void(0);" autocomplete="on">
-            <div class="space-input-group">
-                <!-- INPUT USERNAME / EMAIL (DENGAN CACHE AUTO-FILL) -->
-                <div class="login-input-group">
-                    <label for="loginEmail">EMAIL / USERNAME</label>
-                    <input 
-                        type="email" 
-                        id="loginEmail" 
-                        name="email" 
-                        class="space-input"
-                        placeholder="Masukkan email Anda" 
-                        required
-                        autocomplete="username email"
-                        spellcheck="false"
-                    >
+    <div class="card">
+        <!-- AREA KIRI (ANIMASI TEMAN ANDA) -->
+        <div class="canvas" id="canvas">
+            <div class="brand">Kantor Regional XIV BKN Manokwari</div>
+            <div class="stage" id="stage">
+                <!-- Orange -->
+                <div class="creature enter" id="orange">
+                    <div class="rig" id="orangeRig">
+                    <svg width="130" height="76" viewBox="0 0 130 76">
+                        <path d="M0,76 L0,46 C0,18 28,0 65,0 C102,0 130,18 130,46 L130,76 Z" fill="var(--orange)"/>
+                        <circle cx="38" cy="56" r="7" fill="#e8723a" opacity="0.35"/>
+                        <circle cx="92" cy="56" r="7" fill="#e8723a" opacity="0.35"/>
+                        <circle id="oBrowL" cx="48" cy="32" r="2" fill="#1a1a1e" opacity="0"/>
+                        <circle id="oBrowR" cx="82" cy="32" r="2" fill="#1a1a1e" opacity="0"/>
+                        
+                        <!-- TAMBAHAN: Bagian Putih Mata -->
+                        <circle cx="48" cy="40" r="7.5" fill="#fff"/>
+                        <circle cx="82" cy="40" r="7.5" fill="#fff"/>
+                        
+                        <circle class="eyedot" cx="48" cy="40" r="3.6" fill="#1a1a1e"/>
+                        <circle class="eyedot" cx="82" cy="40" r="3.6" fill="#1a1a1e"/>
+                        <path id="oMouth" d="M48,53 Q65,62 82,53" stroke="#1a1a1e" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+                    </svg>
+                    </div>
                 </div>
-            </div>
-
-            <div class="space-input-group">
-                <!-- INPUT PASSWORD (DENGAN CACHE AUTO-FILL) -->
-                <div class="login-input-group">
-                    <label for="password">PASSWORD</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        class="space-input" 
-                        placeholder="••••••••" 
-                        required 
-                        autocomplete="current-password"
-                    >
+                <!-- Purple -->
+                <div class="creature enter" id="purple">
+                    <div class="rig" id="purpleRig">
+                    <svg width="86" height="218" viewBox="0 0 86 218">
+                        <path id="pBody" d="M0,218 L0,24 C0,11 11,0 24,0 L62,0 C75,0 86,11 86,24 L86,218 Z" fill="var(--purple)"/>
+                        <path id="pBrowL" d="M24,24 L34,18" stroke="#1a1a1e" stroke-width="2.6" stroke-linecap="round" opacity="0"/>
+                        <path id="pBrowR" d="M52,18 L62,24" stroke="#1a1a1e" stroke-width="2.6" stroke-linecap="round" opacity="0"/>
+                        
+                        <!-- TAMBAHAN: Bagian Putih Mata -->
+                        <circle cx="33" cy="26" r="6.5" fill="#fff"/>
+                        <circle cx="53" cy="26" r="6.5" fill="#fff"/>
+                        
+                        <circle class="eyedot" cx="33" cy="26" r="2.8" fill="#1a1a1e"/>
+                        <circle class="eyedot" cx="53" cy="26" r="2.8" fill="#1a1a1e"/>
+                        <path id="pMouth" d="M43,38 L43,44" stroke="#1a1a1e" stroke-width="2.6" stroke-linecap="round"/>
+                    </svg>
+                    </div>
                 </div>
+                <!-- Black -->
+                <div class="creature enter" id="black">
+                    <div class="rig" id="blackRig">
+                    <svg width="56" height="232" viewBox="0 0 56 232">
+                        <rect x="0" y="0" width="56" height="232" rx="12" fill="var(--black)"/>
+                        <ellipse cx="18" cy="26" rx="6" ry="7" fill="#fff"/>
+                        <ellipse cx="38" cy="26" rx="6" ry="7" fill="#fff"/>
+                        <circle class="eyedot" cx="18" cy="27" r="2.6" fill="#1a1a1e"/>
+                        <circle class="eyedot" cx="38" cy="27" r="2.6" fill="#1a1a1e"/>
+                        <path id="bMouth" d="M18,44 L38,44" stroke="#fff" stroke-width="2.6" stroke-linecap="round" opacity="0"/>
+                    </svg>
+                    </div>
+                </div>
+                <!-- Yellow -->
+              <!-- Yellow pill — short, front-right -->
+<div class="creature enter" id="yellow">
+    <div class="rig" id="yellowRig">
+    <svg width="62" height="108" viewBox="0 0 62 108">
+        <rect x="0" y="0" width="62" height="108" rx="31" fill="var(--yellow)"/>
+        
+        <!-- BAGIAN PUTIH MATA & PUPIL HITAM -->
+        <circle id="yEyeWhiteL" cx="20" cy="38" r="7.5" fill="#fff"/>
+        <circle id="yEyeWhiteR" cx="42" cy="38" r="7.5" fill="#fff"/>
+        <circle id="yEyeDotL" class="eyedot" cx="20" cy="38" r="3.5" fill="#1a1a1e"/>
+        <circle id="yEyeDotR" class="eyedot" cx="42" cy="38" r="3.5" fill="#1a1a1e"/>
+        
+        <!-- EYEBROW / ANTENA -->
+        <line id="yBrowL" x1="13" y1="32" x2="29" y2="36" stroke="#1a1a1e" stroke-width="3.2" stroke-linecap="round"/>
+        <line id="yAntenna" x1="33" y1="36" x2="49" y2="32" stroke="#1a1a1e" stroke-width="3.2" stroke-linecap="round"/>
+        
+        <!-- MULUT SENGIR (SINGLE PATH) -->
+        <path id="yMouth" d="M20,54 L42,54" stroke="#1a1a1e" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+    </svg>
+    </div>
+</div>
             </div>
+            <div class="caption" id="caption">The Minions sedang rapat bersama.</div>
+        </div>
 
-            <button type="submit" id="btnLogin" class="btn-space-login">
-                <span id="btnLoginText">MASUK KE SISTEM</span>
-            </button>
+        <!-- AREA KANAN (FORM ANDA) -->
+        <div class="form-side">
+            <div class="form-inner">
+                <div class="space-icon">✦. ݁˖𐦂𖨆𐀪𖠋𐀪𐀪˖ ݁.✦</div>
+                <h1 class="space-title">APLIKASI LAPORAN</h1>
+                <p class="space-subtitle">Tim Kerja Pengangkatan dan Mutasi</p>
+                
+                <form id="spaceLoginForm" method="POST" action="javascript:void(0);" autocomplete="on">
+                    <div class="field">
+                        <label for="loginEmail">EMAIL / USERNAME</label>
+                        <div class="field-wrap">
+                            <input type="email" id="loginEmail" class="space-input" placeholder="Masukkan email Anda" required autocomplete="username email" spellcheck="false"/>
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <label for="password">PASSWORD</label>
+                        <div class="field-wrap">
+                            <input type="password" id="password" class="space-input pw" placeholder="••••••••" required autocomplete="current-password"/>
+                            <button type="button" class="eye-toggle" id="eyeToggle" aria-label="Show password">
+                                <svg id="eyeShow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/>
+                                </svg>
+                                <svg id="eyeHide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+                                    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.5 18.5 0 0 1 4.22-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                                    <line x1="1" y1="1" x2="23" y2="23"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" id="btnLogin" class="btn-space-login">
+                        <span id="btnLoginText">MASUK KE SISTEM</span>
+                    </button>
 
-            <div id="loginError" class="error-message"></div>
-        </form>
+                    <div id="loginError" class="error-message"></div>
+                </form>
+            </div>
+        </div>
     </div>
 
+    <!-- SKRIP ANIMASI SVG -->
+    <script>
+    (function(){
+        const canvas  = document.getElementById('canvas');
+        const caption = document.getElementById('caption');
+        const emailEl = document.getElementById('loginEmail'); // Disesuaikan ID-nya
+        const passEl  = document.getElementById('password');
+        const eyeToggle = document.getElementById('eyeToggle');
+        const eyeShow = document.getElementById('eyeShow');
+        const eyeHide = document.getElementById('eyeHide');
+        const loginBtn  = document.getElementById('btnLogin'); // Disesuaikan ID-nya
+
+        const O_SMILE   = 'M48,53 Q65,62 82,53';
+        const O_WORRIED = 'M48,58 Q65,52 82,58';
+        const O_NEUTRAL = 'M48,53 Q65,56 82,53';
+        const PM_NEUTRAL = 'M43,38 L43,44';
+        const PM_WORRIED = 'M40,40 Q43,36 47,41';
+        const BM_NEUTRAL = 'M18,44 L38,44';
+        const BM_WORRIED = 'M17,42 Q28,38 39,42';
+        const YA_N = {x1:33,y1:36,x2:49,y2:32};
+        const YA_W = {x1:33,y1:34,x2:47,y2:39};
+
+        const P_NORMAL = 'M0,218 L0,24 C0,11 11,0 24,0 L62,0 C75,0 86,11 86,24 L86,218 Z';
+        const P_PANIC  = 'M0,218 L0,38 C0,26 6,20 16,14 C28,6 50,-4 66,6 C76,13 86,22 86,34 L86,218 Z';
+
+        const pBody  = document.getElementById('pBody');
+        const pBrowL = document.getElementById('pBrowL');
+        const pBrowR = document.getElementById('pBrowR');
+        const pMouth = document.getElementById('pMouth');
+        const oBrowL = document.getElementById('oBrowL');
+        const oBrowR = document.getElementById('oBrowR');
+        const oMouth = document.getElementById('oMouth');
+        const bMouth = document.getElementById('bMouth');
+        const yAnt   = document.getElementById('yAntenna');
+        const allEyes = Array.from(document.querySelectorAll('.eyedot'));
+
+        let state = 'idle', pwVisible = false, hopTimer = 0;
+
+        const captions = {
+            idle:   'Lagi pada nongkrong santai, nih.',
+            typing: 'Eits, lagi pada ngeliatin ko mengetik!',
+            panic:  'Jangan diintip e! Rahasia negara, nih.',
+            reveal: 'Ohh aman.. keliatan sedikit saja.',
+            hop:    'Gaskeuun, masukk!',
+        };
+
+        const creatures = [
+            {
+                id:'orange', rig:document.getElementById('orangeRig'),
+                fl:{spd:1/3.9,ph:0.4,amp:3.5},
+                s:{
+                    idle:  {y:0,  x:0,  r:0,   sy:1,    sc:1},
+                    typing:{y:0,  x:0,  r:3,   sy:1,    sc:1},
+                    panic: {y:0,  x:0,  r:-3,  sy:0.92, sc:1},
+                    reveal:{y:-3, x:0,  r:0,   sy:1.04, sc:1},
+                    hop:   {y:-13,x:0,  r:2,   sy:1,    sc:1.04},
+                }
+            },
+            {
+                id:'purple', rig:document.getElementById('purpleRig'),
+                fl:{spd:1/4.5,ph:0.0,amp:4},
+                s:{
+                    idle:  {y:0,  x:0,  r:0,   sy:1,    sc:1},
+                    typing:{y:0,  x:0,  r:4,   sy:1,    sc:1},
+                    panic: {y:0,  x:-4, r:-3,  sy:0.88, sc:1},
+                    reveal:{y:-8, x:0,  r:0,   sy:1.08, sc:1},
+                    hop:   {y:-20,x:0,  r:0,   sy:1,    sc:1},
+                }
+            },
+            {
+                id:'black', rig:document.getElementById('blackRig'),
+                fl:{spd:1/5.1,ph:1.1,amp:3.5},
+                s:{
+                    idle:  {y:0,  x:0, r:0,  sy:1,    sc:1},
+                    typing:{y:0,  x:0, r:4,  sy:1,    sc:1},
+                    // ⚠️ BARIS INI YANG MEMBUAT CHARACTER HITAM TERLALU PENDEK / DIPRES
+                    panic: {y:0,  x:2, r:0,  sy:0.50, sc:1},
+                    reveal:{y:-6, x:0, r:0,  sy:1.05, sc:1},
+                    hop:   {y:-17,x:0, r:0,  sy:1,    sc:1},
+                }
+            },
+            {
+                id:'yellow', rig:document.getElementById('yellowRig'),
+                fl:{spd:1/4.7,ph:1.7,amp:4},
+                s:{
+                    idle:  {y:0,  x:0, r:0,  sy:1,    sc:1},
+                    typing:{y:0,  x:0, r:-5, sy:1,    sc:1},
+                    panic: {y:0,  x:0, r:5,  sy:0.94, sc:1},
+                    reveal:{y:-4, x:0, r:0,  sy:0.94, sc:1},
+                    hop:   {y:-19,x:0, r:-2, sy:1,    sc:1},
+                }
+            },
+        ];
+
+        const cur = {};
+        creatures.forEach(c=>{cur[c.id]={y:0,x:0,r:0,sy:1,sc:1};});
+
+        function lerp(a,b,t){return a+(b-a)*t;}
+        function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v));}
+
+        function tick(){
+            const t = performance.now()/1000;
+            const isPanic  = state==='panic';
+            const isTyping = state==='typing';
+            const isHop    = state==='hop';
+            if(isHop) hopTimer+=1/60;
+
+            creatures.forEach((c,i)=>{
+                const tgt = c.s[state]||c.s.idle;
+                const floatAmp = isTyping ? 0.4 : isPanic ? 0 : 1;
+                const fy = Math.sin((t+c.fl.ph)*Math.PI*2*c.fl.spd)*c.fl.amp*floatAmp;
+
+                let ty = tgt.y + (isHop?0:fy);
+                if(isHop){
+                    const d = i*0.07;
+                    const el = Math.max(0,hopTimer-d);
+                    ty = Math.min(0, Math.sin(el*Math.PI*3.2)*-22);
+                }
+
+                const spd = isPanic?0.3 : isTyping?0.16 : 0.12;
+                const cv = cur[c.id];
+                cv.y  = lerp(cv.y,  ty,   spd);
+                cv.x  = lerp(cv.x,  tgt.x, spd);
+                cv.r  = lerp(cv.r,  tgt.r, spd);
+                cv.sc = lerp(cv.sc, tgt.sc,spd);
+                cv.sy = lerp(cv.sy, tgt.sy,spd);
+
+                c.rig.style.transform =
+                    `translate(${cv.x.toFixed(2)}px,${cv.y.toFixed(2)}px) `+
+                    `rotate(${cv.r.toFixed(2)}deg) `+
+                    `scale(${cv.sc.toFixed(3)},${(cv.sy*cv.sc).toFixed(3)})`;
+            });
+            requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+
+        // ==========================================
+// 1. DEKLARASI ELEMEN KARAKTER YELLOW
+// (Pastikan ditaruh di bagian atas bersama deklarasi elemen lain)
+// ==========================================
+const yEyeWhiteL = document.getElementById('yEyeWhiteL');
+const yEyeWhiteR = document.getElementById('yEyeWhiteR');
+const yEyeDotL   = document.getElementById('yEyeDotL');
+const yEyeDotR   = document.getElementById('yEyeDotR');
+const yBrowL     = document.getElementById('yBrowL');
+
+// Posisi Garis Alis Kiri & Kanan (Normal vs Panik)
+const YL_N = { x1: 13, y1: 32, x2: 29, y2: 36 }; // Normal Alis Kiri
+const YL_W = { x1: 15, y1: 38, x2: 27, y2: 35 }; // Panik Alis Kiri
+const YR_N = { x1: 33, y1: 36, x2: 49, y2: 32 }; // Normal Antenna/Alis Kanan
+const YR_W = { x1: 35, y1: 35, x2: 47, y2: 38 }; // Panik Antenna/Alis Kanan
+
+
+// ==========================================
+// 2. FUNGSI UTAMA DENGAN PENSESUAIAN
+// ==========================================
+function updateEyes(cx, cy) {
+    if (state === 'panic') return;
+    const rect = canvas.getBoundingClientRect();
+    const dx = clamp((cx - rect.left - rect.width * .44) / (rect.width / 2) * 5, -5, 5);
+    const dy = clamp((cy - rect.top - rect.height * .46) / (rect.height / 2) * 5, -5, 5);
+    allEyes.forEach(p => { p.style.transform = `translate(${dx}px,${dy}px)`; });
+}
+document.addEventListener('mousemove', e => updateEyes(e.clientX, e.clientY));
+
+function setCaption(s) {
+    caption.style.opacity = 0;
+    setTimeout(() => { 
+        caption.textContent = captions[s] || captions.idle; 
+        caption.style.opacity = 1; 
+    }, 120);
+}
+
+// ==========================================
+// BENTUK MULUT YELLOW (NORMAL VS SENGIR PUTIH)
+// ==========================================
+const yMouth = document.getElementById('yMouth');
+
+// Garis lurus biasa
+const YM_NEUTRAL = 'M20,54 L42,54';               
+// Bentuk Lingkaran Bulat Penuh (Circle)
+const YM_GRIN = 'M24,54 C24,47 38,47 38,54 C38,61 24,61 24,54 Z';
+
+function applyFace(s) {
+    const worried = (s === 'panic');
+    
+    // Karakter Purple
+    pBody.setAttribute('d', worried ? P_PANIC : P_NORMAL);
+    pBrowL.setAttribute('opacity', worried ? '1' : '0');
+    pBrowR.setAttribute('opacity', worried ? '1' : '0');
+    pMouth.setAttribute('d', worried ? PM_WORRIED : PM_NEUTRAL);
+    
+    // Karakter Orange & Black
+    oBrowL.setAttribute('opacity', worried ? '1' : '0');
+    oBrowR.setAttribute('opacity', worried ? '1' : '0');
+    bMouth.setAttribute('opacity', worried ? '1' : '0');
+    bMouth.setAttribute('d', worried ? BM_WORRIED : BM_NEUTRAL);
+
+    if (worried)         oMouth.setAttribute('d', O_WORRIED);
+    else if (s==='typing') oMouth.setAttribute('d', O_NEUTRAL);
+    else                 oMouth.setAttribute('d', O_SMILE);
+
+    // ==========================================
+    // LOGIKA KHUSUS KARAKTER YELLOW
+    // ==========================================
+    if (worried) {
+        // 1. Sembunyikan mata (putih & pupil)
+        if (yEyeWhiteL) yEyeWhiteL.style.display = 'none';
+        if (yEyeWhiteR) yEyeWhiteR.style.display = 'none';
+        if (yEyeDotL)   yEyeDotL.style.display   = 'none';
+        if (yEyeDotR)   yEyeDotR.style.display   = 'none';
+
+        // 2. Ubah alis ke posisi panik
+        if (yBrowL) {
+            yBrowL.setAttribute('x1', YL_W.x1); yBrowL.setAttribute('y1', YL_W.y1);
+            yBrowL.setAttribute('x2', YL_W.x2); yBrowL.setAttribute('y2', YL_W.y2);
+        }
+        if (yAnt) {
+            yAnt.setAttribute('x1', YR_W.x1); yAnt.setAttribute('y1', YR_W.y1);
+            yAnt.setAttribute('x2', YR_W.x2); yAnt.setAttribute('y2', YR_W.y2);
+        }
+
+        // 3. MULUT MENGANTONG/SENGIR DENGAN ISIAN PUTIH (FILL WHITE)
+        if (yMouth) {
+            yMouth.setAttribute('d', YM_GRIN);
+            yMouth.setAttribute('fill', '#ffffff'); // Isian dalam mulut berwarna putih penuh
+            yMouth.setAttribute('stroke', '#1a1a1e'); // Garis pinggir tetap hitam
+        }
+
+    } else {
+        // 1. Kembalikan mata saat tidak panik
+        if (yEyeWhiteL) yEyeWhiteL.style.display = 'block';
+        if (yEyeWhiteR) yEyeWhiteR.style.display = 'block';
+        if (yEyeDotL)   yEyeDotL.style.display   = 'block';
+        if (yEyeDotR)   yEyeDotR.style.display   = 'block';
+
+        // 2. Kembalikan alis ke posisi normal
+        if (yBrowL) {
+            yBrowL.setAttribute('x1', YL_N.x1); yBrowL.setAttribute('y1', YL_N.y1);
+            yBrowL.setAttribute('x2', YL_N.x2); yBrowL.setAttribute('y2', YL_N.y2);
+        }
+        if (yAnt) {
+            yAnt.setAttribute('x1', YR_N.x1); yAnt.setAttribute('y1', YR_N.y1);
+            yAnt.setAttribute('x2', YR_N.x2); yAnt.setAttribute('y2', YR_N.y2);
+        }
+
+        // 3. KEMBALIKAN MULUT GARIS BIASA (TANPA ISIAN)
+        if (yMouth) {
+            yMouth.setAttribute('d', YM_NEUTRAL);
+            yMouth.setAttribute('fill', 'none'); // Tanpa warna isian
+            yMouth.setAttribute('stroke', '#1a1a1e');
+        }
+    }
+}
+
+function setState(s) {
+    if (state === s) return;
+    if (s === 'hop') hopTimer = 0;
+    state = s;
+    applyFace(s);
+    setCaption(s);
+    if (s !== 'panic') allEyes.forEach(p => { p.style.transform = ''; });
+}
+
+        emailEl.addEventListener('focus',()=>setState('typing'));
+        emailEl.addEventListener('input', ()=>setState('typing'));
+        emailEl.addEventListener('blur',  ()=>setState('idle'));
+
+        passEl.addEventListener('focus',()=>setState(pwVisible?'reveal':'panic'));
+        passEl.addEventListener('blur', ()=>setState('idle'));
+
+        eyeToggle.addEventListener('click',()=>{
+            pwVisible=!pwVisible;
+            passEl.type=pwVisible?'text':'password';
+            eyeShow.style.display=pwVisible?'none':'block';
+            eyeHide.style.display=pwVisible?'block':'none';
+            eyeToggle.setAttribute('aria-label',pwVisible?'Hide password':'Show password');
+            setState(pwVisible?'reveal':'panic');
+            passEl.focus();
+        });
+
+        loginBtn.addEventListener('mouseenter',()=>setState('hop'));
+        loginBtn.addEventListener('mouseleave',()=>setState('idle'));
+        
+        document.getElementById('spaceLoginForm').addEventListener('submit', () => {
+            setState('hop');
+        });
+
+        document.querySelectorAll('.creature').forEach(el=>{
+            el.addEventListener('animationend',e=>{
+                const names=['enter-black','enter-purple','enter-yellow','enter-orange'];
+                if(names.includes(e.animationName)) el.classList.remove('enter');
+            });
+        });
+    })();
+    </script>
+
+    <!-- SKRIP FIREBASE AUTH ANDA -->
     <script type="module">
         import { auth } from "./firebase-config.js";
-        // Diimpor secara benar dari firebase-auth.js
         import { 
             signInWithEmailAndPassword, 
             onAuthStateChanged 
         } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
-        // Pengalihan otomatis jika user sudah terautentikasi / ter-login
         onAuthStateChanged(auth, (user) => {
             if (user) window.location.href = "index.html";
         });
 
         document.getElementById('spaceLoginForm')?.addEventListener('submit', async function(e) {
-        e.preventDefault(); // Mencegah reload halaman
-        
-        const emailInput = document.getElementById('loginEmail').value;
-        const passwordInput = document.getElementById('password').value;
-        const btnLogin = document.getElementById('btnLogin');
-        const btnText = document.getElementById('btnLoginText');
-        const errorEl = document.getElementById('loginError');
-
-        // Tampilkan Indikator Loading
-        if (btnText) btnText.innerText = "PROSES MASUK...";
-        if (btnLogin) btnLogin.disabled = true;
-        if (errorEl) errorEl.style.display = 'none';
-
-        try {
-            // Eksekusi Login Firebase
-            await signInWithEmailAndPassword(auth, emailInput, passwordInput);
+            e.preventDefault(); 
             
-            // Simpan waktu login di localStorage
-            localStorage.setItem('last_user_activity', Date.now().toString());
-            localStorage.removeItem('session_expired');
+            const emailInput = document.getElementById('loginEmail').value;
+            const passwordInput = document.getElementById('password').value;
+            const btnLogin = document.getElementById('btnLogin');
+            const btnText = document.getElementById('btnLoginText');
+            const errorEl = document.getElementById('loginError');
 
-            // Pengalihan ke Dashboard utama
-            window.location.replace("index.html");
+            if (btnText) btnText.innerText = "PROSES MASUK...";
+            if (btnLogin) btnLogin.disabled = true;
+            if (errorEl) errorEl.style.display = 'none';
 
-        } catch (error) {
-            console.error("Login gagal:", error);
-            if (errorEl) {
-                errorEl.innerText = "Email atau password yang Anda masukkan salah.";
-                errorEl.style.display = 'block';
+            try {
+                await signInWithEmailAndPassword(auth, emailInput, passwordInput);
+                localStorage.setItem('last_user_activity', Date.now().toString());
+                localStorage.removeItem('session_expired');
+                window.location.replace("index.html");
+            } catch (error) {
+                console.error("Login gagal:", error);
+                if (errorEl) {
+                    errorEl.innerText = "Email atau password yang Anda masukkan salah.";
+                    errorEl.style.display = 'block';
+                }
+                if (btnText) btnText.innerText = "MASUK KE SISTEM";
+                if (btnLogin) btnLogin.disabled = false;
             }
-            if (btnText) btnText.innerText = "MASUK KE SISTEM";
-            if (btnLogin) btnLogin.disabled = false;
-        }
-    });
+        });
     </script>
 </body>
 </html>
