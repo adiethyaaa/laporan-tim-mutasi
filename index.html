@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aplikasi Laporan Hasil Pelayanan</title>
+
     <!-- FONTAWESOME CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- STYLESHEET UTAMA -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- EXTERNAL LIBRARIES -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Library HTML2PDF untuk Generate Preview & Download PDF -->
@@ -23,8 +28,10 @@
     <!-- HAMBURGER BUTTON MOBILE -->
     <button id="btnMobileHamburger" class="mobile-hamburger-btn" title="Buka Menu">☰ Menu</button>
 
-    <!-- SIDEBAR UTAMA -->
-    <div id="sidebarContainer" class="sidebar" style="display: none;">
+    <!-- ========================================== -->
+    <!-- SIDEBAR UTAMA                              -->
+    <!-- ========================================== -->
+    <aside id="sidebarContainer" class="sidebar" style="display: none;">
         <div class="sidebar-header">
             <h2 class="sidebar-title">Layanan Tim KP</h2>
             <button id="btnToggleSidebar" class="toggle-sidebar-btn" title="Ciutkan Sidebar">➕</button>
@@ -51,7 +58,7 @@
                 <span class="sidebar-text">Usulan KP</span>
             </a>
 
-            <a id="nav-aplikasi-pga" onclick="showSection('aplikasi-2-PGA')" style="display: none;">
+            <a id="nav-aplikasi-pga" onclick="showSection('aplikasi-2-PGA', 'PGA')" style="display: none;">
                 <span class="sidebar-icon">🎓</span>
                 <span class="sidebar-text">Usulan PGA</span>
             </a>
@@ -71,14 +78,18 @@
                 <span class="sidebar-text" style="color:#ffffff;">Keluar</span>
             </a>
         </nav>
-    </div>
+    </aside>
 
-    <!-- MAIN CONTENT AREA -->
-    <div id="mainContent" class="main-content" style="display: none;">
-        <!-- 0. HALAMAN PROFIL USER & WELCOME BANNER -->
-        <div id="profile-page" class="section active">
+    <!-- ========================================== -->
+    <!-- MAIN CONTENT AREA                          -->
+    <!-- ========================================== -->
+    <main id="mainContent" class="main-content" style="display: none;">
+
+        <!-- ------------------------------------------ -->
+        <!-- 0. HALAMAN PROFIL USER & WELCOME BANNER    -->
+        <!-- ------------------------------------------ -->
+        <section id="profile-page" class="section active">
             <div class="welcome-hero-container">
-                
                 <!-- WIDGET JAM DIGITAL WIT MINIMALIS -->
                 <div class="digital-clock-hero">
                     <div class="clock-date-hero" id="clockDate">Senin, 18 Agustus 2026</div>
@@ -123,13 +134,16 @@
                         <p id="welcomeQuote" class="welcome-quote-text">"Semangat memberikan pelayanan terbaik hari ini. Setiap berkas yang diproses adalah bentuk pengabdian!"</p>
                     </div>
                 </div>
-                <!-- FOOTER DIGITAL STYLE MINIMALIS -->
-                 <div class="profile-digital-footer">made 🫰 by aditya</div>
-            </div>
-        </div>
 
-        <!-- 1. SEKSI HALAMAN APLIKASI KP -->
-        <div id="aplikasi-1-KP" class="section">
+                <!-- FOOTER DIGITAL STYLE MINIMALIS -->
+                <div class="profile-digital-footer">made 🫰 by aditya</div>
+            </div>
+        </section>
+
+        <!-- ------------------------------------------ -->
+        <!-- 1. SEKSI HALAMAN APLIKASI KP               -->
+        <!-- ------------------------------------------ -->
+        <section id="aplikasi-1-KP" class="section">
             <div class="module-header-banner header-kp">
                 <div class="module-header-title">
                     <h2>📈 Laporan Pelayanan Kenaikan Pangkat (KP)</h2>
@@ -154,6 +168,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="module-header-title">
                 <button id="btnToggleUploadForm" class="btn-toggle-chart" style="background: rgba(255,255,255,0.18); color: rgb(38, 15, 15); border: 1px solid rgba(255,255,255,0.3);">
                     <span id="toggleIcon"><i class="fas fa-eye-slash"></i></span>
@@ -241,13 +256,12 @@
                             </div>
                         </div>
                     </div>
+                    
                     <div style="display: flex; justify-content: flex-end; align-items: center; width: 100%; margin-top: 10px; margin-bottom: 5px;">
-                    <button type="button" class="btn-rekap-animated" 
-                            style="background: #004590 !important; width: auto !important; max-width: fit-content !important; min-width: unset !important; padding: 10px 14px !important; font-family: 'Segoe UI'; font-size: 14px !important; margin-top: 0 !important;" 
-                            onclick="window.resetMainFilters(event)">
-                        Reset Filter
-                    </button>
-                </div>
+                        <button type="button" class="btn-rekap-animated btn-reset-filter-kp" onclick="window.resetMainFilters(event)">
+                            Reset Filter
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="data-count-container">
@@ -318,14 +332,16 @@
                     </table>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- 2. SEKSI HALAMAN USULAN PGA -->
-        <div id="aplikasi-2-PGA" class="section">
+        <!-- ------------------------------------------ -->
+        <!-- 2. SEKSI HALAMAN USULAN PGA                -->
+        <!-- ------------------------------------------ -->
+        <section id="aplikasi-2-PGA" class="section">
             <div class="module-header-banner header-pga" style="background: linear-gradient(135deg, #1e1b4b, #312e81);">
                 <div class="module-header-title">
-                    <h2>🎓 Laporan Pelayanan Usulan PGA & PMK</h2>
-                    <p>Pencatatan, pemantauan, dan manajemen usulan Pencantuman Gelar Akademik (PGA) dan Peninjauan Masa Kerja (PMK).</p>
+                    <h2>🎓 Laporan Pelayanan Usulan Pencantuman Gelar Akademik (PGA)</h2>
+                    <p>Pencatatan, pemantauan, dan manajemen usulan Pencantuman Gelar Akademik (PGA).</p>
                 </div>
 
                 <div class="header-widgets-compact">
@@ -377,7 +393,7 @@
                 <div class="filter-box-header">
                     <div class="filter-box-title">
                         <i class="fas fa-filter filter-icon" style="color: #4338ca;"></i>
-                        <span>Filter Data PGA & PMK</span>
+                        <span>Filter Data PGA</span>
                     </div>
                     <button type="button" class="btn-reset-filter-mini" onclick="window.resetFilterPGA()">
                         <i class="fas fa-rotate-left"></i> Reset Filter
@@ -412,7 +428,7 @@
                             <i class="fas fa-rotate-left"></i> Undo
                         </button>
 
-                        <!-- Tombol ini memicu fungsi untuk membuka Modal Pop-up -->
+                        <!-- Tombol pembuka Modal Pop-up PGA -->
                         <button id="btnOpenAddFormPGA" class="btn-delete-selected" onclick="openModalFormPGA()" style="display: inline-flex; align-items: center; gap: 6px; background-color: #4338ca; color: white; border: none; cursor: pointer;">
                             <i class="fas fa-plus"></i>
                             <span>Tambah Data PGA</span>
@@ -441,98 +457,16 @@
                                 <th style="width: 70px; text-align: center;">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody id="tableBodyPGA">
-                            <!-- Data dirender otomatis oleh renderTablePGA() -->
-                        </tbody>
+                        <tbody id="tableBodyPGA"></tbody>
                     </table>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- ========================================== -->
-        <!-- MODAL POP UP TAMBAH/EDIT DATA PGA -->
-        <!-- ========================================== -->
-        <div id="modalFormPGA" class="modal-overlay" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
-            
-            <div class="modal-box" style="background: #ffffff; border-radius: 12px; width: 100%; max-width: 480px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); overflow: hidden; animation: slideDown 0.3s ease;">
-                
-                <!-- Header Modal -->
-                <div style="background: #4338ca; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;">
-                    <h3 id="modalTitleTextPGA" style="margin: 0; color: white; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-file-signature"></i> <span>Tambah Data PGA</span>
-                    </h3>
-                    <button type="button" onclick="closeModalFormPGA()" style="background: none; border: none; color: white; font-size: 22px; cursor: pointer; line-height: 1;">&times;</button>
-                </div>
-
-                <!-- Datalist Master Instansi (Tanpa Vertikal) -->
-                <datalist id="listInstansiSuggestPGA"></datalist>
-
-                <!-- Body Form -->
-                <div style="padding: 20px;">
-                    <form id="formEditPGA" style="display: flex; flex-direction: column; gap: 14px;">
-                        <input type="hidden" id="editKeyPGA">
-                        
-                        <div>
-                            <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">Nama Pegawai</label>
-                            <input type="text" id="editNamaPGA" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;" required>
-                        </div>
-                        
-                        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 12px;">
-                            <div>
-                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">NIP</label>
-                                <input type="text" id="editNipPGA" placeholder="18 Digit..." style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;" required>
-                            </div>
-                            <div>
-                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">ID Validator</label>
-                                <input type="text" id="editValidatorPGA" placeholder="Contoh: CM" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;">
-                            </div>
-                        </div>
-
-                        <div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase;">Instansi</label>
-                                <button type="button" onclick="openModalMasterInstansi()" style="background: none; border: none; color: #4338ca; font-size: 11px; cursor: pointer; font-weight: bold;">+ Master</button>
-                            </div>
-                            <input type="text" id="editInstansiPGA" list="listInstansiSuggestPGA" placeholder="Ketik instansi daerah..." style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;" required>
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                            <div>
-                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">Tgl Usul</label>
-                                <input type="date" id="editTglUsulPGA" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;">
-                            </div>
-                            <div>
-                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">Status Usulan</label>
-                                <select id="editStatusPGA" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;">
-                                    <option value="MS">MS</option>
-                                    <option value="TMS">TMS</option>
-                                    <option value="BTS">BTS</option>
-                                    <option value="INBOX">INBOX</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">Keterangan</label>
-                            <textarea id="editKeteranganPGA" rows="3" placeholder="Catatan opsional..." style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;"></textarea>
-                        </div>
-
-                        <!-- Footer Modal (Tombol) -->
-                        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 6px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
-                            <button type="button" onclick="closeModalFormPGA()" style="padding: 10px 16px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: 600;">
-                                Batal
-                            </button>
-                            <button type="submit" id="btnSubmitFormPGA" style="padding: 10px 20px; background: #4338ca; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-                                <i class="fas fa-floppy-disk"></i> Simpan Data
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3. SEKSI HALAMAN APLIKASI KHUSUS PINDAH INSTANSI (PI) -->
-        <div id="aplikasi-3-PI" class="section">
+        <!-- ------------------------------------------ -->
+        <!-- 3. SEKSI HALAMAN APLIKASI PINDAH INSTANSI  -->
+        <!-- ------------------------------------------ -->
+        <section id="aplikasi-3-PI" class="section">
             <div class="module-header-banner header-pi">
                 <div class="module-header-title">
                     <h2>🏣 Laporan Pelayanan Pindah Instansi (PI)</h2>
@@ -627,7 +561,6 @@
                 </div>
                 
                 <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-    
                     <!-- Kelompok Tombol Aksi Kiri (Hapus, Undo, Tambah Data) -->
                     <div style="display: flex; gap: 8px; align-items: center;">
                         <button id="btnDeleteSelectedPI" class="btn-delete-selected" style="display: none;">
@@ -657,11 +590,9 @@
                         style="background-color: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 6px;">
                             <i class="fas fa-file-pdf"></i> Export PDF PI
                     </button>
-                    
                 </div>
                 
-                <!-- KONTANER TABEL PINDAH INSTANSI (PI) -->
-                <!-- AREA KONTEN UTAMA PINDAH INSTANSI (SPLIT LAYOUT) -->
+                <!-- KONTANER TABEL PINDAH INSTANSI (PI) - SPLIT LAYOUT -->
                 <div class="split-layout-pi" style="display: flex; gap: 20px; align-items: flex-start; width: 100%;">
 
                     <!-- KOLOM KIRI: TABEL DATA PI -->
@@ -674,7 +605,6 @@
                                     <th style="width: 50px;">ID</th>
                                     <th onclick="sortTablePI('tgl_validasi')" style="cursor:pointer;">Tgl Validasi <span id="sort_pi_tgl_validasi">↕</span></th>
                                     <th onclick="sortTablePI('nama')" style="cursor:pointer;">Nama Pegawai <span id="sort_pi_nama">↕</span></th>
-                                    <!-- KOLOM BARU: NIP -->
                                     <th onclick="sortTablePI('nip')" style="cursor:pointer;">NIP <span id="sort_pi_nip">↕</span></th>
                                     <th onclick="sortTablePI('instansi_asal')" style="cursor:pointer;">Instansi Asal <span id="sort_pi_instansi_asal">↕</span></th>
                                     <th onclick="sortTablePI('instansi_tujuan')" style="cursor:pointer;">Instansi Tujuan <span id="sort_pi_instansi_tujuan">↕</span></th>
@@ -684,9 +614,7 @@
                                     <th style="width: 70px; text-align: center;">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="tableBodyPI">
-                                <!-- Data dirender otomatis oleh renderTablePI() -->
-                            </tbody>
+                            <tbody id="tableBodyPI"></tbody>
                         </table>
                     </div>
 
@@ -760,12 +688,13 @@
                         </form>
                     </div>
                 </div>
-
             </div>
-        </div>
+        </section>
 
-        <!-- 4. SEKSI DASHBOARD -->
-        <div id="dashboard" class="section">
+        <!-- ------------------------------------------ -->
+        <!-- 4. SEKSI DASHBOARD                         -->
+        <!-- ------------------------------------------ -->
+        <section id="dashboard" class="section">
             <div class="module-header-banner header-dshb">
                 <div class="module-header-title">
                     <h2>📍🗺️ Dashboard Pelayanan Tim Pengangkatan dan Mutasi</h2>
@@ -791,23 +720,23 @@
             </div>
    
             <!-- SPLIT LAYOUT DASHBOARD -->
-             
             <div class="dashboard-split-layout">
                 <div class="chart-box-wrapper">
                     <canvas id="mainTotalChart"></canvas>
                 </div>
                 <div class="dashboard-cards-column">
                     <!-- BARIS HEADER SUMMARY (Judul Ringkasan & Badge Total Usulan di Kanan) -->
-                    <div style="display: flex; justify-content:left ; align-items: center; margin-bottom: 12px; gap: 10px;">
-                        <h3 class="btn-rekap-animated" style="background: #ffffff; color: #065f46; margin: 0; text-align: left ; pointer-events: none;">
+                    <div style="display: flex; justify-content: left; align-items: center; margin-bottom: 12px; gap: 10px;">
+                        <h3 class="btn-rekap-animated" style="background: #ffffff; color: #065f46; margin: 0; text-align: left; pointer-events: none;">
                             📊 Ringkasan Status Usulan
                         </h3>
                         
-                        <!-- POSISI BARU: BOX TOTAL USULAN DI KANAN ATAS CARDS -->
-                        <div id="totalSummaryBadge" id="btnResetDashFilter" class="btn-rekap-animated" style="background: #4d4d4d;  margin: 0; text-align: right ; pointer-events: none">
+                        <!-- POSISI TOTAL USULAN DI KANAN ATAS CARDS (ID Duplikat Telah Dibersihkan) -->
+                        <div id="totalSummaryBadge" class="btn-rekap-animated" style="background: #4d4d4d; margin: 0; text-align: right; pointer-events: none;">
                             Total Usulan: <strong>0 Data</strong>
                         </div>
                     </div>
+
                     <div class="dashboard-cards">
                         <div class="card card-ms">
                             <h4>MEMENUHI SYARAT (MS)</h4>
@@ -859,7 +788,7 @@
             </div>
 
             <!-- FILTER DASHBOARD -->
-            <div class="js-team-modal-section" style="margin-top: 30px; width: 100%; box-sizing: border-box;background-color: #c8c8c8;">
+            <div class="js-team-modal-section" style="margin-top: 30px; width: 100%; box-sizing: border-box; background-color: #c8c8c8;">
                 <header class="js-team-modal-head">
                     <div class="filter-container">
                         <div class="filter-group">
@@ -897,12 +826,9 @@
                                 Reset Filter
                             </button>
                         </div>
-                        
                     </div>
                 </header>
             </div>
-            
-            <!-- <div id="totalSummaryBadge" class="total-summary-badge">Total Usulan Terpilih: 0 Data</div> -->
 
             <!-- INTEGRASI SECTION REKAP DASHBOARD 3 CARDS -->
             <div class="js-team-modal-section" style="margin-top: 30px; width: 100%; box-sizing: border-box;">
@@ -1076,9 +1002,7 @@
                 </div>
             </div>    
 
-            <!-- ========================================== -->
-            <!-- TREN GRAFIK USULAN HARIAN (BARU)           -->
-            <!-- ========================================== -->
+            <!-- TREN GRAFIK USULAN HARIAN -->
             <div class="dashboard-section" style="margin-top: 24px; margin-bottom: 24px;">
                 <div class="rekap-region-card" style="background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 1px solid #e2e8f0;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">
@@ -1095,7 +1019,7 @@
                 </div>
             </div>
             
-            <div class="btn-rekap-animated" >
+            <div class="btn-rekap-animated">
                 <button id="btnToggleKabChart" class="btn-toggle-chart">
                     <span>🍩</span> Tampilkan Grafik Donat Detail per Instansi
                 </button>
@@ -1106,421 +1030,491 @@
                 <h3 style="font-size: 15px; color: #1e293b; margin-bottom: 10px;">Sebaran Rekapitulasi per Instansi Induk</h3>
                 <div id="donutCardsGrid" class="donut-grid-container"></div>
             </div>
-        </div>
+        </section>
 
-        <!-- 5. SEKSI ADMIN PANEL -->
-        <!-- HALAMAN ADMIN PANEL / PROFIL -->
-<div id="admin-page" class="section" style="display: none;">
-    
-    <!-- HEADER ADMIN -->
-    <div class="content-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-        <div>
-            <h2><i class="fas fa-user-shield"></i> Pengaturan Akun & Pengguna</h2>
-            <p>Kelola kata sandi akun Anda dan manajemen pengguna sistem.</p>
-        </div>
-        <button onclick="openChangePasswordModal()" class="btn-action" style="background: #e67e22; padding: 8px 16px; font-size: 14px;">
-            🔑 Ubah Password Saya
-        </button>
-    </div>
-
-    <!-- AREA KELOLA PENGGUNA SISTEM (HANYA UNTUK ROLE ADMIN) -->
-    <div id="adminUserManagementArea" style="display: none; margin-top: 25px;">
-        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-bottom: 25px;">
-        
-        <!-- TOMBOL TAMBAH USER -->
-        <div style="margin-bottom: 20px; display: flex; justify-content: flex-end;">
-            <button onclick="openAddUserForm()" class="btn-action">
-                <i class="fas fa-user-plus"></i> Tambah User Baru
-            </button>
-        </div>
-
-        <!-- GRID TABEL & FORM REGISTER -->
-        <div class="admin-grid-container">
-            <!-- TABEL USER -->
-            <div class="admin-card-box admin-col-left">
-                <h4 style="margin-top: 0; color: #2c3e50;">👥 Informasi User Pengguna</h4>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 50px; text-align: center;">ID Inisial</th>
-                                <th>Email User</th>
-                                <th>Nama Lengkap</th>
-                                <th>Role</th>
-                                <th style="text-align: center; width: 140px;">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="userManagementTableBody">
-                            <tr><td colspan="5" style="text-align: center; padding: 15px; color: #7f8c8d;">Memuat data user...</td></tr>
-                        </tbody>
-                    </table>
+        <!-- ------------------------------------------ -->
+        <!-- 5. SEKSI ADMIN PANEL & MANAJEMEN PENGGUNA  -->
+        <!-- ------------------------------------------ -->
+        <section id="admin-page" class="section" style="display: none;">
+            <!-- HEADER ADMIN -->
+            <div class="content-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <div>
+                    <h2><i class="fas fa-user-shield"></i> Pengaturan Akun & Pengguna</h2>
+                    <p>Kelola kata sandi akun Anda dan manajemen pengguna sistem.</p>
                 </div>
-                <br>
-                <br>
-                <br>
-                    <button type="button" class="btn-logout" onclick="window.clearAllDataKP()" style="background-color: #ef4444; color: white; padding: 6px 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">
-                        <i class="fas fa-trash-can"></i> Hapus Semua Data KP
-                    </button>
+                <button onclick="openChangePasswordModal()" class="btn-action" style="background: #e67e22; padding: 8px 16px; font-size: 14px;">
+                    🔑 Ubah Password Saya
+                </button>
             </div>
-            
-            <!-- FORM REGISTER/EDIT USER -->
-            <div class="admin-card-box admin-col-right" id="adminFormBox" style="display: none; border-top: 4px solid #2ecc71;">
-                <h4 id="adminFormTitle" style="margin-top: 0; color: #2c3e50;">➕ Tambah User Pengguna Baru & Atur Hak Akses</h4>
-                <form id="adminRegisterForm">
-                    <input type="hidden" id="editUserUidTarget" value="">
-                    <div class="form-group-stacked">
-                        <label style="font-size: 12px; font-weight: bold;">Nama Lengkap / Identitas</label>
-                        <input type="text" id="newUserName" required placeholder="Nama User" class="admin-input-field">
-                    </div>
-                    <div class="form-group-stacked">
-                        <label style="font-size: 12px; font-weight: bold;">Email User</label>
-                        <input type="email" id="newUserEmail" required placeholder="user@instansi.go.id" class="admin-input-field">
-                    </div>
-                    <div class="form-grid-2" style="margin-top: 10px;">
-                        <div>
-                            <label style="font-size: 12px; font-weight: bold;">ID Inisial (Max 3 Huruf)</label>
-                            <input type="text" id="newUserIdInisial" required maxlength="3" placeholder="ADI" class="admin-input-field" style="text-transform: uppercase;">
+
+            <!-- AREA KELOLA PENGGUNA SISTEM (HANYA UNTUK ROLE ADMIN) -->
+            <div id="adminUserManagementArea" style="display: none; margin-top: 25px;">
+                <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-bottom: 25px;">
+                
+                <!-- TOMBOL TAMBAH USER -->
+                <div style="margin-bottom: 20px; display: flex; justify-content: flex-end;">
+                    <button onclick="openAddUserForm()" class="btn-action">
+                        <i class="fas fa-user-plus"></i> Tambah User Baru
+                    </button>
+                </div>
+
+                <!-- GRID TABEL & FORM REGISTER -->
+                <div class="admin-grid-container">
+                    <!-- TABEL USER -->
+                    <div class="admin-card-box admin-col-left">
+                        <h4 style="margin-top: 0; color: #2c3e50;">👥 Informasi User Pengguna</h4>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px; text-align: center;">ID Inisial</th>
+                                        <th>Email User</th>
+                                        <th>Nama Lengkap</th>
+                                        <th>Role</th>
+                                        <th style="text-align: center; width: 140px;">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userManagementTableBody">
+                                    <tr><td colspan="5" style="text-align: center; padding: 15px; color: #7f8c8d;">Memuat data user...</td></tr>
+                                </tbody>
+                            </table>
                         </div>
+                        <button type="button" class="btn-logout admin-delete-all-btn" onclick="window.clearAllDataKP()">
+                            <i class="fas fa-trash-can"></i> Hapus Semua Data KP
+                        </button>
+                    </div>
+                    
+                    <!-- FORM REGISTER/EDIT USER -->
+                    <div class="admin-card-box admin-col-right" id="adminFormBox" style="display: none; border-top: 4px solid #2ecc71;">
+                        <h4 id="adminFormTitle" style="margin-top: 0; color: #2c3e50;">➕ Tambah User Pengguna Baru & Atur Hak Akses</h4>
+                        <form id="adminRegisterForm">
+                            <input type="hidden" id="editUserUidTarget" value="">
+                            <div class="form-group-stacked">
+                                <label style="font-size: 12px; font-weight: bold;">Nama Lengkap / Identitas</label>
+                                <input type="text" id="newUserName" required placeholder="Nama User" class="admin-input-field">
+                            </div>
+                            <div class="form-group-stacked">
+                                <label style="font-size: 12px; font-weight: bold;">Email User</label>
+                                <input type="email" id="newUserEmail" required placeholder="user@instansi.go.id" class="admin-input-field">
+                            </div>
+                            <div class="form-grid-2" style="margin-top: 10px;">
+                                <div>
+                                    <label style="font-size: 12px; font-weight: bold;">ID Inisial (Max 3 Huruf)</label>
+                                    <input type="text" id="newUserIdInisial" required maxlength="3" placeholder="ADI" class="admin-input-field" style="text-transform: uppercase;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 12px; font-weight: bold;">Password</label>
+                                    <input type="password" id="newUserPassword" placeholder="Password" class="admin-input-field">
+                                </div>
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <label style="font-size: 12px; font-weight: bold;">Role Akses Jabatan</label>
+                                <select id="newUserRole" onchange="window.handleNewRoleChange()" class="admin-input-field">
+                                    <option value="Operator">Operator Pelayanan</option>
+                                    <option value="Admin">Administrator Sistem</option>
+                                </select>
+                            </div>
+                            <div style="margin-top: 15px; margin-bottom: 20px;">
+                                <label style="font-size: 12px; font-weight: bold; color: #2c3e50;">Pengaturan Sakelar ON/OFF Hak Akses Menu & Fitur:</label>
+                                <div class="toggle-switch-group">
+                                    <div class="toggle-switch-item"><span class="toggle-switch-label">📈 Halaman KP</span><label class="switch"><input type="checkbox" id="chkNewMenuKP" checked><span class="slider"></span></label></div>
+                                    <div class="toggle-switch-item"><span class="toggle-switch-label">🔄 Halaman PI</span><label class="switch"><input type="checkbox" id="chkNewMenuPI" checked><span class="slider"></span></label></div>
+                                    <div class="toggle-switch-item"><span class="toggle-switch-label">🎓 Halaman PGA</span><label class="switch"><input type="checkbox" id="chkNewMenuPGA" checked><span class="slider"></span></label></div>
+                                    <div class="toggle-switch-item"><span class="toggle-switch-label">📊 Halaman Dashboard</span><label class="switch"><input type="checkbox" id="chkNewDashboard" checked><span class="slider"></span></label></div>
+                                    <div class="toggle-switch-item"><span class="toggle-switch-label">⚙️ Halaman Admin</span><label class="switch"><input type="checkbox" id="chkNewAdmin" checked><span class="slider"></span></label></div>
+                                    <div class="toggle-switch-item" style="background: #f1f5f9; border-left: 3px solid #e11d48; margin-top: 8px;">
+                                        <span class="toggle-switch-label" style="color: #9f1239; font-weight: bold;">🗑️ Izin Tombol Hapus Terpilih</span>
+                                        <label class="switch"><input type="checkbox" id="chkAllowDeleteSelected"><span class="slider"></span></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <button type="submit" id="btnAdminSubmit" class="btn-action" style="background: #2ecc71; flex: 1;">Daftarkan User</button>
+                                <button type="button" id="btnAdminCancelEdit" class="btn-undo-cancel" onclick="window.confirmCancelEditAdmin()">Tutup</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- MODAL DIALOGS CONTAINER                   -->
+    <!-- ========================================== -->
+    <div id="modalsContainer" class="modals-container">
+
+        <!-- 1. MODAL POP UP TAMBAH/EDIT DATA PGA -->
+        <div id="modalFormPGA" class="modal-form-pga-overlay">
+            <div class="modal-box modal-form-pga-box">
+                <!-- Header Modal -->
+                <div style="background: #4338ca; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 id="modalTitleTextPGA" style="margin: 0; color: white; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-file-signature"></i> <span>Tambah Data PGA</span>
+                    </h3>
+                    <button type="button" onclick="closeModalFormPGA()" style="background: none; border: none; color: white; font-size: 22px; cursor: pointer; line-height: 1;">&times;</button>
+                </div>
+
+                <!-- Datalist Master Instansi (Tanpa Vertikal) -->
+                <datalist id="listInstansiSuggestPGA"></datalist>
+
+                <!-- Body Form -->
+                <div style="padding: 20px;">
+                    <form id="formEditPGA" style="display: flex; flex-direction: column; gap: 14px;">
+                        <input type="hidden" id="editKeyPGA">
+                        
                         <div>
-                            <label style="font-size: 12px; font-weight: bold;">Password</label>
-                            <input type="password" id="newUserPassword" placeholder="Password" class="admin-input-field">
+                            <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">Nama Pegawai</label>
+                            <input type="text" id="editNamaPGA" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;" required>
                         </div>
-                    </div>
-                    <div style="margin-top: 10px;">
-                        <label style="font-size: 12px; font-weight: bold;">Role Akses Jabatan</label>
-                        <select id="newUserRole" onchange="window.handleNewRoleChange()" class="admin-input-field">
-                            <option value="Operator">Operator Pelayanan</option>
-                            <option value="Admin">Administrator Sistem</option>
-                        </select>
-                    </div>
-                    <div style="margin-top: 15px; margin-bottom: 20px;">
-                        <label style="font-size: 12px; font-weight: bold; color: #2c3e50;">Pengaturan Sakelar ON/OFF Hak Akses Menu & Fitur:</label>
-                        <div class="toggle-switch-group">
-                            <div class="toggle-switch-item"><span class="toggle-switch-label">📈 Halaman KP</span><label class="switch"><input type="checkbox" id="chkNewMenuKP" checked><span class="slider"></span></label></div>
-                            <div class="toggle-switch-item"><span class="toggle-switch-label">🔄 Halaman PI</span><label class="switch"><input type="checkbox" id="chkNewMenuPI" checked><span class="slider"></span></label></div>
-                            <div class="toggle-switch-item"><span class="toggle-switch-label">🎓 Halaman PGA</span><label class="switch"><input type="checkbox" id="chkNewMenuPGA" checked><span class="slider"></span></label></div>
-                            <div class="toggle-switch-item"><span class="toggle-switch-label">📊 Halaman Dashboard</span><label class="switch"><input type="checkbox" id="chkNewDashboard" checked><span class="slider"></span></label></div>
-                            <div class="toggle-switch-item"><span class="toggle-switch-label">⚙️ Halaman Admin</span><label class="switch"><input type="checkbox" id="chkNewAdmin" checked><span class="slider"></span></label></div>
-                            <div class="toggle-switch-item" style="background: #f1f5f9; border-left: 3px solid #e11d48; margin-top: 8px;">
-                                <span class="toggle-switch-label" style="color: #9f1239; font-weight: bold;">🗑️ Izin Tombol Hapus Terpilih</span>
-                                <label class="switch"><input type="checkbox" id="chkAllowDeleteSelected"><span class="slider"></span></label>
+                        
+                        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 12px;">
+                            <div>
+                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">NIP</label>
+                                <input type="text" id="editNipPGA" placeholder="18 Digit..." style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;" required>
+                            </div>
+                            <div>
+                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">ID Validator</label>
+                                <input type="text" id="editValidatorPGA" placeholder="Contoh: CM" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;">
                             </div>
                         </div>
+
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase;">Instansi</label>
+                                <button type="button" onclick="openModalMasterInstansi()" style="background: none; border: none; color: #4338ca; font-size: 11px; cursor: pointer; font-weight: bold;">+ Master</button>
+                            </div>
+                            <input type="text" id="editInstansiPGA" list="listInstansiSuggestPGA" placeholder="Ketik instansi daerah..." style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;" required>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div>
+                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">Tgl Usul</label>
+                                <input type="date" id="editTglUsulPGA" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">Status Usulan</label>
+                                <select id="editStatusPGA" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;">
+                                    <option value="MS">MS</option>
+                                    <option value="TMS">TMS</option>
+                                    <option value="BTS">BTS</option>
+                                    <option value="INBOX">INBOX</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label style="font-size: 11px; font-weight: bold; color: #475569; text-transform: uppercase; margin-bottom: 4px; display: block;">Keterangan</label>
+                            <textarea id="editKeteranganPGA" rows="3" placeholder="Catatan opsional..." style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px;"></textarea>
+                        </div>
+
+                        <!-- Footer Modal (Tombol) -->
+                        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 6px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+                            <button type="button" onclick="closeModalFormPGA()" style="padding: 10px 16px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: 600;">
+                                Batal
+                            </button>
+                            <button type="submit" id="btnSubmitFormPGA" style="padding: 10px 20px; background: #4338ca; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-floppy-disk"></i> Simpan Data
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. MODAL POP-UP UBAH PASSWORD -->
+        <div id="modalChangePassword" class="modal-backdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+            <div style="background: #fff; padding: 25px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;">
+                <h3 style="margin-top: 0; font-size: 18px; color: #1e293b;">🔑 Ganti Kata Sandi</h3>
+                <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Masukkan password saat ini dan password baru Anda.</p>
+                
+                <form id="formChangePassword" onsubmit="event.preventDefault();">
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px;">Password Saat Ini (Lama)</label>
+                        <input type="password" id="inputOldPassword" placeholder="Masukkan password saat ini" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
                     </div>
-                    <div style="display: flex; gap: 10px;">
-                        <button type="submit" id="btnAdminSubmit" class="btn-action" style="background: #2ecc71; flex: 1;">Daftarkan User</button>
-                        <button type="button" id="btnAdminCancelEdit" class="btn-undo-cancel" onclick="window.confirmCancelEditAdmin()">Tutup</button>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px;">Password Baru</label>
+                        <input type="password" id="inputNewPassword" placeholder="Minimal 6 karakter" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px;">Konfirmasi Password Baru</label>
+                        <input type="password" id="inputConfirmPassword" placeholder="Ketik ulang password baru" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+                    </div>
+
+                    <div id="changePasswordStatus" style="display: none; margin-bottom: 15px; text-align: center; font-size: 14px; font-weight: 600;"></div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                        <button type="button" id="btnCancelChangePassword" onclick="closeChangePasswordModal()" style="padding: 8px 16px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; cursor: pointer;">Batal</button>
+                        <button type="button" id="btnSubmitChangePassword" onclick="window.handleProcessChangePassword()" style="padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer;">Simpan Password</button>
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <!-- 3. MODAL REKAPITULASI ANGKA DASHBOARD -->
+        <div id="rekapAngkaModal" class="modal-wrapper" style="display: none;">
+            <div class="modal-content modal-large">
+                <div class="modal-header">
+                    <h3>📊 Rekapitulasi Angka Dashboard</h3>
+                    <span class="modal-close" onclick="document.getElementById('rekapAngkaModal').style.display='none'">&times;</span>
+                </div>
+                <div class="modal-body">
+                    
+                    <!-- A. REKAP STATUS USULAN -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
+                        <h4 style="margin: 0; color: #1e293b; font-size: 15px;">A. Rekap Kenaikan Pangkat</h4>
+                        <div style="display: flex; gap: 8px;">
+                            <button onclick="window.openRekapInstansiModal()" class="btn-rekap-instansi">🏢 Lihat Rekap Per Instansi</button>
+                            <button onclick="window.copyAnyTable('tabelRekapStatus')" class="copy-table-btn">📋 Copy Tabel Rekap</button>
+                        </div>
+                    </div>
+
+                    <div style="overflow-x: auto; width: 100%;">
+                        <table id="tabelRekapStatus" class="table-rekap-angka">
+                            <thead>
+                                <tr>
+                                    <th id="modalRekapDateTextA" colspan="6" class="rekap-table-period-header"></th>
+                                </tr>
+                                <tr>
+                                    <th class="col-region">Wilayah / Instansi</th>
+                                    <th class="col-num" style="color: #86efac;">MS</th>
+                                    <th class="col-num" style="color: #fde047;">BTS</th>
+                                    <th class="col-num" style="color: #fca5a5;">TMS</th>
+                                    <th class="col-num" style="color: #93c5fd;">Inbox</th>
+                                    <th class="col-num th-total-col">TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyRekapStatusRegional"></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="col-region" style="font-weight: 800; color: #0f172a;">JUMLAH TOTAL</td>
+                                    <td id="rekMs" class="col-num" style="color: #16a34a;">0</td>
+                                    <td id="rekBts" class="col-num" style="color: #d97706;">0</td>
+                                    <td id="rekTms" class="col-num" style="color: #dc2626;">0</td>
+                                    <td id="rekInbox" class="col-num" style="color: #2563eb;">0</td>
+                                    <td id="rekTotalStatus" class="col-num td-total-col">0</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <!-- B. REKAP JENIS KP -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; margin-top: 18px; flex-wrap: wrap; gap: 8px;">
+                        <h4 style="margin: 0; color: #1e293b; font-size: 15px;">B. Rekap Berdasarkan Jenis KP</h4>
+                        <button onclick="window.copyAnyTable('tabelRekapJenis')" class="copy-table-btn">📋 Copy Tabel Jenis KP</button>
+                    </div>
+
+                    <div style="overflow-x: auto; width: 100%;">
+                        <table id="tabelRekapJenis" class="table-rekap-angka">
+                            <thead>
+                                <tr>
+                                    <th id="modalRekapDateTextB" colspan="6" class="rekap-table-period-header"></th>
+                                </tr>
+                                <tr>
+                                    <th class="col-region">Wilayah / Instansi</th>
+                                    <th class="col-num">KP Reguler</th>
+                                    <th class="col-num">PI / Ijazah</th>
+                                    <th class="col-num">KP JF</th>
+                                    <th class="col-num">KP Struktural</th>
+                                    <th class="col-num th-total-col">TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyRekapJenisRegional"></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="col-region" style="font-weight: 800; color: #0f172a;">JUMLAH TOTAL</td>
+                                    <td id="rekReg" class="col-num">0</td>
+                                    <td id="rekIj" class="col-num">0</td>
+                                    <td id="rekJf" class="col-num">0</td>
+                                    <td id="rekStruk" class="col-num">0</td>
+                                    <td id="rekTotalJenis" class="col-num td-total-col">0</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
                 </div>
             </div>
         </div>
-    </div>
-</div>    
-
-    <!-- ========================================== -->
-    <!-- MODAL POP-UP UBAH PASSWORD -->
-    <!-- ========================================== -->
-    <!-- MODAL POP-UP UBAH PASSWORD -->
-    <div id="modalChangePassword" class="modal-backdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
-        <div style="background: #fff; padding: 25px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;">
-            <h3 style="margin-top: 0; font-size: 18px; color: #1e293b;">🔑 Ganti Kata Sandi</h3>
-            <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Masukkan password saat ini dan password baru Anda.</p>
-            
-            <form id="formChangePassword" onsubmit="event.preventDefault();">
-                <!-- INPUT PASSWORD LAMA -->
-                <div style="margin-bottom: 15px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px;">Password Saat Ini (Lama)</label>
-                    <input type="password" id="inputOldPassword" placeholder="Masukkan password saat ini" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+        
+        <!-- 4. MODAL REKAPITULASI USULAN PER INSTANSI -->
+        <div id="rekapInstansiModal" class="modal-wrapper" style="display: none;">
+            <div class="modal-content modal-large">
+                <div class="modal-header">
+                    <h3>🏢 Rekapitulasi Usulan Per Instansi</h3>
+                    <span class="modal-close" onclick="document.getElementById('rekapInstansiModal').style.display='none'">&times;</span>
                 </div>
-
-                <!-- INPUT PASSWORD BARU -->
-                <div style="margin-bottom: 15px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px;">Password Baru</label>
-                    <input type="password" id="inputNewPassword" placeholder="Minimal 6 karakter" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+                <div class="modal-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                        <span style="font-size: 12px; color: #64748b;">Klik header kolom untuk mengurutkan data:</span>
+                        <button type="button" onclick="window.copyInstansiTableClean()" class="copy-table-btn">📋 Copy Tabel ke Excel</button>
+                    </div>
+                    <div class="table-wrapper" style="max-height: 420px; overflow-y: auto;">
+                        <table id="tabelRekapInstansi" class="detail-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px; text-align: center;">No</th>
+                                    <th class="sortable" onclick="window.sortRekapInstansiTable('name')">Nama Instansi <span id="sort_inst_name" class="sort-arrow">↕</span></th>
+                                    <th class="sortable" style="text-align: center; width: 80px;" onclick="window.sortRekapInstansiTable('MS')">MS <span id="sort_inst_MS" class="sort-arrow">↕</span></th>
+                                    <th class="sortable" style="text-align: center; width: 80px;" onclick="window.sortRekapInstansiTable('BTS')">BTS <span id="sort_inst_BTS" class="sort-arrow">↕</span></th>
+                                    <th class="sortable" style="text-align: center; width: 80px;" onclick="window.sortRekapInstansiTable('TMS')">TMS <span id="sort_inst_TMS" class="sort-arrow">↕</span></th>
+                                    <th class="sortable" style="text-align: center; width: 80px;" onclick="window.sortRekapInstansiTable('Inbox')">Inbox <span id="sort_inst_Inbox" class="sort-arrow">↕</span></th>
+                                    <th class="sortable th-total-col" style="width: 110px;" onclick="window.sortRekapInstansiTable('Total')">TOTAL JUMLAH <span id="sort_inst_Total" class="sort-arrow">↕</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelRekapInstansiBody"></tbody>
+                            <tfoot id="tabelRekapInstansiFoot"></tfoot>
+                        </table>
+                    </div>
                 </div>
-                
-                <!-- INPUT KONFIRMASI PASSWORD BARU -->
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px;">Konfirmasi Password Baru</label>
-                    <input type="password" id="inputConfirmPassword" placeholder="Ketik ulang password baru" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
-                </div>
-
-                <!-- PESAN STATUS / SPINNER -->
-                <div id="changePasswordStatus" style="display: none; margin-bottom: 15px; text-align: center; font-size: 14px; font-weight: 600;"></div>
-
-                <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                    <button type="button" id="btnCancelChangePassword" onclick="closeChangePasswordModal()" style="padding: 8px 16px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; cursor: pointer;">Batal</button>
-                    <!-- UBAH TYPE MENJADI BUTTON DAN PANGGIL FUNGSI SECARA DIRECT -->
-                    <button type="button" id="btnSubmitChangePassword" onclick="window.handleProcessChangePassword()" style="padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer;">Simpan Password</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- SEMUA MODAL BAWAAN -->
-   <!-- MODAL REKAPITULASI ANGKA DASHBOARD -->
-    <div id="rekapAngkaModal" class="modal-wrapper" style="display: none;">
-        <div class="modal-content modal-large">
-            <div class="modal-header">
-                <h3>📊 Rekapitulasi Angka Dashboard</h3>
-                <span class="modal-close" onclick="document.getElementById('rekapAngkaModal').style.display='none'">&times;</span>
             </div>
-            <div class="modal-body">
-                
-                <!-- A. REKAP STATUS USULAN -->
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
-                    <h4 style="margin: 0; color: #1e293b; font-size: 15px;">A. Rekap Kenaikan Pangkat</h4>
-                    <div style="display: flex; gap: 8px;">
-                        <button onclick="window.openRekapInstansiModal()" class="btn-rekap-instansi">🏢 Lihat Rekap Per Instansi</button>
-                        <button onclick="window.copyAnyTable('tabelRekapStatus')" class="copy-table-btn">📋 Copy Tabel Rekap</button>
+        </div>
+     
+        <!-- 5. MODAL DETAIL RINGKASAN TABLE -->
+        <div id="summaryTableModal" class="modal-wrapper" style="display: none;">
+            <div class="modal-content modal-large">
+                <div class="modal-header">
+                    <h3 id="summaryModalTitle">Daftar Usulan KP</h3>
+                    <span class="modal-close" onclick="document.getElementById('summaryTableModal').style.display='none'">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                        <span style="font-size: 12px; color: #64748b;">Klik header kolom untuk mengurutkan data detail:</span>
+                        <button onclick="window.copyDetailSummaryTableClean()" class="copy-table-btn">📋 Copy Tabel ke Excel</button>
+                    </div>
+                    <div class="table-wrapper" style="max-height: 420px; overflow-y: auto;">
+                        <table id="summaryExportTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px; text-align: center;">No</th>
+                                    <th class="sortable" onclick="window.sortDetailSummaryTable('uploader_initial')">ID User <span id="sort_det_uploader_initial" class="sort-arrow">↕</span></th>
+                                    <th class="sortable" onclick="window.sortDetailSummaryTable('instansi_induk')">Instansi <span id="sort_det_instansi_induk" class="sort-arrow">↕</span></th>
+                                    <th class="sortable" onclick="window.sortDetailSummaryTable('tgl_pengiriman_kelayanan')">Tgl Usul Masuk <span id="sort_det_tgl_pengiriman_kelayanan" class="sort-arrow">▼</span></th>
+                                    <th class="sortable" onclick="window.sortDetailSummaryTable('nama')">Nama <span id="sort_det_nama" class="sort-arrow">↕</span></th>
+                                    <th class="sortable" onclick="window.sortDetailSummaryTable('nip')">NIP <span id="sort_det_nip" class="sort-arrow">↕</span></th>
+                                    <th class="sortable" onclick="window.sortDetailSummaryTable('jenis_kp')">Jenis KP <span id="sort_det_jenis_kp" class="sort-arrow">↕</span></th>
+                                    <th class="sortable" onclick="window.sortDetailSummaryTable('kategori_status')">Kategori Status <span id="sort_det_kategori_status" class="sort-arrow">↕</span></th>
+                                    <th class="sortable" onclick="window.sortDetailSummaryTable('status_usulan')">Status Usulan <span id="sort_det_status_usulan" class="sort-arrow">↕</span></th>
+                                    <th class="sortable" onclick="window.sortDetailSummaryTable('no_pertek')">No Pertek <span id="sort_det_no_pertek" class="sort-arrow">↕</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="summaryExportTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. MODAL PREVIEW DETAIL USULAN PEGAWAI -->
+        <div id="previewModal" class="modal-wrapper" style="display: none;">
+            <div class="modal-content">
+                <button class="modal-close-btn" onclick="closePreviewModal()" style="position: absolute; top: 15px; right: 18px; background: none; border: none; font-size: 22px; cursor: pointer; color: #64748b;">&times;</button>
+                <h3>Detail Usulan Pegawai</h3>
+                    
+                <div style="display: flex; flex-direction: column; gap: 12px; font-size: 14px; margin-top: 15px;">
+                    <div><strong>Nama / NIP:</strong> <span id="mNamaNip">--</span></div>
+                    <div><strong>Jabatan Lama:</strong> <span id="mJabatanLama">--</span></div>
+                    <div><strong>Jabatan Baru:</strong> <span id="mJabatanBaru">--</span></div>
+                    <div><strong>Pendidikan:</strong> <span id="mPendidikan">--</span></div>
+                    <div><strong>Verifikator:</strong> <span id="mVerifikator">--</span></div>
+                    <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 10px; border-radius: 4px; color: #991b1b;">
+                        <strong>Alasan Tolak / Catatan:</strong> <span id="mAlasanTolak">--</span>
                     </div>
                 </div>
 
-                <div style="overflow-x: auto; width: 100%;">
-                    <table id="tabelRekapStatus" class="table-rekap-angka">
-                        <thead>
-                            <!-- BARIS PERIODE KP DITEMPATKAN DI ATAS HEADER KOLOM -->
-                            <tr>
-                                <th id="modalRekapDateTextA" colspan="6" style="background-color: #ffffff !important; color: #5a2a00 !important; text-align: left !important; padding: 8px 12px !important; font-size: 12px !important; border-bottom: 2px solid #e8e8e8 !important;"></th>
-                            </tr>
-                            <tr>
-                                <!-- <th class="col-region">Regional / Wilayah</th> -->
-                                <th class="col-region">Wilayah / Instansi</th>
-                                <th class="col-num" style="color: #86efac;">MS</th>
-                                <th class="col-num" style="color: #fde047;">BTS</th>
-                                <th class="col-num" style="color: #fca5a5;">TMS</th>
-                                <th class="col-num" style="color: #93c5fd;">Inbox</th>
-                                <th class="col-num th-total-col">TOTAL</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbodyRekapStatusRegional"></tbody>
-                        <tfoot>
-                            <tr>
-                                <td class="col-region" style="font-weight: 800; color: #0f172a;">JUMLAH TOTAL</td>
-                                <td id="rekMs" class="col-num" style="color: #16a34a;">0</td>
-                                <td id="rekBts" class="col-num" style="color: #d97706;">0</td>
-                                <td id="rekTms" class="col-num" style="color: #dc2626;">0</td>
-                                <td id="rekInbox" class="col-num" style="color: #2563eb;">0</td>
-                                <td id="rekTotalStatus" class="col-num td-total-col">0</td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-
-                <!-- B. REKAP JENIS KP -->
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; margin-top: 18px; flex-wrap: wrap; gap: 8px;">
-                    <h4 style="margin: 0; color: #1e293b; font-size: 15px;">B. Rekap Berdasarkan Jenis KP</h4>
-                    <button onclick="window.copyAnyTable('tabelRekapJenis')" class="copy-table-btn">📋 Copy Tabel Jenis KP</button>
-                </div>
-
-                <div style="overflow-x: auto; width: 100%;">
-                    <table id="tabelRekapJenis" class="table-rekap-angka">
-                        <thead>
-                            <!-- BARIS PERIODE KP DITEMPATKAN DI ATAS HEADER KOLOM -->
-                            <tr>
-                                <th id="modalRekapDateTextB" colspan="6" style="background-color: #ffffff !important; color: #5a2a00 !important; text-align: left !important; padding: 8px 12px !important; font-size: 12px !important; border-bottom: 2px solid #e8e8e8 !important;"></th>
-                            </tr>
-                            <tr>
-                                <!-- <th class="col-region">Regional / Wilayah</th> -->
-                                <th class="col-region">Wilayah / Instansi</th>
-                                <th class="col-num">KP Reguler</th>
-                                <th class="col-num">PI / Ijazah</th>
-                                <th class="col-num">KP JF</th>
-                                <th class="col-num">KP Struktural</th>
-                                <th class="col-num th-total-col">TOTAL</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbodyRekapJenisRegional"></tbody>
-                        <tfoot>
-                            <tr>
-                                <td class="col-region" style="font-weight: 800; color: #0f172a;">JUMLAH TOTAL</td>
-                                <td id="rekReg" class="col-num">0</td>
-                                <td id="rekIj" class="col-num">0</td>
-                                <td id="rekJf" class="col-num">0</td>
-                                <td id="rekStruk" class="col-num">0</td>
-                                <td id="rekTotalJenis" class="col-num td-total-col">0</td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    
-
-    <div id="rekapInstansiModal" class="modal-wrapper" style="display: none;">
-        <div class="modal-content modal-large">
-            <div class="modal-header">
-                <h3>🏢 Rekapitulasi Usulan Per Instansi</h3>
-                <span class="modal-close" onclick="document.getElementById('rekapInstansiModal').style.display='none'">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-                    <span style="font-size: 12px; color: #64748b;">Klik header kolom untuk mengurutkan data:</span>
-                    <button type="button" onclick="window.copyInstansiTableClean()" class="copy-table-btn">📋 Copy Tabel ke Excel</button>
-                </div>
-                <div class="table-wrapper" style="max-height: 420px; overflow-y: auto;">
-                    <table id="tabelRekapInstansi" class="detail-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 50px; text-align: center;">No</th>
-                                <th class="sortable" onclick="window.sortRekapInstansiTable('name')">Nama Instansi <span id="sort_inst_name" class="sort-arrow">↕</span></th>
-                                <th class="sortable" style="text-align: center; width: 80px;" onclick="window.sortRekapInstansiTable('MS')">MS <span id="sort_inst_MS" class="sort-arrow">↕</span></th>
-                                <th class="sortable" style="text-align: center; width: 80px;" onclick="window.sortRekapInstansiTable('BTS')">BTS <span id="sort_inst_BTS" class="sort-arrow">↕</span></th>
-                                <th class="sortable" style="text-align: center; width: 80px;" onclick="window.sortRekapInstansiTable('TMS')">TMS <span id="sort_inst_TMS" class="sort-arrow">↕</span></th>
-                                <th class="sortable" style="text-align: center; width: 80px;" onclick="window.sortRekapInstansiTable('Inbox')">Inbox <span id="sort_inst_Inbox" class="sort-arrow">↕</span></th>
-                                <th class="sortable th-total-col" style="width: 110px;" onclick="window.sortRekapInstansiTable('Total')">TOTAL JUMLAH <span id="sort_inst_Total" class="sort-arrow">↕</span></th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelRekapInstansiBody"></tbody>
-                        <tfoot id="tabelRekapInstansiFoot"></tfoot>
-                    </table>
+                <div style="text-align: right; margin-top: 20px;">
+                    <button class="btn-secondary" onclick="closePreviewModal()" style="padding: 8px 18px; border-radius: 6px; cursor: pointer;">Tutup</button>
                 </div>
             </div>
         </div>
-    </div>
- 
-    <div id="summaryTableModal" class="modal-wrapper" style="display: none;">
-        <div class="modal-content modal-large">
-            <div class="modal-header">
-                <h3 id="summaryModalTitle">Daftar Usulan KP</h3>
-                <span class="modal-close" onclick="document.getElementById('summaryTableModal').style.display='none'">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-                    <span style="font-size: 12px; color: #64748b;">Klik header kolom untuk mengurutkan data detail:</span>
-                    <button onclick="window.copyDetailSummaryTableClean()" class="copy-table-btn">📋 Copy Tabel ke Excel</button>
+
+        <!-- 7. MODAL KONFIRMASI KELUAR (LOGOUT) -->
+        <div class="modal-wrapper" id="logoutModal" style="display: none;">
+            <div class="modal-content" style="max-width: 420px; text-align: center; padding: 0;">
+                <div class="modal-header" style="background: #e11d48 !important;">
+                    <h3 style="color: #ffffff !important; font-size: 16px !important;">🚪 Konfirmasi Keluar</h3>
+                    <span class="modal-close" id="btnCancelLogoutModal" style="color: #ffffff;">&times;</span>
                 </div>
-                <div class="table-wrapper" style="max-height: 420px; overflow-y: auto;">
-                    <table id="summaryExportTable">
-                        <thead>
-                            <tr>
-                                <th style="width: 40px; text-align: center;">No</th>
-                                <th class="sortable" onclick="window.sortDetailSummaryTable('uploader_initial')">ID User <span id="sort_det_uploader_initial" class="sort-arrow">↕</span></th>
-                                <th class="sortable" onclick="window.sortDetailSummaryTable('instansi_induk')">Instansi <span id="sort_det_instansi_induk" class="sort-arrow">↕</span></th>
-                                <th class="sortable" onclick="window.sortDetailSummaryTable('tgl_pengiriman_kelayanan')">Tgl Usul Masuk <span id="sort_det_tgl_pengiriman_kelayanan" class="sort-arrow">▼</span></th>
-                                <th class="sortable" onclick="window.sortDetailSummaryTable('nama')">Nama <span id="sort_det_nama" class="sort-arrow">↕</span></th>
-                                <th class="sortable" onclick="window.sortDetailSummaryTable('nip')">NIP <span id="sort_det_nip" class="sort-arrow">↕</span></th>
-                                <th class="sortable" onclick="window.sortDetailSummaryTable('jenis_kp')">Jenis KP <span id="sort_det_jenis_kp" class="sort-arrow">↕</span></th>
-                                <th class="sortable" onclick="window.sortDetailSummaryTable('kategori_status')">Kategori Status <span id="sort_det_kategori_status" class="sort-arrow">↕</span></th>
-                                <th class="sortable" onclick="window.sortDetailSummaryTable('status_usulan')">Status Usulan <span id="sort_det_status_usulan" class="sort-arrow">↕</span></th>
-                                <th class="sortable" onclick="window.sortDetailSummaryTable('no_pertek')">No Pertek <span id="sort_det_no_pertek" class="sort-arrow">↕</span></th>
-                            </tr>
-                        </thead>
-                        <tbody id="summaryExportTableBody"></tbody>
-                    </table>
+                <div class="modal-body" style="padding: 25px 20px;">
+                    <div style="font-size: 48px; margin-bottom: 12px;">⚠️</div>
+                    <h4 style="margin: 0 0 8px 0; color: #0f172a; font-size: 16px;">Apakah Anda yakin ingin keluar?</h4>
+                    <p style="margin: 0 0 20px 0; color: #64748b; font-size: 13px; line-height: 1.5;">
+                        Sesi login Anda akan diakhiri dan Anda perlu memasukkan akun kembali untuk mengakses aplikasi.
+                    </p>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button type="button" id="btnCancelLogoutAction" class="btn-undo-cancel" style="padding: 9px 18px; border-radius: 6px;">Batal</button>
+                        <button type="button" id="btnConfirmLogoutModal" class="btn-undo-cancel" style="padding: 9px 18px; border-radius: 6px; cursor: pointer; background: #930000;">Ya, Keluar Saja</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="previewModal" class="modal-wrapper" style="display: none;">
-        <div class="modal-content">
-            <!-- Tombol Silang (X) Penutup -->
-            <button class="modal-close-btn" onclick="closePreviewModal()" style="position: absolute; top: 15px; right: 18px; background: none; border: none; font-size: 22px; cursor: pointer; color: #64748b;">&times;</button>
-            <h3>Detail Usulan Pegawai</h3>
+        <!-- 8. MODAL PROGRESS UPLOAD DATA -->
+        <div id="uploadProgressModal" class="progress-modal" style="display: none;">
+            <div class="progress-card">
+                <div class="cloud-icon">☁️</div>
+                <h3 style="margin: 10px 0 5px 0; color: #0f172a; font-size: 16px; font-weight: 700;">Mengunggah Data ke Database...</h3>
                 
-            <div style="display: flex; flex-direction: column; gap: 12px; font-size: 14px; margin-top: 15px;">
-                <div><strong>Nama / NIP:</strong> <span id="mNamaNip">--</span></div>
-                <div><strong>Jabatan Lama:</strong> <span id="mJabatanLama">--</span></div>
-                <div><strong>Jabatan Baru:</strong> <span id="mJabatanBaru">--</span></div>
-                <div><strong>Pendidikan:</strong> <span id="mPendidikan">--</span></div>
-                <div><strong>Verifikator:</strong> <span id="mVerifikator">--</span></div>
-                <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 10px; border-radius: 4px; color: #991b1b;">
-                    <strong>Alasan Tolak / Catatan:</strong> <span id="mAlasanTolak">--</span>
+                <!-- Progress Bar -->
+                <div class="progress-bar-container">
+                    <div id="progressBarFill" class="progress-bar-fill"></div>
                 </div>
-            </div>
-
-            <div style="text-align: right; margin-top: 20px;">
-                <button class="btn-secondary" onclick="closePreviewModal()" style="padding: 8px 18px; border-radius: 6px; cursor: pointer;">Tutup</button>
+                
+                <!-- Teks Persentase & Rincian Baris dengan Style Baru -->
+                <div id="progressPercent" class="progress-text">0%</div>
+                <div id="progressSubDetail" class="progress-subtext">0 dari 0 baris terkirim</div>
             </div>
         </div>
-    </div>
 
-    <div class="modal-wrapper" id="logoutModal" style="display: none;">
-        <div class="modal-content" style="max-width: 420px; text-align: center; padding: 0;">
-            <div class="modal-header" style="background: #e11d48 !important;">
-                <h3 style="color: #ffffff !important; font-size: 16px !important;">🚪 Konfirmasi Keluar</h3>
-                <span class="modal-close" id="btnCancelLogoutModal" style="color: #ffffff;">&times;</span>
-            </div>
-            <div class="modal-body" style="padding: 25px 20px;">
-                <div style="font-size: 48px; margin-bottom: 12px;">⚠️</div>
-                <h4 style="margin: 0 0 8px 0; color: #0f172a; font-size: 16px;">Apakah Anda yakin ingin keluar?</h4>
-                <p style="margin: 0 0 20px 0; color: #64748b; font-size: 13px; line-height: 1.5;">
-                    Sesi login Anda akan diakhiri dan Anda perlu memasukkan akun kembali untuk mengakses aplikasi.
-                </p>
-                <div style="display: flex; gap: 10px; justify-content: center;">
-                    <button type="button" id="btnCancelLogoutAction" class="btn-undo-cancel" style="padding: 9px 18px; border-radius: 6px;">Batal</button>
-                    <button type="button" id="btnConfirmLogoutModal" class="btn-undo-cancel" style="padding: 9px 18px; border-radius: 6px; cursor: pointer; background: #930000;">Ya, Keluar Saja</button>
+        <!-- 9. MODAL POPUP: KELOLA MASTER INSTANSI & WILKER -->
+        <div id="modalMasterInstansi" class="modal-wrapper" style="display: none;">
+            <div class="modal-content" style="max-width: 550px; display: none; flex-direction: column;">
+                <div class="modal-header">
+                    <h3>🏢 Kelola Master Instansi & Wilker</h3>
+                    <span class="modal-close" onclick="closeModalMasterInstansi()">&times;</span>
                 </div>
-            </div>
-        </div>
-    </div>
+                <div class="modal-body">
+                    <!-- FORM TAMBAH MASTER INSTANSI -->
+                    <form id="formAddMasterInstansi" style="display: flex; gap: 8px; margin-bottom: 15px; align-items: flex-end;">
+                        <div style="flex: 2;">
+                            <label style="font-size: 11px; font-weight: bold;">Nama Instansi</label>
+                            <input type="text" id="newMasterInstansiName" placeholder="Contoh: Badan Kepegawaian Negara" style="width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px;" required>
+                        </div>
+                        <div style="flex: 1.2;">
+                            <label style="font-size: 11px; font-weight: bold;">Kategori Wilayah</label>
+                            <select id="newMasterInstansiWilker" style="width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px;" required>
+                                <option value="Instansi Vertikal">Instansi Vertikal</option>
+                                <option value="Papua Barat">Papua Barat</option>
+                                <option value="Papua Barat Daya">Papua Barat Daya</option>
+                            </select>
+                        </div>
+                        <button type="submit" style="padding: 7px 12px; background: #047857; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer;">+ Tambah</button>
+                    </form>
 
-    <!-- MODAL PROGRESS UPLOAD DATA -->
-    <div id="uploadProgressModal" class="progress-modal" style="display: none;">
-        <div class="progress-card">
-            <div class="cloud-icon">☁️</div>
-            <h3 style="margin: 10px 0 5px 0; color: #0f172a; font-size: 16px; font-weight: 700;">Mengunggah Data ke Database...</h3>
-            
-            <!-- Progress Bar -->
-            <div class="progress-bar-container">
-                <div id="progressBarFill" class="progress-bar-fill"></div>
-            </div>
-            
-            <!-- Teks Persentase & Rincian Baris dengan Style Baru -->
-            <div id="progressPercent" class="progress-text">0%</div>
-            <div id="progressSubDetail" class="progress-subtext">0 dari 0 baris terkirim</div>
-        </div>
-    </div>
-
-    <!-- MODAL POPUP: KELOLA MASTER INSTANSI & WILKER -->
-    <div id="modalMasterInstansi" class="modal-wrapper" style="display: none;">
-        <!-- Ditambahkan style="display: none;" bawaan yang nanti diubah JS menjadi flex -->
-        <div class="modal-content" style="max-width: 550px; display: none; flex-direction: column;">
-            <div class="modal-header">
-                <h3>🏢 Kelola Master Instansi & Wilker</h3>
-                <span class="modal-close" onclick="closeModalMasterInstansi()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <!-- FORM TAMBAH MASTER INSTANSI -->
-                <form id="formAddMasterInstansi" style="display: flex; gap: 8px; margin-bottom: 15px; align-items: flex-end;">
-                    <div style="flex: 2;">
-                        <label style="font-size: 11px; font-weight: bold;">Nama Instansi</label>
-                        <input type="text" id="newMasterInstansiName" placeholder="Contoh: Badan Kepegawaian Negara" style="width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px;" required>
+                    <!-- TABEL DAFTAR INSTANSI -->
+                    <div style="max-height: 280px; overflow-y: auto; border: 1px solid #cbd5e1; border-radius: 6px;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                            <thead>
+                                <tr style="background: #f1f5f9; position: sticky; top: 0;">
+                                    <th style="padding: 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Nama Instansi</th>
+                                    <th style="padding: 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Wilayah / Kategori</th>
+                                    <th style="padding: 8px; border-bottom: 1px solid #cbd5e1; width: 50px; text-align: center;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyMasterInstansi"></tbody>
+                        </table>
                     </div>
-                    <div style="flex: 1.2;">
-                        <label style="font-size: 11px; font-weight: bold;">Kategori Wilayah</label>
-                        <select id="newMasterInstansiWilker" style="width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px;" required>
-                            <option value="Instansi Vertikal">Instansi Vertikal</option>
-                            <option value="Papua Barat">Papua Barat</option>
-                            <option value="Papua Barat Daya">Papua Barat Daya</option>
-                        </select>
-                    </div>
-                    <button type="submit" style="padding: 7px 12px; background: #047857; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer;">+ Tambah</button>
-                </form>
-
-                <!-- TABEL DAFTAR INSTANSI -->
-                <div style="max-height: 280px; overflow-y: auto; border: 1px solid #cbd5e1; border-radius: 6px;">
-                    <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
-                        <thead>
-                            <tr style="background: #f1f5f9; position: sticky; top: 0;">
-                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Nama Instansi</th>
-                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Wilayah / Kategori</th>
-                                <th style="padding: 8px; border-bottom: 1px solid #cbd5e1; width: 50px; text-align: center;">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbodyMasterInstansi"></tbody>
-                    </table>
                 </div>
             </div>
         </div>
+
     </div>
 
-
-
+    <!-- MAIN JAVASCRIPT ENTRYPOINT -->
     <script type="module" src="app.js"></script>
 </body>
 </html>

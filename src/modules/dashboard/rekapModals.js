@@ -1,4 +1,4 @@
-﻿import { state } from "../../services/store.js";
+import { state } from "../../services/store.js";
 import { 
     cleanInstansiName, 
     formatJenisKP, 
@@ -339,7 +339,7 @@ export function openDetailInstansiSummaryModal(fullInstansiName) {
         return true;
     });
 
-    const titleEl = document.getElementById('detailSummaryModalTitle');
+    const titleEl = document.getElementById('summaryModalTitle') || document.getElementById('detailSummaryModalTitle');
     if (titleEl) {
         titleEl.innerText = `Detail Rekap Usulan: ${cleanInstansiName(fullInstansiName)} (${filtered.length} Data)`;
     }
@@ -369,14 +369,23 @@ export function sortDetailSummaryTable(colName) {
 }
 
 export function renderDetailSummaryTable() {
+    if (!currentDetailSummaryDataList) return;
+
     currentDetailSummaryDataList.sort((a, b) => {
         let valA = a[detailSummarySortCol] || '';
         let valB = b[detailSummarySortCol] || '';
+
+        if (detailSummarySortCol === 'tgl_pengiriman_kelayanan') {
+            const timeA = valA && valA !== '--' ? new Date(valA).getTime() : 0;
+            const timeB = valB && valB !== '--' ? new Date(valB).getTime() : 0;
+            return detailSummarySortAsc ? timeA - timeB : timeB - timeA;
+        }
+
         if (typeof valA === 'string') return detailSummarySortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
         return detailSummarySortAsc ? valA - valB : valB - valA;
     });
 
-    const tbody = document.getElementById('summaryTableBody');
+    const tbody = document.getElementById('summaryExportTableBody') || document.getElementById('summaryTableBody');
     if (!tbody) return;
     tbody.innerHTML = '';
 

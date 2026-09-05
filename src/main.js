@@ -1,4 +1,4 @@
-﻿import { auth, db, get, ref, onAuthStateChanged, signOut } from "./services/firebase.js";
+import { auth, db, get, ref, onAuthStateChanged, signOut } from "./services/firebase.js";
 import { state } from "./services/store.js";
 import { SESSION_TIMEOUT_MS } from "./config/constants.js";
 import { 
@@ -19,6 +19,8 @@ import { setupPGAEventListeners } from "./modules/pga/pgaController.js";
 import { initCharts } from "./modules/dashboard/charts.js";
 import { updateFilterActiveState } from "./modules/dashboard/rekapModals.js";
 import "./modules/reports/pdfExport.js";
+import "./modules/pi/piController.js";
+import "./modules/pga/pgaController.js";
 import { loadDatabaseData, refreshAllDisplays } from "./modules/kp/kpController.js";
 import { 
     setupDragAndDrop, 
@@ -26,6 +28,7 @@ import {
     setupKPUploadListeners 
 } from "./modules/kp/kpUpload.js";
 import { setupDragAndDropPI, setupPIUploadListeners } from "./modules/pi/piUpload.js";
+import { setupPGAUploadListeners } from "./modules/pga/pgaUpload.js";
 import { 
     renderUserManagementTable, 
     setupAdminRegisterForm, 
@@ -38,7 +41,8 @@ document.addEventListener("DOMContentLoaded", injectDynamicFavicon);
 // 1. Filter Input Listeners
 document.addEventListener("DOMContentLoaded", () => {
     ['filterInstansi', 'filterPeriodeKP', 'filterKategori', 'filterJenisKP', 
-     'filterInstansiAsalPI', 'filterInstansiTujuanPI', 'filterWilkerPI', 'filterStatusPI'].forEach(id => {
+     'filterInstansiAsalPI', 'filterInstansiTujuanPI', 'filterWilkerPI', 'filterStatusPI',
+     'filterInstansiPGA', 'filterStatusPGA'].forEach(id => {
         const el = document.getElementById(id); 
         if (el) el.addEventListener('change', refreshAllDisplays);
     });
@@ -54,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderInstansiDatalist();
     setupMasterInstansiForm();
     setupPGAEventListeners();
+    setupPGAUploadListeners();
     setupKPUploadListeners();
     setupPIUploadListeners();
     setupLogoutHandlers();

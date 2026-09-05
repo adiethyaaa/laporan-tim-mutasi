@@ -1,5 +1,6 @@
-﻿import { NAMA_BULAN } from "../../config/constants.js";
+import { NAMA_BULAN } from "../../config/constants.js";
 import { toCapitalEachWord } from "../../utils/formatters.js";
+import { state } from "../../services/store.js";
 
 const MOTIVASI_LIST = [
     "Setiap usulan yang Anda selesaikan adalah bentuk pelayanan terbaik bagi pegawai!", 
@@ -43,10 +44,27 @@ export function showSection(sectionId, moduleName = null) {
     const activeBtn = document.querySelector(`#sidebarContainer a[onclick*="${sectionId}"]`);
     if (activeBtn) activeBtn.classList.add('active');
 
-    if (moduleName) {
-        window.currentModule = moduleName;
-        if (typeof window.loadDatabaseData === 'function') {
-            window.loadDatabaseData();
+    // Tentukan target modul
+    let targetMod = moduleName;
+    if (!targetMod) {
+        if (sectionId === 'aplikasi-3-PI') targetMod = 'PI';
+        else if (sectionId === 'aplikasi-2-PGA') targetMod = 'PGA';
+        else if (sectionId === 'aplikasi-1-KP' || sectionId === 'dashboard') targetMod = 'KP';
+    }
+
+    if (targetMod) {
+        const modChanged = (state.currentModule !== targetMod);
+        state.currentModule = targetMod;
+        window.currentModule = targetMod;
+
+        if (modChanged) {
+            if (typeof window.loadDatabaseData === 'function') {
+                window.loadDatabaseData();
+            }
+        } else {
+            if (typeof window.refreshAllDisplays === 'function') {
+                window.refreshAllDisplays();
+            }
         }
     }
 }

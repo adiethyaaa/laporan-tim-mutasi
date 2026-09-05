@@ -1,4 +1,4 @@
-﻿import { NAMA_BULAN } from "../config/constants.js";
+import { NAMA_BULAN } from "../config/constants.js";
 
 export function normalizeValue(val) { 
     if (val === null || val === undefined) return '--'; 
@@ -62,8 +62,14 @@ export function formatTanggal(excelDate) {
         const date = new Date((excelDate - 25569) * 86400 * 1000); 
         return date.toISOString().split('T')[0]; 
     } 
-    const str = String(excelDate).substring(0, 10); 
-    return str.trim() !== '' ? str : '--'; 
+    const str = String(excelDate).trim();
+    // Jika format DD/MM/YYYY (contoh: 01/09/2025)
+    if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(str)) {
+        const [d, m, y] = str.split('/');
+        return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+    }
+    const sub = str.substring(0, 10); 
+    return sub.trim() !== '' ? sub : '--'; 
 }
 
 export function formatFileSize(bytes) { 
