@@ -1,4 +1,4 @@
-﻿import { normalizeValue } from "./formatters.js";
+import { normalizeValue } from "./formatters.js";
 
 export function isValidExcelStructure(rows) {
     if (!rows || rows.length < 4) return false;
@@ -28,4 +28,20 @@ export function isValidExcelStructurePI(rows) {
     const hasNip = header.some(h => h.includes("NIP"));
     
     return hasNama && hasNip;
+}
+
+export function isValidExcelStructurePGA(rows) {
+    if (!rows || rows.length < 2) return false;
+    // Cari baris header di 3 baris pertama
+    for (let r = 0; r < Math.min(rows.length, 3); r++) {
+        if (!Array.isArray(rows[r])) continue;
+        const header = rows[r].map(cell => String(cell || '').toUpperCase().trim());
+        const hasNama = header.some(h => h.includes("NAMA"));
+        const hasNip = header.some(h => h.includes("NIP"));
+        const hasPGAField = header.some(h => h.includes("VALIDATOR") || h.includes("INSTANSI") || h.includes("STATUS") || h.includes("TANGGAL"));
+        if (hasNama && hasNip && hasPGAField) {
+            return true;
+        }
+    }
+    return false;
 }

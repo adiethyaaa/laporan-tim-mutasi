@@ -48,6 +48,7 @@ export function showSection(sectionId, moduleName = null) {
     let targetMod = moduleName;
     if (!targetMod) {
         if (sectionId === 'aplikasi-3-PI') targetMod = 'PI';
+        else if (sectionId === 'aplikasi-2-PGA') targetMod = 'PGA';
         else if (sectionId === 'aplikasi-1-KP' || sectionId === 'dashboard') targetMod = 'KP';
     }
 

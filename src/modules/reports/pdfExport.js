@@ -1,4 +1,4 @@
-﻿import { state } from "../../services/store.js";
+import { state } from "../../services/store.js";
 import { NAMA_BULAN } from "../../config/constants.js";
 import { calculatePeriodeKP, standardizeInstansiName } from "../../utils/formatters.js";
 import { isEligibleForApp } from "../../utils/eligibility.js";
@@ -290,7 +290,89 @@ export function exportLaporanPIPDF() {
     }, 500);
 }
 
+export function exportLaporanPGAPDF() {
+    const dataList = (typeof state.combinedDataList !== 'undefined' && state.currentModule === 'PGA')
+        ? state.combinedDataList
+        : Object.keys(state.dbFetchedMap || {}).map(k => ({ dbKey: k, ...state.dbFetchedMap[k] }));
+
+    if (!dataList || dataList.length === 0) {
+        alert("⚠️ Tidak ada data Usulan PGA di database untuk di-export.");
+        return;
+    }
+
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+        alert("⚠️ Pop-up diblokir oleh browser. Izinkan pop-up untuk mencetak PDF.");
+        return;
+    }
+
+    let rowsHtml = '';
+    dataList.forEach((item, index) => {
+        rowsHtml += `
+            <tr>
+                <td style="text-align: center;">${index + 1}</td>
+                <td style="text-align: center;">${item.validator || item.uploader_initial || '-'}</td>
+                <td style="text-align: left; font-weight: bold;">${item.nama || '-'}</td>
+                <td style="text-align: center; font-family: monospace;">${item.nip || '-'}</td>
+                <td style="text-align: left;">${item.instansi || '-'}</td>
+                <td style="text-align: center;">${item.tgl_usul || '-'}</td>
+                <td style="text-align: center; font-weight: bold;">${item.status || '-'}</td>
+                <td style="text-align: left;">${item.keterangan || '-'}</td>
+            </tr>
+        `;
+    });
+
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Laporan Usulan Pencantuman Gelar Akademik (PGA)</title>
+            <style>
+                @page { size: A4 landscape; margin: 10mm; }
+                body { font-family: Arial, sans-serif; font-size: 8.5pt; color: #000; margin: 0; padding: 0; }
+                .header-container { text-align: center; margin-bottom: 15px; border-bottom: 2px solid #0f172a; padding-bottom: 8px; }
+                .header-title { font-size: 11pt; font-weight: bold; text-transform: uppercase; }
+                .header-subtitle { font-size: 9pt; font-weight: bold; color: #4338ca; margin-top: 4px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                th, td { border: 1px solid #cbd5e1; padding: 6px; }
+                th { background-color: #1e1b4b; color: #ffffff; font-weight: bold; font-size: 8pt; text-align: center; }
+            </style>
+        </head>
+        <body>
+            <div class="header-container">
+                <div class="header-title">LAPORAN PELAYANAN USULAN PENCANTUMAN GELAR AKADEMIK (PGA)</div>
+                <div class="header-subtitle">KANTOR REGIONAL XIV BKN MANOKWARI</div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 30px;">No</th>
+                        <th style="width: 50px;">Validator</th>
+                        <th>Nama Pegawai</th>
+                        <th>NIP</th>
+                        <th>Instansi</th>
+                        <th style="width: 80px;">Tgl Usul</th>
+                        <th style="width: 60px;">Status</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rowsHtml}
+                </tbody>
+            </table>
+        </body>
+        </html>
+    `);
+
+    printWindow.document.close();
+    setTimeout(() => {
+        printWindow.focus();
+        printWindow.print();
+    }, 500);
+}
+
 if (typeof window !== 'undefined') {
     window.previewLaporanPDF = previewLaporanPDF;
     window.exportLaporanPIPDF = exportLaporanPIPDF;
+    window.exportLaporanPGAPDF = exportLaporanPGAPDF;
 }

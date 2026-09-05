@@ -7,7 +7,8 @@ export const NAMA_BULAN = [
 
 export const MODULE_CONFIG = {
   'KP': { node: 'usulan_kp', title: 'Laporan Pelayanan Kenaikan Pangkat (KP)' },
-  'PI': { node: 'usulan_pi', title: 'Laporan Pelayanan Pindah Instansi (PI)' }
+  'PI': { node: 'usulan_pi', title: 'Laporan Pelayanan Pindah Instansi (PI)' },
+  'PGA': { node: 'usulan_pga', title: 'Laporan Pelayanan Usulan Pencantuman Gelar Akademik (PGA)' }
 };
 
 export const REGION_PAPUA_BARAT = [

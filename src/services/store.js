@@ -3,6 +3,7 @@ export const state = {
     combinedDataList: [],
     selectedFilesQueue: [],
     selectedFilesQueuePI: [],
+    selectedFilesQueuePGA: [],
     mainTotalChart: null,
     donutChartInstancesMap: {},
     dailyTrendChartInstance: null,

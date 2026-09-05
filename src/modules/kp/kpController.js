@@ -12,6 +12,7 @@ import {
 import { isGolonganIVc, isEligibleForApp, checkIsKPO } from "../../utils/eligibility.js";
 import { getColorForInitial } from "../../../admin.js";
 import { renderTablePI, sortDataListPI, populateDropdownFiltersPI, filterTablePI } from "../pi/piController.js";
+import { renderTablePGA, populateDropdownFiltersPGA, filterTablePGA } from "../pga/pgaController.js";
 
 export function loadDatabaseData() {
     const activeMod = state.currentModule || window.currentModule || 'KP';
@@ -22,6 +23,7 @@ export function loadDatabaseData() {
     state.isFirstDbLoad = true;
     
     if (activeMod === 'PI') renderTablePI([]); 
+    else if (activeMod === 'PGA') renderTablePGA([]);
     else renderAllTableRows([]);
     
     if (state.dbUnsubscribe) {
@@ -36,6 +38,8 @@ export function loadDatabaseData() {
             
             if (activeMod === 'PI') {
                 populateDropdownFiltersPI(); 
+            } else if (activeMod === 'PGA') {
+                populateDropdownFiltersPGA();
             } else {
                 populateDropdownFilters();
             }
@@ -45,6 +49,7 @@ export function loadDatabaseData() {
             state.isFirstDbLoad = false; 
             const errHtml = `<tr><td colspan="16" style="text-align: center; color: #e74c3c;">⚠️ Gagal Memproses Data</td></tr>`;
             if (activeMod === 'PI') document.getElementById('tableBodyPI').innerHTML = errHtml; 
+            else if (activeMod === 'PGA') document.getElementById('tableBodyPGA').innerHTML = errHtml;
             else document.getElementById('tableBody').innerHTML = errHtml;
         }
     }, (error) => {
@@ -52,6 +57,7 @@ export function loadDatabaseData() {
         state.isFirstDbLoad = false; 
         const errHtml = `<tr><td colspan="16" style="text-align: center; color: #e74c3c;">⚠️ Gagal Menarik Data Firebase</td></tr>`;
         if (activeMod === 'PI') document.getElementById('tableBodyPI').innerHTML = errHtml; 
+        else if (activeMod === 'PGA') document.getElementById('tableBodyPGA').innerHTML = errHtml;
         else document.getElementById('tableBody').innerHTML = errHtml;
     });
 }
@@ -101,6 +107,8 @@ export function refreshAllDisplays() {
     const activeMod = state.currentModule || window.currentModule || 'KP';
     if (activeMod === 'PI') {
         filterTablePI();
+    } else if (activeMod === 'PGA') {
+        filterTablePGA();
     } else {
         state.combinedDataList = Object.keys(state.dbFetchedMap || {})
             .map(key => ({ 
