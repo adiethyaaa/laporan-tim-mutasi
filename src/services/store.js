@@ -1,4 +1,4 @@
-﻿export const state = {
+export const state = {
     dbFetchedMap: {},
     combinedDataList: [],
     selectedFilesQueue: [],
@@ -25,4 +25,13 @@ if (typeof window !== 'undefined') {
     window.appState = state;
     window.currentDashboardFilteredData = state.currentDashboardFilteredData;
     window.includeKPO = state.includeKPO;
+    try {
+        Object.defineProperty(window, 'currentModule', {
+            get() { return state.currentModule; },
+            set(val) { state.currentModule = val; },
+            configurable: true
+        });
+    } catch (e) {
+        window.currentModule = state.currentModule;
+    }
 }

@@ -1,4 +1,4 @@
-﻿import { auth, db, get, ref, onAuthStateChanged, signOut } from "./services/firebase.js";
+import { auth, db, get, ref, onAuthStateChanged, signOut } from "./services/firebase.js";
 import { state } from "./services/store.js";
 import { SESSION_TIMEOUT_MS } from "./config/constants.js";
 import { 
@@ -19,6 +19,7 @@ import { setupPGAEventListeners } from "./modules/pga/pgaController.js";
 import { initCharts } from "./modules/dashboard/charts.js";
 import { updateFilterActiveState } from "./modules/dashboard/rekapModals.js";
 import "./modules/reports/pdfExport.js";
+import "./modules/pi/piController.js";
 import { loadDatabaseData, refreshAllDisplays } from "./modules/kp/kpController.js";
 import { 
     setupDragAndDrop, 

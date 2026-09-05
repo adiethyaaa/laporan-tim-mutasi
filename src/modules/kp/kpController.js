@@ -1,4 +1,4 @@
-﻿import { db, ref, remove, onValue } from "../../services/firebase.js";
+import { db, ref, remove, onValue } from "../../services/firebase.js";
 import { state } from "../../services/store.js";
 import { MODULE_CONFIG } from "../../config/constants.js";
 import { 
@@ -11,23 +11,30 @@ import {
 } from "../../utils/formatters.js";
 import { isGolonganIVc, isEligibleForApp, checkIsKPO } from "../../utils/eligibility.js";
 import { getColorForInitial } from "../../../admin.js";
-import { renderTablePI, sortDataListPI, populateDropdownFiltersPI } from "../pi/piController.js";
+import { renderTablePI, sortDataListPI, populateDropdownFiltersPI, filterTablePI } from "../pi/piController.js";
 
 export function loadDatabaseData() {
-    if (!MODULE_CONFIG[state.currentModule]) return; 
+    const activeMod = state.currentModule || window.currentModule || 'KP';
+    state.currentModule = activeMod;
+    window.currentModule = activeMod;
+
+    if (!MODULE_CONFIG[activeMod]) return; 
     state.isFirstDbLoad = true;
     
-    if (state.currentModule === 'PI') renderTablePI([]); 
+    if (activeMod === 'PI') renderTablePI([]); 
     else renderAllTableRows([]);
     
-    if (state.dbUnsubscribe) state.dbUnsubscribe();
+    if (state.dbUnsubscribe) {
+        state.dbUnsubscribe();
+        state.dbUnsubscribe = null;
+    }
     
-    state.dbUnsubscribe = onValue(ref(db, MODULE_CONFIG[state.currentModule].node), (snapshot) => {
+    state.dbUnsubscribe = onValue(ref(db, MODULE_CONFIG[activeMod].node), (snapshot) => {
         try {
             state.dbFetchedMap = snapshot.val() || {}; 
             state.isFirstDbLoad = false;
             
-            if (state.currentModule === 'PI') {
+            if (activeMod === 'PI') {
                 populateDropdownFiltersPI(); 
             } else {
                 populateDropdownFilters();
@@ -37,13 +44,14 @@ export function loadDatabaseData() {
             console.error(err); 
             state.isFirstDbLoad = false; 
             const errHtml = `<tr><td colspan="16" style="text-align: center; color: #e74c3c;">⚠️ Gagal Memproses Data</td></tr>`;
-            if (state.currentModule === 'PI') document.getElementById('tableBodyPI').innerHTML = errHtml; 
+            if (activeMod === 'PI') document.getElementById('tableBodyPI').innerHTML = errHtml; 
             else document.getElementById('tableBody').innerHTML = errHtml;
         }
     }, (error) => {
+        console.error("Firebase fetch error:", error);
         state.isFirstDbLoad = false; 
         const errHtml = `<tr><td colspan="16" style="text-align: center; color: #e74c3c;">⚠️ Gagal Menarik Data Firebase</td></tr>`;
-        if (state.currentModule === 'PI') document.getElementById('tableBodyPI').innerHTML = errHtml; 
+        if (activeMod === 'PI') document.getElementById('tableBodyPI').innerHTML = errHtml; 
         else document.getElementById('tableBody').innerHTML = errHtml;
     });
 }
@@ -90,23 +98,9 @@ export function populateDropdownFilters() {
 }
 
 export function refreshAllDisplays() {
-    if (state.currentModule === 'PI') {
-        state.combinedDataList = Object.keys(state.dbFetchedMap || {}).map(key => ({ dbKey: key, ...state.dbFetchedMap[key] }));
-        
-        const sAsal = document.getElementById('filterInstansiAsalPI')?.value || '';
-        const sTujuan = document.getElementById('filterInstansiTujuanPI')?.value || '';
-        const sWilker = document.getElementById('filterWilkerPI')?.value || '';
-        const sStatus = document.getElementById('filterStatusPI')?.value || '';
-        
-        let filtered = state.combinedDataList.filter(item => { 
-            return (!sAsal || item.instansi_asal === sAsal) && 
-                   (!sTujuan || item.instansi_tujuan === sTujuan) && 
-                   (!sWilker || item.wilker_prov === sWilker) && 
-                   (!sStatus || item.status === sStatus); 
-        });
-        
-        sortDataListPI(filtered); 
-        renderTablePI(filtered);
+    const activeMod = state.currentModule || window.currentModule || 'KP';
+    if (activeMod === 'PI') {
+        filterTablePI();
     } else {
         state.combinedDataList = Object.keys(state.dbFetchedMap || {})
             .map(key => ({ 

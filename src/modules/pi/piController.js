@@ -1,4 +1,4 @@
-﻿import { db, ref, push, update, remove, set } from "../../services/firebase.js";
+import { db, ref, push, update, remove, set } from "../../services/firebase.js";
 import { state } from "../../services/store.js";
 import { MODULE_CONFIG } from "../../config/constants.js";
 import { 
@@ -154,10 +154,12 @@ export function populateDropdownFiltersPI() {
 
     records.forEach(rec => {
         if (rec.instansi_asal && String(rec.instansi_asal).trim() !== '') {
-            instansiAsalSet.add(standardizeInstansiName(rec.instansi_asal));
+            const asalBaku = standardizeInstansiName(rec.instansi_asal);
+            if (asalBaku && asalBaku !== '--') instansiAsalSet.add(asalBaku);
         }
         if (rec.instansi_tujuan && String(rec.instansi_tujuan).trim() !== '') {
-            instansiTujuanSet.add(standardizeInstansiName(rec.instansi_tujuan));
+            const tujuanBaku = standardizeInstansiName(rec.instansi_tujuan);
+            if (tujuanBaku && tujuanBaku !== '--') instansiTujuanSet.add(tujuanBaku);
         }
     });
 
@@ -198,10 +200,10 @@ export function filterTablePI() {
     const filterWilkerEl = document.getElementById('filterWilkerPI');
     const filterStatusEl = document.getElementById('filterStatusPI');
 
-    const filterAsal = (filterAsalEl?.value || "").toLowerCase();
-    const filterTujuan = (filterTujuanEl?.value || "").toLowerCase();
-    const filterWilker = (filterWilkerEl?.value || "").toLowerCase();
-    const filterStatus = (filterStatusEl?.value || "").toLowerCase();
+    const filterAsal = (filterAsalEl?.value || "").trim().toLowerCase();
+    const filterTujuan = (filterTujuanEl?.value || "").trim().toLowerCase();
+    const filterWilker = (filterWilkerEl?.value || "").trim().toLowerCase();
+    const filterStatus = (filterStatusEl?.value || "").trim().toLowerCase();
 
     [filterAsalEl, filterTujuanEl, filterWilkerEl, filterStatusEl].forEach(el => {
         if (!el) return;
@@ -217,17 +219,27 @@ export function filterTablePI() {
     const filteredData = dataToFilter.filter(item => {
         const instAsalBaku = standardizeInstansiName(item.instansi_asal || "");
         const instTujuanBaku = standardizeInstansiName(item.instansi_tujuan || "");
-        const wilkerAuto = getAutomaticWilker(instAsalBaku, instTujuanBaku);
-        const currentStatus = (item.status === 'MS' ? 'ACC' : item.status || "").toLowerCase();
+        const wilkerAuto = getAutomaticWilker(instAsalBaku, instTujuanBaku) || item.wilker_prov || "Instansi Vertikal";
+        const itemStatus = (item.status || "").trim().toLowerCase();
 
         const matchAsal = !filterAsal || instAsalBaku.toLowerCase() === filterAsal;
         const matchTujuan = !filterTujuan || instTujuanBaku.toLowerCase() === filterTujuan;
         const matchWilker = !filterWilker || wilkerAuto.toLowerCase() === filterWilker;
-        const matchStatus = !filterStatus || currentStatus === filterStatus;
+        
+        let matchStatus = true;
+        if (filterStatus) {
+            if (filterStatus === 'ms' || filterStatus === 'acc') {
+                matchStatus = (itemStatus === 'ms' || itemStatus === 'acc');
+            } else {
+                matchStatus = (itemStatus === filterStatus);
+            }
+        }
 
         return matchAsal && matchTujuan && matchWilker && matchStatus;
     });
 
+    state.combinedDataList = filteredData;
+    sortDataListPI(filteredData);
     renderTablePI(filteredData);
 }
 
@@ -350,7 +362,7 @@ export function editRecordPI(dbKey) {
     closeEditFormPI();
 
     let statusValue = (item.status || 'INBOX').toUpperCase().trim();
-    if (statusValue === 'MS') statusValue = 'ACC';
+    if (statusValue === 'ACC') statusValue = 'MS';
 
     const keyEl = document.getElementById('editKeyPI');
     if (keyEl) keyEl.value = dbKey;
